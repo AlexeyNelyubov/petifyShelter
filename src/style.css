@@ -1,0 +1,28 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html::-webkit-scrollbar-track {
+  display: none;
+}
+
+html::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+}
+
+@font-face {
+  font-family: "Epilogue";
+  src: url("src/assets/fonts/Epilogue/Epilogue.ttf") format("truetype");
+}
