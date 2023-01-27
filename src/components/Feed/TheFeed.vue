@@ -4,8 +4,10 @@ import { ref } from "vue";
 const PetsList = ref([]);
 
 (async () => {
-  const response = await fetch("src/assets/feed/Pets.json");
-  const json = await response.json();
+  //let response = await fetch("src/assets/feed/Pets.json");
+  //let response = await fetch("/api/pets");
+  let response = await fetch(`${import.meta.env.VITE_SERVER_URI}/api/v1/pets`);
+  let json = await response.json();
 
   if (response.ok) {
     for (let pet of json) {

@@ -6,11 +6,11 @@
   padding: 0;
 }
 
-/* html::-webkit-scrollbar {
+html::-webkit-scrollbar {
   display: none;
 }
 
-html::-webkit-scrollbar-track {
+/*html::-webkit-scrollbar-track {
   display: none;
 }
 
@@ -22,9 +22,9 @@ html::-webkit-scrollbar-thumb {
   width: 0;
 }
 
-/* html {
+html {
   scrollbar-width: none;
-} */
+}
 
 @font-face {
   font-family: "Epilogue";

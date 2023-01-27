@@ -19,12 +19,22 @@ import TheFooter from "@/components/TheFooter.vue";
 <style scoped>
 .wrapper-index {
   min-height: 100vh;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; */
 }
 
 .header-index {
-  position: sticky;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.main-index {
+  position: relative;
+  z-index: 1;
+  flex-grow: 1;
 }
 </style>

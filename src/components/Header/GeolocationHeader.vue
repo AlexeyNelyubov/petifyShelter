@@ -55,15 +55,16 @@ function checkLocationAfterInput(event, type) {
   }
 }
 
-onMounted(() => {
-  (async () => {
-    let response = await fetch("src/assets/header/RussiaCities.json");
-    let data = await response.json();
-    for (let el of data) {
-      arrCities.push(el.city);
-    }
-  })();
-});
+(async () => {
+  //let response = await fetch("src/assets/header/RussiaCities.json");
+  //let response = await fetch("/api/city");
+  let response = await fetch(`${import.meta.env.VITE_SERVER_URI}/api/v1/city`);
+  //let response = await fetch("http://localhost:4000/api/v1/city");
+  let data = await response.json();
+  for (let el of data) {
+    arrCities.push(el.city);
+  }
+})();
 
 watch(location, () => {
   cities.value.splice(0, cities.value.length);
@@ -108,11 +109,19 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div v-if="inputActive" class="inputActive"></div>
-    <div class="wrapper-geolocation">
+    <div
+      v-if="inputActive"
+      class="inputActive"
+      :class="{ 'inputActive-uncorrect': uncorrectValueLocation }"
+    ></div>
+    <div
+      class="geolocation"
+      :class="{ 'geolocation-uncorrect': uncorrectValueLocation }"
+    >
       <img alt="geolocation" src="@/assets/header/imggeolocation.svg" />
       <input
         class="input-for-location"
+        :class="{ 'input-for-location-uncorrect': uncorrectValueLocation }"
         type="text"
         v-model="location"
         @input="
@@ -156,8 +165,18 @@ onUnmounted(() => {
   height: 100%;
   z-index: 1;
 }
+.inputActive-uncorrect {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: #000;
+  opacity: 0.5;
+}
 
-.wrapper-geolocation {
+.geolocation {
   display: flex;
   align-items: center;
   width: 224px;
@@ -168,6 +187,18 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
+.geolocation-uncorrect {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  width: 224px;
+  height: 32px;
+  margin-right: 24px;
+  background-color: #ff0000;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
 img {
   margin: 0 16px 0 16px;
 }
@@ -182,6 +213,20 @@ img {
   line-height: 22px;
   color: #ffffff;
   background-color: #60b2ee;
+  border: none;
+  outline: none;
+}
+
+.input-for-location-uncorrect {
+  width: 160px;
+  text-decoration: none;
+  font-family: "Epilogue";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #ffffff;
+  background-color: #ff0000;
   border: none;
   outline: none;
 }
@@ -215,7 +260,7 @@ img {
 
 .notValideLocation {
   position: absolute;
-  top: 64px;
+  top: 32px;
   width: 256px;
   padding: 16px 0 16px 16px;
   z-index: 2;
