@@ -58,7 +58,7 @@ function checkLocationAfterInput(event, type) {
 (async () => {
   //let response = await fetch("src/assets/header/RussiaCities.json");
   //let response = await fetch("/api/city");
-  let response = await fetch(`${import.meta.env.VITE_SERVER_URI}/api/v1/city`);
+  let response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/city`);
   //let response = await fetch("http://localhost:4000/api/v1/city");
   let data = await response.json();
   for (let el of data) {

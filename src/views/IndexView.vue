@@ -6,9 +6,13 @@ import TheFooter from "@/components/TheFooter.vue";
 
 <template>
   <div class="wrapper-index">
-    <header class="header-index"><the-header /></header>
+    <header class="header-index">
+      <the-header />
+    </header>
 
-    <main class="main-index"><the-feed /></main>
+    <main class="main-index">
+      <the-feed />
+    </main>
 
     <footer class="footer-index">
       <the-footer />
@@ -18,18 +22,18 @@ import TheFooter from "@/components/TheFooter.vue";
 
 <style scoped>
 .wrapper-index {
-  min-height: 100vh;
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  justify-content: space-between; */
-}
-
-.header-index {
-  position: fixed;
-  left: 0;
-  top: 0;
+  justify-content: space-between;
   width: 100%;
-  z-index: 2;
+  min-height: 100vh;
+}
+.header-index {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
 }
 
 .main-index {

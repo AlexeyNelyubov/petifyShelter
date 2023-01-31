@@ -9,6 +9,11 @@ const router = createRouter({
       name: "home",
       component: IndexView,
     },
+    {
+      path: "/NewFreature(aboutAs)",
+      name: "AboutUs",
+      component: () => import("../views/AboutUsVeiw.vue"),
+    },
     // {
     //   path: '/about',
     //   name: 'about',
