@@ -1,5 +1,8 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
+import { useLocationStore } from "@/stores/location.js";
+
+const storeGeolocation = useLocationStore();
 
 const geoAutocomplite = ref(false);
 const location = ref("Весь мир");
@@ -27,6 +30,7 @@ function checkLocationAfterInput(event, type) {
   }
   if (!happendEvent & (location.value === "")) {
     location.value = "Весь мир";
+    storeGeolocation.location = location.value;
     input.blur();
     inputActive.value = false;
   } else {
@@ -40,6 +44,7 @@ function checkLocationAfterInput(event, type) {
         if (location.value.toUpperCase() === city.toUpperCase()) {
           j++;
           location.value = city;
+          storeGeolocation.location = location.value;
           geoAutocomplite.value = false;
           inputActive.value = false;
           input.blur();
@@ -146,7 +151,8 @@ onUnmounted(() => {
           @click="
             (location = 'Весь мир'),
               (inputActive = false),
-              (uncorrectValueLocation = false)
+              (uncorrectValueLocation = false),
+              (storeGeolocation.location = location)
           "
         >
           Весь мир

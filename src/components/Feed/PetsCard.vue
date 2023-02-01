@@ -4,6 +4,11 @@ const props = defineProps({
   pet: Object,
 });
 
+//console.log(props.pet);
+// for (let p of props.pet) {
+//   console.log(p);
+// }
+
 const PetsTypeImg = ref("");
 const PetsAge = ref(props.pet.age);
 const PetsSterelization = ref("");
@@ -83,24 +88,17 @@ if (fullMonth === 1) {
 }
 
 const Age = `${fullYear} ${year} ${fullMonth} ${month}`;
-console.log(Age);
-
-if (props.pet.sterelized) {
-  PetsSterelization.value = "стерелизован";
-} else {
-  PetsSterelization.value = "src/assets/feed/female.svg";
-}
 
 if (props.pet.gender === "Самец") {
   PetsGender.value = "src/assets/feed/male.svg";
-  if (props.pet.sterelized) {
+  if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизован";
   } else {
     PetsSterelization.value = "не стерелизован";
   }
 } else {
   PetsGender.value = "src/assets/feed/female.svg";
-  if (props.pet.sterelized) {
+  if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизована";
   } else {
     PetsSterelization.value = "не стерелизована";
@@ -153,20 +151,20 @@ if (props.pet.gender === "Самец") {
           >
             ...
           </p>
+        </div>
+        <div
+          v-if="showAllFeatures"
+          class="all-features"
+          @pointerover="showAllFeatures = true"
+          @pointerleave="showAllFeatures = false"
+        >
           <div
-            v-if="showAllFeatures"
-            class="all-features"
-            @pointerover="showAllFeatures = true"
-            @pointerleave="showAllFeatures = false"
+            v-for="item in props.pet.features"
+            :key="item.id"
+            class="single-feature-in-all-features"
+            :style="{ backgroundColor: ColorForPetsFeature() }"
           >
-            <div
-              v-for="item in props.pet.features"
-              :key="item.id"
-              class="single-feature-in-all-features"
-              :style="{ backgroundColor: ColorForPetsFeature() }"
-            >
-              {{ item }}
-            </div>
+            {{ item }}
           </div>
         </div>
       </div>
@@ -256,7 +254,7 @@ if (props.pet.gender === "Самец") {
 
 .all-features {
   position: absolute;
-  top: -100px;
+  top: -72px;
   width: 200px;
   height: 200px;
   padding: 16px;
