@@ -1,36 +1,43 @@
+<script setup>
+import FilterType from "./Filters/FilterType.vue";
+import FilterGender from "./Filters/FilterTGender.vue";
+import FilterBreed from "./Filters/FilterBreed.vue";
+</script>
+
 <template>
-  <div class="wrapper-filters">FILTERS</div>
-  <!-- <div class="wrapper-filters">
-    <div class="square">
-      <div class="single-feature"></div>
-      <div class="single-feature"></div>
+  <div class="wrapper-filters">
+    <div class="filters">
+      <filter-type />
+      <filter-gender />
+      <filter-breed />
     </div>
-  </div> -->
+    <button class="lucky">Мне повезёт</button>
+  </div>
 </template>
 
 <style scoped>
 .wrapper-filters {
-  background-color: rgb(122, 104, 104);
-}
-.square {
-  margin-left: auto;
-  margin-right: auto;
-  height: 64px;
-  width: 100px;
+  padding: 24px 72px 24px 56px;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  background-color: rgb(255, 0, 0);
+  background-color: #fff;
+  border-top: 2px solid #d9d9d9;
 }
 
-.single-feature {
-  position: relative;
-  height: 28px;
-  margin-right: 4px;
-  padding: 4px;
+.filters {
+  display: flex;
+}
+
+.lucky {
+  margin-top: 14px;
+  height: 32px;
+  padding: 0 8px 0 8px;
   display: flex;
   align-items: center;
-  border-radius: 5px;
-  background-color: blueviolet;
+  font-size: 14px;
+  color: #fff;
+  background-color: #bb9bff;
+  border-radius: 10px;
+  border: none;
 }
 </style>

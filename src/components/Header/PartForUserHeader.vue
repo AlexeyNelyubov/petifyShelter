@@ -28,12 +28,7 @@ watch(
       height="24"
     />
     <div class="userName">Николас Кейдж</div>
-    <img
-      alt="arrow"
-      src="@/assets/header/imgarrowforuser.svg"
-      width="14"
-      height="8"
-    />
+    <img alt="arrow" src="@/assets/imgarrowdown.svg" width="14" height="8" />
     <div
       v-if="showMenuForProfile"
       @pointerleave="showMenuForProfile = false"

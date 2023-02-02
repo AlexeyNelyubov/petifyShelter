@@ -59,7 +59,6 @@ watch(
 <style scoped>
 .filters {
   position: fixed;
-  height: 100px;
   width: 100%;
   z-index: 1;
 }
