@@ -5,10 +5,16 @@ import PetsCard from "./PetsCard.vue";
 
 import { useLocationStore } from "@/stores/location.js";
 const storeGeolocation = useLocationStore();
-console.log(storeGeolocation.location);
+
+import { useFiltersStore } from "@/stores/filters.js";
+const FiltersStore = useFiltersStore();
 
 const PetsList = ref([]);
-const PetListAfterGetLocation = ref([]);
+const PetListAfterGeoLocation = ref([]);
+const PetListAfterFilters = ref([]);
+const PetsListForShow = ref([]);
+const counterOfFilters = ref(false);
+const counterOfGeoLocation = ref(false);
 
 (async () => {
   //let response = await fetch("src/assets/feed/Pets.json");
@@ -19,7 +25,7 @@ const PetListAfterGetLocation = ref([]);
   if (response.ok) {
     for (let pet of json) {
       PetsList.value.push(pet);
-      PetListAfterGetLocation.value.push(pet);
+      PetsListForShow.value.push(pet);
     }
   } else {
     console.log("error", json);
@@ -30,27 +36,113 @@ watch(
   () => storeGeolocation.location,
   () => {
     if (storeGeolocation.location === "Весь мир") {
-      PetListAfterGetLocation.value.splice(0);
+      counterOfGeoLocation.value = false;
+      // fn(PetsList.value);
+      PetsListForShow.value.splice(0);
+      PetListAfterGeoLocation.value.splice(0);
       for (let pet of PetsList.value) {
-        PetListAfterGetLocation.value.push(pet);
+        PetListAfterGeoLocation.value.push(pet);
+        PetsListForShow.value.push(pet);
       }
-    }
-    if (storeGeolocation.location != "Весь мир") {
-      PetListAfterGetLocation.value.splice(0);
+    } else {
+      PetsListForShow.value.splice(0);
+      PetListAfterGeoLocation.value.splice(0);
       for (let pet of PetsList.value) {
-        if (storeGeolocation.location === pet.shelter.address)
-          PetListAfterGetLocation.value.push(pet);
+        if (storeGeolocation.location === pet.shelter.address) {
+          PetListAfterGeoLocation.value.push(pet);
+          PetsListForShow.value.push(pet);
+        }
+      }
+      counterOfGeoLocation.value = true;
+      // fn(PetListAfterGeoLocation.value);
+    }
+    // if (storeGeolocation.location != "Весь мир") {
+    //   PetListAfterGeoLocation.value.splice(0);
+    //   for (let pet of PetsList.value) {
+    //     if (storeGeolocation.location === pet.shelter.address) {
+    //       PetListAfterGeoLocation.value.push(pet);
+    //     }
+    //   }
+    // }
+    if (counterOfFilters.value) {
+      PetsListForShow.value.splice(0);
+      for (let petInGeoLocation of PetListAfterGeoLocation.value) {
+        for (let petInFilters of PetListAfterFilters.value) {
+          if (petInFilters.id === petInGeoLocation.id) {
+            PetsListForShow.value.push(petInGeoLocation);
+          }
+        }
       }
     }
   }
 );
+
+// function fn(arr) {
+//   if (counterOfFilters.value & counterOfGeoLocation.value) {
+//     console.log(PetsListForShow.value);
+//     const List = PetsListForShow.value.slice(0);
+//     console.log(List);
+//     PetsListForShow.value.splice(0);
+//     for (let pet of arr) {
+//       for (let petinlist of List) {
+//         if (pet.id === petinlist.id) {
+//           PetsListForShow.value.push(pet);
+//         }
+//       }
+//     }
+//     console.log(PetsListForShow.value);
+//   } else {
+//     PetsListForShow.value.splice(0);
+//     for (let pet of arr) {
+//       PetsListForShow.value.push(pet);
+//     }
+//   }
+// }
+
+// function fn(arr) {
+// }
+watch(FiltersStore.filters, () => {
+  if (FiltersStore.filters.type.length) {
+    PetsListForShow.value.splice(0);
+    PetListAfterFilters.value.splice(0);
+    for (let pet of PetsList.value) {
+      for (let type of FiltersStore.filters.type) {
+        if (type === pet.type) {
+          PetListAfterFilters.value.push(pet);
+          PetsListForShow.value.push(pet);
+        }
+      }
+    }
+    counterOfFilters.value = true;
+    // fn(PetListAfterFilters.value);
+  } else {
+    counterOfFilters.value = false;
+    // fn(PetsList.value);
+    PetsListForShow.value.splice(0);
+    PetListAfterFilters.value.splice(0);
+    for (let pet of PetsList.value) {
+      PetListAfterFilters.value.push(pet);
+      PetsListForShow.value.push(pet);
+    }
+  }
+  if (counterOfGeoLocation.value) {
+    PetsListForShow.value.splice(0);
+    for (let petInFilters of PetListAfterFilters.value) {
+      for (let petInGeoLocation of PetListAfterGeoLocation.value) {
+        if (petInFilters.id === petInGeoLocation.id) {
+          PetsListForShow.value.push(petInFilters);
+        }
+      }
+    }
+  }
+});
 </script>
 
 <template>
   <pets-filters class="filters" />
 
   <div class="wrapper-for-card">
-    <div v-for="pet in PetListAfterGetLocation" :key="pet.id">
+    <div v-for="pet in PetsListForShow" :key="pet.id">
       <pets-card :pet="pet" />
     </div>
   </div>

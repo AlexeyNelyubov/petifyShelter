@@ -20,8 +20,7 @@ import { ref } from "vue";
   margin-right: 24px;
   display: flex;
   flex-direction: column;
-  background-color: #d9d9d9;
-  opacity: 0.8;
+  background-color: rgba(217, 217, 217, 0.41);
   border-radius: 8px;
 }
 

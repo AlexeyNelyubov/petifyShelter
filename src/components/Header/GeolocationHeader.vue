@@ -241,6 +241,7 @@ img {
   position: absolute;
   top: 64px;
   z-index: 2;
+  cursor: pointer;
 }
 
 .cityInAutocomplite {
