@@ -29,8 +29,8 @@ const emit = defineEmits(["change-authorization"]);
 }
 
 .signin:hover {
-  color: var(--color-hover);
-  background-color: var(--color);
+  color: #fff;
+  background-color: #d9d9d9;
 }
 .signup {
   height: 32px;
@@ -46,7 +46,7 @@ const emit = defineEmits(["change-authorization"]);
   border-radius: 16px;
 }
 .signup:hover {
-  color: var(--color-hover);
-  background-color: var(--color);
+  color: #fff;
+  background-color: #d9d9d9;
 }
 </style>

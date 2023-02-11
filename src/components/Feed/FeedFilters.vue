@@ -1,15 +1,15 @@
 <script setup>
-import FilterType from "./Filters/FilterType.vue";
-import FilterGender from "./Filters/FilterTGender.vue";
-import FilterBreed from "./Filters/FilterBreed.vue";
+import FilterType from "./FeedFilters/FilterType.vue";
+import FilterGender from "./FeedFilters/FilterGender.vue";
+import FilterBreed from "./FeedFilters/FilterBreed.vue";
 </script>
 
 <template>
   <div class="wrapper-filters">
     <div class="filters">
-      <filter-type />
-      <filter-gender />
-      <filter-breed />
+      <FilterType />
+      <FilterGender />
+      <FilterBreed />
     </div>
     <button class="lucky">Мне повезёт</button>
   </div>

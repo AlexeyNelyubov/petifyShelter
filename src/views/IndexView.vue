@@ -7,15 +7,15 @@ import TheFooter from "@/components/TheFooter.vue";
 <template>
   <div class="wrapper-index">
     <header class="header-index">
-      <the-header />
+      <TheHeader />
     </header>
 
     <main class="main-index">
-      <the-feed />
+      <TheFeed />
     </main>
 
     <footer class="footer-index">
-      <the-footer />
+      <TheFooter />
     </footer>
   </div>
 </template>

@@ -123,7 +123,11 @@ onUnmounted(() => {
       class="geolocation"
       :class="{ 'geolocation-uncorrect': uncorrectValueLocation }"
     >
-      <img alt="geolocation" src="@/assets/header/imggeolocation.svg" />
+      <img
+        alt="geolocation"
+        src="@/assets/header/imggeolocation.svg"
+        class="geolocation-img"
+      />
       <input
         class="input-for-location"
         :class="{ 'input-for-location-uncorrect': uncorrectValueLocation }"
@@ -205,7 +209,7 @@ onUnmounted(() => {
   border-radius: 16px;
   box-sizing: border-box;
 }
-img {
+.geolocation-img {
   margin: 0 16px 0 16px;
 }
 
@@ -257,12 +261,12 @@ img {
   font-size: 18px;
   line-height: 22px;
   background-color: #ffffff;
-  border: 1px solid var(--color);
+  border: 1px solid #d9d9d9;
   border-radius: 16px;
 }
 .cityInAutocomplite:hover {
-  color: var(--color-hover);
-  background-color: var(--color);
+  color: #fff;
+  background-color: #d9d9d9;
 }
 
 .notValideLocation {
@@ -278,7 +282,7 @@ img {
   font-size: 18px;
   line-height: 22px;
   background-color: #ffffff;
-  border: 1px solid var(--color);
+  border: 1px solid #d9d9d9;
   border-radius: 16px;
 }
 .global-search {

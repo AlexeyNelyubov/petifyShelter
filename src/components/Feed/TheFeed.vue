@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
-import PetsFilters from "./PetsFilters.vue";
-import PetsCard from "./PetsCard.vue";
+import FeedFilters from "./FeedFilters.vue";
+import FeedPetsCards from "./FeedPetsCards.vue";
 
 import { useLocationStore } from "@/stores/location.js";
 const storeGeolocation = useLocationStore();
@@ -10,15 +10,15 @@ import { useFiltersStore } from "@/stores/filters.js";
 const FiltersStore = useFiltersStore();
 
 const PetsList = ref([]);
-const PetListAfterGeoLocation = ref([]);
-const PetListAfterFilters = ref([]);
+const PetsListAfterGeoLocation = ref([]);
+const PetsListAfterFilters = ref([]);
 const PetsListForShow = ref([]);
-const counterOfFilters = ref(false);
+const counterOfFilters = ref([]);
 const counterOfGeoLocation = ref(false);
+let pets = [];
 
 (async () => {
   //let response = await fetch("src/assets/feed/Pets.json");
-  //let response = await fetch("/api/pets");
   let response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/pets`);
   let json = await response.json();
 
@@ -37,113 +37,87 @@ watch(
   () => {
     if (storeGeolocation.location === "Весь мир") {
       counterOfGeoLocation.value = false;
-      // fn(PetsList.value);
       PetsListForShow.value.splice(0);
-      PetListAfterGeoLocation.value.splice(0);
+      PetsListAfterGeoLocation.value.splice(0);
       for (let pet of PetsList.value) {
-        PetListAfterGeoLocation.value.push(pet);
+        PetsListAfterGeoLocation.value.push(pet);
         PetsListForShow.value.push(pet);
       }
     } else {
       PetsListForShow.value.splice(0);
-      PetListAfterGeoLocation.value.splice(0);
+      PetsListAfterGeoLocation.value.splice(0);
       for (let pet of PetsList.value) {
         if (storeGeolocation.location === pet.shelter.address) {
-          PetListAfterGeoLocation.value.push(pet);
+          PetsListAfterGeoLocation.value.push(pet);
           PetsListForShow.value.push(pet);
         }
       }
       counterOfGeoLocation.value = true;
-      // fn(PetListAfterGeoLocation.value);
     }
-    // if (storeGeolocation.location != "Весь мир") {
-    //   PetListAfterGeoLocation.value.splice(0);
-    //   for (let pet of PetsList.value) {
-    //     if (storeGeolocation.location === pet.shelter.address) {
-    //       PetListAfterGeoLocation.value.push(pet);
-    //     }
-    //   }
-    // }
-    if (counterOfFilters.value) {
-      PetsListForShow.value.splice(0);
-      for (let petInGeoLocation of PetListAfterGeoLocation.value) {
-        for (let petInFilters of PetListAfterFilters.value) {
-          if (petInFilters.id === petInGeoLocation.id) {
-            PetsListForShow.value.push(petInGeoLocation);
-          }
-        }
-      }
+
+    if (counterOfFilters.value.length) {
+      compareFiltersandGeolocation();
     }
   }
 );
 
-// function fn(arr) {
-//   if (counterOfFilters.value & counterOfGeoLocation.value) {
-//     console.log(PetsListForShow.value);
-//     const List = PetsListForShow.value.slice(0);
-//     console.log(List);
-//     PetsListForShow.value.splice(0);
-//     for (let pet of arr) {
-//       for (let petinlist of List) {
-//         if (pet.id === petinlist.id) {
-//           PetsListForShow.value.push(pet);
-//         }
-//       }
-//     }
-//     console.log(PetsListForShow.value);
-//   } else {
-//     PetsListForShow.value.splice(0);
-//     for (let pet of arr) {
-//       PetsListForShow.value.push(pet);
-//     }
-//   }
-// }
+function compareFiltersandGeolocation() {
+  PetsListForShow.value.splice(0);
+  for (let petInGeoLocation of PetsListAfterGeoLocation.value) {
+    for (let petInFilters of PetsListAfterFilters.value) {
+      if (petInFilters.id === petInGeoLocation.id) {
+        PetsListForShow.value.push(petInGeoLocation);
+      }
+    }
+  }
+}
 
-// function fn(arr) {
-// }
 watch(FiltersStore.filters, () => {
-  if (FiltersStore.filters.type.length) {
-    PetsListForShow.value.splice(0);
-    PetListAfterFilters.value.splice(0);
-    for (let pet of PetsList.value) {
-      for (let type of FiltersStore.filters.type) {
-        if (type === pet.type) {
-          PetListAfterFilters.value.push(pet);
-          PetsListForShow.value.push(pet);
+  pets = PetsList.value.slice(0);
+  for (let filter in FiltersStore.filters) {
+    if (FiltersStore.filters[filter].length) {
+      PetsListForShow.value.splice(0);
+      PetsListAfterFilters.value.splice(0);
+      if (!counterOfFilters.value.includes(filter)) {
+        counterOfFilters.value.push(filter);
+      }
+      for (let pet of pets) {
+        for (let item of FiltersStore.filters[filter]) {
+          if (item === pet[filter]) {
+            PetsListForShow.value.push(pet);
+            PetsListAfterFilters.value.push(pet);
+          }
+        }
+      }
+      pets = PetsListForShow.value.slice(0);
+    } else {
+      for (let i in counterOfFilters.value) {
+        if (counterOfFilters.value[i] === filter) {
+          counterOfFilters.value.splice(i, 1);
         }
       }
     }
-    counterOfFilters.value = true;
-    // fn(PetListAfterFilters.value);
-  } else {
-    counterOfFilters.value = false;
-    // fn(PetsList.value);
+  }
+  if (!counterOfFilters.value.length) {
     PetsListForShow.value.splice(0);
-    PetListAfterFilters.value.splice(0);
+    PetsListAfterFilters.value.splice(0);
     for (let pet of PetsList.value) {
-      PetListAfterFilters.value.push(pet);
       PetsListForShow.value.push(pet);
+      PetsListAfterFilters.value.push(pet);
     }
   }
   if (counterOfGeoLocation.value) {
-    PetsListForShow.value.splice(0);
-    for (let petInFilters of PetListAfterFilters.value) {
-      for (let petInGeoLocation of PetListAfterGeoLocation.value) {
-        if (petInFilters.id === petInGeoLocation.id) {
-          PetsListForShow.value.push(petInFilters);
-        }
-      }
-    }
+    compareFiltersandGeolocation();
   }
 });
 </script>
 
 <template>
-  <pets-filters class="filters" />
+  <FeedFilters class="filters" />
 
   <div class="wrapper-for-card">
     <div v-for="pet in PetsListForShow" :key="pet.id">
-      <pets-card :pet="pet" />
+      <FeedPetsCards :pet="pet" />
     </div>
   </div>
 </template>

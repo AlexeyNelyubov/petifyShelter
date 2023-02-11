@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import PartForGuestHeader from "./PartForGuestHeader.vue";
-import PartForUserHeader from "./PartForUserHeader.vue";
-import GeolocationHeader from "./GeolocationHeader.vue";
+import HeaderGeolocation from "./HeaderGeolocation.vue";
+import HeaderPartForGuest from "./HeaderPartForGuest.vue";
+import HeaderPartForUser from "./HeaderPartForUser.vue";
 
 const authorization = ref(false);
 const showMenuForUser = ref(false);
@@ -13,21 +13,21 @@ const showMenuForUser = ref(false);
   <div class="wrapper-header">
     <RouterLink to="/" class="logo-link"
       ><img alt="petify logo" src="src/assets/header/logoptf.svg " />
-      <span>petify</span></RouterLink
+      <span class="logo-sign">petify</span></RouterLink
     >
     <div class="wrapper-right-part-header">
       <div
         @pointerover="showMenuForUser = true"
         @pointerleave="showMenuForUser = false"
       >
-        <geolocation-header />
+        <HeaderGeolocation />
       </div>
       <div>
-        <part-for-guest-header
+        <HeaderPartForGuest
           v-if="!authorization"
           @change-authorization="authorization = true"
         />
-        <part-for-user-header
+        <HeaderPartForUser
           v-if="authorization"
           @change-authorization="authorization = false"
           :showMenuForUser="showMenuForUser"
@@ -45,9 +45,7 @@ const showMenuForUser = ref(false);
   height: 96px;
   padding: 0px 48px;
   box-sizing: border-box;
-  background-color: #ffffff;
-  --color: #d9d9d9;
-  --color-hover: #ffffff;
+  background-color: #fff;
 }
 
 .logo-link {
@@ -61,7 +59,7 @@ const showMenuForUser = ref(false);
   color: #000;
 }
 
-span {
+.logo-sign {
   margin-left: 8px;
   font-family: "Epilogue";
   font-style: normal;

@@ -4,6 +4,8 @@ import { useFiltersStore } from "@/stores/filters.js";
 const FiltersStore = useFiltersStore();
 
 const showFilter = ref(false);
+const filterSign = ref("Не выбран");
+const filterCounter = ref(0);
 const cat = ref();
 const dog = ref();
 const bird = ref();
@@ -11,7 +13,9 @@ const bird = ref();
 watch(cat, () => {
   if (cat.value) {
     FiltersStore.filters.type.push("Кот");
+    filterCounter.value++;
   } else {
+    filterCounter.value--;
     FiltersStore.filters.type.splice(
       FiltersStore.filters.type.indexOf("Кот"),
       1
@@ -22,7 +26,9 @@ watch(cat, () => {
 watch(dog, () => {
   if (dog.value) {
     FiltersStore.filters.type.push("Собака");
+    filterCounter.value++;
   } else {
+    filterCounter.value--;
     FiltersStore.filters.type.splice(
       FiltersStore.filters.type.indexOf("Собака"),
       1
@@ -32,26 +38,57 @@ watch(dog, () => {
 watch(bird, () => {
   if (bird.value) {
     FiltersStore.filters.type.push("Птица");
+    filterCounter.value++;
   } else {
+    filterCounter.value--;
     FiltersStore.filters.type.splice(
       FiltersStore.filters.type.indexOf("Птица"),
       1
     );
   }
 });
+
+watch(filterCounter, () => {
+  switch (filterCounter.value) {
+    case 0:
+      filterSign.value = "Не выбран";
+      break;
+    case 1:
+      filterSign.value = "1";
+      break;
+    case 2:
+      filterSign.value = "2";
+      break;
+    case 3:
+      filterSign.value = "Все";
+      break;
+  }
+});
 </script>
 
 <template>
-  <div class="filter-type">
+  <div
+    class="filter-type"
+    :class="{
+      'filter-type-border-all': filterCounter === 3,
+      'filter-type-border': filterCounter === 1 || filterCounter === 2,
+    }"
+  >
     <p class="filter-header">Тип животного</p>
     <div class="down-part" @click="showFilter = !showFilter">
-      <p>Все</p>
+      <p>{{ filterSign }}</p>
       <img src="@/assets/imgarrowdown.svg" width="14" height="8" alt="arrow" />
     </div>
     <div v-if="showFilter" class="filter">
-      <label> <input type="checkbox" v-model="cat" /> Кот </label>
-      <label> <input type="checkbox" v-model="dog" /> Собака </label>
-      <label> <input type="checkbox" v-model="bird" /> Птица </label>
+      <label class="filter-label">
+        <input type="checkbox" v-model="cat" /> Кот
+      </label>
+      <label class="filter-label">
+        <input type="checkbox" v-model="dog" /> Собака
+      </label>
+      <label class="filter-label">
+        <input type="checkbox" v-model="bird" /> Птица
+      </label>
     </div>
   </div>
 </template>
@@ -60,16 +97,24 @@ watch(bird, () => {
 .filter-type {
   height: 60px;
   width: 132px;
-  padding: 10px;
   margin-right: 24px;
   display: flex;
   flex-direction: column;
   background-color: rgba(217, 217, 217, 0.41);
+  border: 2px solid rgba(217, 217, 217, 0.41);
   border-radius: 8px;
 }
 
+.filter-type-border-all {
+  border: 2px solid #00ff00;
+}
+
+.filter-type-border {
+  border: 2px solid #00aaff;
+}
+
 .filter-header {
-  margin-bottom: 8px;
+  margin: 10px 10px 4px 10px;
   font-family: "Epilogue";
   font-style: normal;
   font-weight: 400;
@@ -77,6 +122,7 @@ watch(bird, () => {
   color: #939393;
 }
 .down-part {
+  margin: 4px 10px 10px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,7 +132,6 @@ watch(bird, () => {
 .filter {
   position: absolute;
   top: 84px;
-  left: 56px;
   width: 132px;
   padding: 10px;
   display: flex;
@@ -95,7 +140,7 @@ watch(bird, () => {
   border-radius: 8px;
   border: 1px solid #d9d9d9;
 }
-label {
+.filter-label {
   margin-top: 8px;
 }
 </style>

@@ -89,7 +89,7 @@ if (fullMonth === 1) {
 
 const Age = `${fullYear} ${year} ${fullMonth} ${month}`;
 
-if (props.pet.gender === "Самец") {
+if (props.pet.gender === "Мальчик") {
   PetsGender.value = "src/assets/feed/male.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизован";

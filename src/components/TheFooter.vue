@@ -12,7 +12,7 @@ import { RouterLink } from "vue-router";
           width="23"
           height="24"
         />
-        <span>petify</span>
+        <span class="logo-sign">petify</span>
       </div>
       <div class="logo-discription">
         <span>Помогаем вам одомашнивать животных.</span>
@@ -25,19 +25,17 @@ import { RouterLink } from "vue-router";
         <span>обр.</span>
         <span>связи</span>
       </RouterLink>
-      <a href="">
+      <a href="" class="link-socialmedia">
         <img
-          class="imgapple"
           alt="imgapple"
           src="../assets/footer/imgfacebook.svg"
           width="44"
           height="44"
         />
       </a>
-      <a href="">
+      <a href="" class="link-socialmedia">
         <img
           alt="imgfacebook"
-          class="imgfacebook"
           src="../assets/footer/imgvk.svg"
           width="44"
           height="44"
@@ -67,7 +65,7 @@ import { RouterLink } from "vue-router";
   margin-left: 80px;
 }
 
-.logo span {
+.logo-sign {
   margin-left: 8px;
   font-family: "Epilogue";
   font-style: normal;
@@ -117,7 +115,7 @@ import { RouterLink } from "vue-router";
   color: #000;
 }
 
-a {
+.link-socialmedia {
   margin-left: 24px;
 }
 </style>
