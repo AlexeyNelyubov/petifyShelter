@@ -19,11 +19,11 @@ const filterCounter = ref(0);
 
 watch(filterItems.value, () => {
   for (let item in filterItems.value) {
-    if (filterItems.value[item].length) {
-      for (let element of filterItems.value[item]) {
-        console.log(element);
-      }
-    }
+    // if (filterItems.value[item].length) {
+    //   for (let element of filterItems.value[item]) {
+    //     console.log(element);
+    //   }
+    // }
     if (filterItems.value[item]) {
       if (!filterTypeItems.value.includes(item)) {
         filterTypeItems.value.push(item);
