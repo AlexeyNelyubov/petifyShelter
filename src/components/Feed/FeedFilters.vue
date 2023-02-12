@@ -1,15 +1,34 @@
 <script setup>
+import FilterSingle from "./FeedFilters/FilterSingle.vue";
 import FilterType from "./FeedFilters/FilterType.vue";
 import FilterGender from "./FeedFilters/FilterGender.vue";
 import FilterBreed from "./FeedFilters/FilterBreed.vue";
+
+const emit = defineEmits(["change-filter"]);
+
+const itemForfilterType = ["type", "Вид животного", "Кот", "Собака", "Птица"];
+const itemForfilterGender = ["gender", "Пол", "Мальчик", "Девочка"];
+
+function changeFilterType(filterType, type) {
+  let filterResult = [];
+  for (let item in filterType) {
+    filterResult.push(filterType[item]);
+  }
+  emit("change-filter", filterResult, type);
+}
 </script>
 
 <template>
   <div class="wrapper-filters">
     <div class="filters">
-      <FilterType />
-      <FilterGender />
-      <FilterBreed />
+      <FilterSingle
+        @change-filterType="changeFilterType"
+        :itemForfilter="itemForfilterType"
+      />
+      <FilterSingle
+        @change-filterType="changeFilterType"
+        :itemForfilter="itemForfilterGender"
+      />
     </div>
     <button class="lucky">Мне повезёт</button>
   </div>

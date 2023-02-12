@@ -15,7 +15,21 @@ const PetsListAfterFilters = ref([]);
 const PetsListForShow = ref([]);
 const counterOfFilters = ref([]);
 const counterOfGeoLocation = ref(false);
+const Filters = ref({
+  type: [],
+  gender: [],
+  breed: [],
+});
 let pets = [];
+
+function changeFilter(filter, type) {
+  Filters.value[type].splice(0);
+  // FiltersStore.filters[type].splice(0);
+  for (let item of filter) {
+    Filters.value[type].push(item);
+    // FiltersStore.filters[type].push(item);
+  }
+}
 
 (async () => {
   //let response = await fetch("src/assets/feed/Pets.json");
@@ -72,17 +86,17 @@ function compareFiltersandGeolocation() {
   }
 }
 
-watch(FiltersStore.filters, () => {
+watch(Filters.value, () => {
   pets = PetsList.value.slice(0);
-  for (let filter in FiltersStore.filters) {
-    if (FiltersStore.filters[filter].length) {
+  for (let filter in Filters.value) {
+    if (Filters.value[filter].length) {
       PetsListForShow.value.splice(0);
       PetsListAfterFilters.value.splice(0);
       if (!counterOfFilters.value.includes(filter)) {
         counterOfFilters.value.push(filter);
       }
       for (let pet of pets) {
-        for (let item of FiltersStore.filters[filter]) {
+        for (let item of Filters.value[filter]) {
           if (item === pet[filter]) {
             PetsListForShow.value.push(pet);
             PetsListAfterFilters.value.push(pet);
@@ -110,10 +124,49 @@ watch(FiltersStore.filters, () => {
     compareFiltersandGeolocation();
   }
 });
+
+// watch(FiltersStore.filters, () => {
+//   pets = PetsList.value.slice(0);
+//   for (let filter in FiltersStore.filters) {
+//     if (FiltersStore.filters[filter].length) {
+//       PetsListForShow.value.splice(0);
+//       PetsListAfterFilters.value.splice(0);
+//       if (!counterOfFilters.value.includes(filter)) {
+//         counterOfFilters.value.push(filter);
+//       }
+//       for (let pet of pets) {
+//         for (let item of FiltersStore.filters[filter]) {
+//           if (item === pet[filter]) {
+//             PetsListForShow.value.push(pet);
+//             PetsListAfterFilters.value.push(pet);
+//           }
+//         }
+//       }
+//       pets = PetsListForShow.value.slice(0);
+//     } else {
+//       for (let i in counterOfFilters.value) {
+//         if (counterOfFilters.value[i] === filter) {
+//           counterOfFilters.value.splice(i, 1);
+//         }
+//       }
+//     }
+//   }
+//   if (!counterOfFilters.value.length) {
+//     PetsListForShow.value.splice(0);
+//     PetsListAfterFilters.value.splice(0);
+//     for (let pet of PetsList.value) {
+//       PetsListForShow.value.push(pet);
+//       PetsListAfterFilters.value.push(pet);
+//     }
+//   }
+//   if (counterOfGeoLocation.value) {
+//     compareFiltersandGeolocation();
+//   }
+// });
 </script>
 
 <template>
-  <FeedFilters class="filters" />
+  <FeedFilters class="filters" @change-filter="changeFilter" />
 
   <div class="wrapper-for-card">
     <div v-for="pet in PetsListForShow" :key="pet.id">

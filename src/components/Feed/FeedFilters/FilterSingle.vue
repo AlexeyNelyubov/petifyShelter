@@ -8,23 +8,14 @@ const props = defineProps({
 const emit = defineEmits(["change-filterType"]);
 
 const filterItems = ref({});
-
 for (let i = 2; i <= props.itemForfilter.length - 1; i++) {
   filterItems.value[props.itemForfilter[i]] = false;
 }
 
-// const filterItems = ref({
-//   Кот: false,
-//   Собака: false,
-//   Птица: false,
-// });
 const filterTypeItems = ref([]);
 const showFilter = ref(false);
 const filterSign = ref("Не выбран");
 const filterCounter = ref(0);
-// const cat = ref();
-// const dog = ref();
-// const bird = ref();
 
 watch(filterItems.value, () => {
   for (let item in filterItems.value) {
@@ -48,47 +39,6 @@ watch(filterItems.value, () => {
   emit("change-filterType", filterTypeItems.value, props.itemForfilter[0]);
 });
 
-// watch(cat, () => {
-//   if (cat.value) {
-//     filterType.value.push("Кот");
-//     FiltersStore.filters.type.push("Кот");
-//     filterCounter.value++;
-//   } else {
-//     filterCounter.value--;
-//     FiltersStore.filters.type.splice(
-//       FiltersStore.filters.type.indexOf("Кот"),
-//       1
-//     );
-//   }
-// });
-
-// watch(dog, () => {
-//   if (dog.value) {
-//     FiltersStore.filters.type.push("Собака");
-//     filterCounter.value++;
-//   } else {
-//     filterCounter.value--;
-//     FiltersStore.filters.type.splice(
-//       FiltersStore.filters.type.indexOf("Собака"),
-//       1
-//     );
-//   }
-// });
-// watch(bird, () => {
-//   if (bird.value) {
-//     FiltersStore.filters.type.push("Птица");
-//     filterCounter.value++;
-//   } else {
-//     filterCounter.value--;
-//     FiltersStore.filters.type.splice(
-//       FiltersStore.filters.type.indexOf("Птица"),
-//       1
-//     );
-//   }
-// });
-
-props.itemForfilter.length - 3;
-
 watch(filterCounter, () => {
   if (filterCounter.value === 0) {
     filterSign.value = "Не выбран";
@@ -100,30 +50,14 @@ watch(filterCounter, () => {
     }
   }
 });
-// watch(filterCounter, () => {
-//   switch (filterCounter.value) {
-//     case 0:
-//       filterSign.value = "Не выбран";
-//       break;
-//     case 1:
-//       filterSign.value = "1";
-//       break;
-//     case 2:
-//       filterSign.value = "2";
-//       break;
-//     case 3:
-//       filterSign.value = "Все";
-//       break;
-//   }
-// });
 </script>
 
 <template>
   <div
     class="filter-type"
     :class="{
-      'filter-type-border-all': filterCounter === 3,
-      'filter-type-border': filterCounter === 1 || filterCounter === 2,
+      'filter-type-border-all': filterSign === 'Все',
+      'filter-type-border': filterSign != 'Все' && filterSign != 'Не выбран',
     }"
   >
     <p class="filter-header">{{ props.itemForfilter[1] }}</p>
@@ -140,16 +74,6 @@ watch(filterCounter, () => {
         <input type="checkbox" v-model="filterItems[filterItem]" />
         {{ filterItem }}
       </label>
-
-      <!-- <label class="filter-label">
-        <input type="checkbox" v-model="cat" /> Кот
-      </label>
-      <label class="filter-label">
-        <input type="checkbox" v-model="dog" /> Собака
-      </label>
-      <label class="filter-label">
-        <input type="checkbox" v-model="bird" /> Птица
-      </label> -->
     </div>
   </div>
 </template>
