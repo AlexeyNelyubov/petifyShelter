@@ -1,4 +1,5 @@
 <script setup>
+// import { ref } from "vue";
 import FilterSingle from "./FeedFilters/FilterSingle.vue";
 import FilterType from "./FeedFilters/FilterType.vue";
 import FilterGender from "./FeedFilters/FilterGender.vue";
@@ -8,10 +9,79 @@ const emit = defineEmits(["change-filter"]);
 
 const itemForfilterType = ["type", "Вид животного", "Кот", "Собака", "Птица"];
 const itemForfilterGender = ["gender", "Пол", "Мальчик", "Девочка"];
+const itemForfilterBreed = [
+  "breeds",
+  "Порода",
+  "Беспородная",
+  "Британская длинношёрстная",
+  "Сибирская",
+  "Американская короткошёрстная",
+  "Персидская",
+  "Турецкий ван",
+  "Беспородная",
+  "Автралийский келпи",
+  "Австралийская овчарка",
+  "Бернский зенненхунд",
+  "Лабрадор",
+  "Ретривер",
+  "Хаски",
+  "Лайка",
+  "Волнистый",
+  "Розелла",
+  "Корелла",
+];
+// const itemForfilterBreedCat = [
+//   "breed",
+//   "Порода",
+//   "Беспородная",
+//   "Британская длинношёрстная",
+//   "Сибирская",
+//   "Американская короткошёрстная",
+//   "Персидская",
+//   "Турецкий ван",
+// ];
+// const itemForfilterBreedDog = [
+//   "breed",
+//   "Порода",
+//   "Беспородная",
+//   "Автралийский келпи",
+//   "Австралийская овчарка",
+//   "Бернский зенненхунд",
+//   "Лабрадор",
+//   "Ретривер",
+//   "Хаски",
+//   "Лайка",
+// ];
+// const itemForfilterBreedBird = [
+//   "breed",
+//   "Порода",
+//   "Волнистый",
+//   "Розелла",
+//   "Корелла",
+// ];
 
 function changeFilterType(filterType, type) {
   let filterResult = [];
   for (let item in filterType) {
+    // itemForfilterBreed.value.splice();
+    // if (filterType[item] === "Кот") {
+    //   showFilterBreed.value = true;
+    //   // for (let i of itemForfilterBreedCat) {
+    //   //   itemForfilterBreed.value.push(i);
+    //   // }
+    //   itemForfilterBreed.value = itemForfilterBreedCat.slice(0);
+    //   console.log(itemForfilterBreed.value);
+    // } else {
+    //   if (filterType[item] === "Собака") {
+    //     showFilterBreed.value = true;
+    //     itemForfilterBreed.value = itemForfilterBreedDog.slice(0);
+    //   } else {
+    //     if (filterType[item] === "Птица") {
+    //       showFilterBreed.value = true;
+    //       itemForfilterBreed.value = itemForfilterBreedBird.slice(0);
+    //     }
+    //   }
+    // }
     filterResult.push(filterType[item]);
   }
   emit("change-filter", filterResult, type);
@@ -28,6 +98,10 @@ function changeFilterType(filterType, type) {
       <FilterSingle
         @change-filterType="changeFilterType"
         :itemForfilter="itemForfilterGender"
+      />
+      <FilterSingle
+        @change-filterType="changeFilterType"
+        :itemForfilter="itemForfilterBreed"
       />
     </div>
     <button class="lucky">Мне повезёт</button>

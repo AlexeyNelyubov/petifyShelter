@@ -18,7 +18,7 @@ const counterOfGeoLocation = ref(false);
 const Filters = ref({
   type: [],
   gender: [],
-  breed: [],
+  breeds: [],
 });
 let pets = [];
 
@@ -97,6 +97,16 @@ watch(Filters.value, () => {
       }
       for (let pet of pets) {
         for (let item of Filters.value[filter]) {
+          if (pet[filter].length) {
+            for (let breed of pet[filter]) {
+              if (item === breed) {
+                if (!PetsListForShow.value.includes(pet)) {
+                  PetsListForShow.value.push(pet);
+                  PetsListAfterFilters.value.push(pet);
+                }
+              }
+            }
+          }
           if (item === pet[filter]) {
             PetsListForShow.value.push(pet);
             PetsListAfterFilters.value.push(pet);

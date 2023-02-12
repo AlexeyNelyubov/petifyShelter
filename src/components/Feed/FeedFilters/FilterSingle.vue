@@ -5,6 +5,12 @@ const props = defineProps({
   itemForfilter: Array,
 });
 
+watch(
+  () => props.itemForfilterBreed,
+  () => {
+    console.log(props.itemForfilterBreed);
+  }
+);
 const emit = defineEmits(["change-filterType"]);
 
 const filterItems = ref({});
