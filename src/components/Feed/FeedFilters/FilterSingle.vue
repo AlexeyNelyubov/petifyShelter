@@ -2,48 +2,81 @@
 import { ref, watch } from "vue";
 
 const props = defineProps({
-  itemForfilter: Array,
+  itemForFilter: Object,
+  Arr: { type: Array, required: false },
 });
 
 const emit = defineEmits(["change-filterType"]);
 
 const filterItems = ref({});
-for (let i = 2; i <= props.itemForfilter.length - 1; i++) {
-  filterItems.value[props.itemForfilter[i]] = false;
+let lenghtfilterItems = ref(0);
+function getfilterItems(compareItem) {
+  filterItems.value = {};
+  for (let index in props.itemForFilter) {
+    let filterItem = [];
+    if (index != compareItem) {
+      for (let el of props.itemForFilter[index]) {
+        filterItem.push(el);
+        lenghtfilterItems.value++;
+      }
+      filterItems.value[index] = filterItem;
+    }
+  }
+}
+
+getfilterItems("general");
+
+if (props.Arr) {
+  watch(props.Arr, () => {
+    if (props.Arr.length) {
+      filterItems.value = {};
+      for (let item of props.Arr) {
+        for (let index in props.itemForFilter) {
+          let filterItem = [];
+          if (item === index) {
+            for (let el of props.itemForFilter[item]) {
+              filterItem.push(el);
+            }
+            filterItems.value[index] = filterItem;
+          }
+        }
+      }
+    } else {
+      getfilterItems("general");
+    }
+  });
 }
 
 const filterTypeItems = ref([]);
+let filters = [];
 const showFilter = ref(false);
-const filterSign = ref("Не выбран");
+const filterSign = ref("");
 const filterCounter = ref(0);
 
-watch(filterItems.value, () => {
-  for (let item in filterItems.value) {
-    if (filterItems.value[item]) {
-      if (!filterTypeItems.value.includes(item)) {
-        filterTypeItems.value.push(item);
-        filterCounter.value++;
-      }
-    } else {
-      for (let element of filterTypeItems.value) {
-        if (element === item) {
-          filterTypeItems.value.splice(
-            filterTypeItems.value.indexOf(element),
-            1
-          );
-          filterCounter.value--;
-        }
-      }
-    }
+if (props.itemForFilter.general[0] === "breeds") {
+  filterSign.value = "Не выбрана";
+} else {
+  filterSign.value = "Не выбран";
+}
+
+watch(filterTypeItems, () => {
+  filterCounter.value = 0;
+  filters = [];
+  for (let i of filterTypeItems.value) {
+    filters.push(i);
+    filterCounter.value++;
   }
-  emit("change-filterType", filterTypeItems.value, props.itemForfilter[0]);
+  emit("change-filterType", filters, props.itemForFilter.general[0]);
 });
 
 watch(filterCounter, () => {
   if (filterCounter.value === 0) {
     filterSign.value = "Не выбран";
+    if (props.itemForFilter.general[0] === "breeds") {
+      filterSign.value = "Не выбрана";
+    }
   } else {
-    if (filterCounter.value === props.itemForfilter.length - 2) {
+    if (filterCounter.value === lenghtfilterItems.value) {
       filterSign.value = "Все";
     } else {
       filterSign.value = String(filterCounter.value);
@@ -57,23 +90,39 @@ watch(filterCounter, () => {
     class="filter-type"
     :class="{
       'filter-type-border-all': filterSign === 'Все',
-      'filter-type-border': filterSign != 'Все' && filterSign != 'Не выбран',
+      'filter-type-border':
+        filterSign != 'Все' &&
+        filterSign != 'Не выбран' &&
+        filterSign != 'Не выбрана' &&
+        filterSign != '',
     }"
   >
-    <p class="filter-header">{{ props.itemForfilter[1] }}</p>
+    <p class="filter-header">{{ props.itemForFilter.general[1] }}</p>
     <div class="down-part" @click="showFilter = !showFilter">
       <p>{{ filterSign }}</p>
       <img src="@/assets/imgarrowdown.svg" width="14" height="8" alt="arrow" />
     </div>
-    <div v-if="showFilter" class="filter">
-      <label
-        v-for="(value, filterItem) in filterItems"
-        :key="filterItem.id"
-        class="filter-label"
-      >
-        <input type="checkbox" v-model="filterItems[filterItem]" />
-        {{ filterItem }}
-      </label>
+    <div
+      v-if="showFilter"
+      :class="{
+        filter: props.itemForFilter.general[0] != 'breeds',
+        'filter-breed': props.itemForFilter.general[0] === 'breeds',
+      }"
+    >
+      <div v-for="(value, filterItem) in filterItems" :key="filterItem.id">
+        <div v-if="props.itemForFilter.general[0] === 'breeds'" class="breed">
+          {{ filterItem }}
+        </div>
+        <label
+          v-for="filter in filterItems[filterItem]"
+          :key="filter.id"
+          class="filter-label"
+        >
+          <input type="checkbox" :value="filter" v-model="filterTypeItems" />
+          {{ filter }}
+          <br />
+        </label>
+      </div>
     </div>
   </div>
 </template>
@@ -81,7 +130,7 @@ watch(filterCounter, () => {
 <style scoped>
 .filter-type {
   height: 60px;
-  width: 132px;
+  width: 140px;
   margin-right: 24px;
   display: flex;
   flex-direction: column;
@@ -117,7 +166,19 @@ watch(filterCounter, () => {
 .filter {
   position: absolute;
   top: 84px;
-  width: 132px;
+  width: 140px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+}
+
+.filter-breed {
+  position: absolute;
+  top: 84px;
+  /* width: 140px; */
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -126,6 +187,18 @@ watch(filterCounter, () => {
   border: 1px solid #d9d9d9;
 }
 .filter-label {
+  line-height: 24px;
+}
+
+.filter-label:hover {
+  color: #939393;
+}
+
+.breed {
   margin-top: 8px;
+  /* font-family: "Epilogue";
+  font-style: normal;
+  font-weight: 400; */
+  font-size: 20px;
 }
 </style>

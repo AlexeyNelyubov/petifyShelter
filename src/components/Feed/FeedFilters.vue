@@ -1,90 +1,61 @@
 <script setup>
-// import { ref } from "vue";
+import { ref } from "vue";
 import FilterSingle from "./FeedFilters/FilterSingle.vue";
-import FilterType from "./FeedFilters/FilterType.vue";
-import FilterGender from "./FeedFilters/FilterGender.vue";
-import FilterBreed from "./FeedFilters/FilterBreed.vue";
 
 const emit = defineEmits(["change-filter"]);
 
-const itemForfilterType = ["type", "Вид животного", "Кот", "Собака", "Птица"];
-const itemForfilterGender = ["gender", "Пол", "Мальчик", "Девочка"];
-const itemForfilterBreed = [
-  "breeds",
-  "Порода",
-  "Беспородная",
-  "Британская длинношёрстная",
-  "Сибирская",
-  "Американская короткошёрстная",
-  "Персидская",
-  "Турецкий ван",
-  "Беспородная",
-  "Автралийский келпи",
-  "Австралийская овчарка",
-  "Бернский зенненхунд",
-  "Лабрадор",
-  "Ретривер",
-  "Хаски",
-  "Лайка",
-  "Волнистый",
-  "Розелла",
-  "Корелла",
-];
-// const itemForfilterBreedCat = [
-//   "breed",
-//   "Порода",
-//   "Беспородная",
-//   "Британская длинношёрстная",
-//   "Сибирская",
-//   "Американская короткошёрстная",
-//   "Персидская",
-//   "Турецкий ван",
-// ];
-// const itemForfilterBreedDog = [
-//   "breed",
-//   "Порода",
-//   "Беспородная",
-//   "Автралийский келпи",
-//   "Австралийская овчарка",
-//   "Бернский зенненхунд",
-//   "Лабрадор",
-//   "Ретривер",
-//   "Хаски",
-//   "Лайка",
-// ];
-// const itemForfilterBreedBird = [
-//   "breed",
-//   "Порода",
-//   "Волнистый",
-//   "Розелла",
-//   "Корелла",
-// ];
+const itemForfilterType = {
+  general: ["type", "Вид животного"],
+  filters: ["Кот", "Собака", "Птица"],
+};
+const itemForfilterGender = {
+  general: ["gender", "Пол"],
+  filters: ["Мальчик", "Девочка"],
+};
+
+const itemForfilterBreed = {
+  general: ["breeds", "Порода"],
+  Коты: [
+    "Беспородная",
+    "Британская длинношёрстная",
+    "Сибирская",
+    "Американская короткошёрстная",
+    "Персидская",
+    "Турецкий ван",
+  ],
+  Собаки: [
+    "Беспородная",
+    "Автралийский келпи",
+    "Австралийская овчарка",
+    "Бернский зенненхунд",
+    "Лабрадор",
+    "Ретривер",
+    "Хаски",
+    "Лайка",
+  ],
+  Птицы: ["Волнистый", "Розелла", "Корелла"],
+};
+
+const Arr = ref([]);
 
 function changeFilterType(filterType, type) {
-  let filterResult = [];
-  for (let item in filterType) {
-    // itemForfilterBreed.value.splice();
-    // if (filterType[item] === "Кот") {
-    //   showFilterBreed.value = true;
-    //   // for (let i of itemForfilterBreedCat) {
-    //   //   itemForfilterBreed.value.push(i);
-    //   // }
-    //   itemForfilterBreed.value = itemForfilterBreedCat.slice(0);
-    //   console.log(itemForfilterBreed.value);
-    // } else {
-    //   if (filterType[item] === "Собака") {
-    //     showFilterBreed.value = true;
-    //     itemForfilterBreed.value = itemForfilterBreedDog.slice(0);
-    //   } else {
-    //     if (filterType[item] === "Птица") {
-    //       showFilterBreed.value = true;
-    //       itemForfilterBreed.value = itemForfilterBreedBird.slice(0);
-    //     }
-    //   }
-    // }
-    filterResult.push(filterType[item]);
+  Arr.value.splice(0);
+  if (type === "type") {
+    for (let el of filterType) {
+      switch (el) {
+        case "Кот":
+          Arr.value.push("Коты");
+          break;
+        case "Собака":
+          Arr.value.push("Собаки");
+          break;
+        case "Птица":
+          Arr.value.push("Птицы");
+          break;
+      }
+    }
   }
-  emit("change-filter", filterResult, type);
+  emit("change-filter", filterType, type);
 }
 </script>
 
@@ -93,15 +64,16 @@ function changeFilterType(filterType, type) {
     <div class="filters">
       <FilterSingle
         @change-filterType="changeFilterType"
-        :itemForfilter="itemForfilterType"
+        :itemForFilter="itemForfilterType"
       />
       <FilterSingle
         @change-filterType="changeFilterType"
-        :itemForfilter="itemForfilterGender"
+        :itemForFilter="itemForfilterGender"
       />
       <FilterSingle
         @change-filterType="changeFilterType"
-        :itemForfilter="itemForfilterBreed"
+        :itemForFilter="itemForfilterBreed"
+        :Arr="Arr"
       />
     </div>
     <button class="lucky">Мне повезёт</button>

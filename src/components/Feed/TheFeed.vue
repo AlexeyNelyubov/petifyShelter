@@ -22,12 +22,23 @@ const Filters = ref({
 });
 let pets = [];
 
+if (localStorage.getItem("type")) {
+  console.log(typeof localStorage.getItem("type"));
+  let arr = localStorage.getItem("type").split(",");
+  for (let item of arr) {
+    Filters.value.type.push(item);
+    console.log(Filters.value);
+  }
+}
+
 function changeFilter(filter, type) {
   Filters.value[type].splice(0);
   // FiltersStore.filters[type].splice(0);
   for (let item of filter) {
     Filters.value[type].push(item);
+    localStorage.setItem(`${type}`, filter);
     // FiltersStore.filters[type].push(item);
+    console.log(Filters.value);
   }
 }
 
@@ -87,6 +98,7 @@ function compareFiltersandGeolocation() {
 }
 
 watch(Filters.value, () => {
+  console.log("1");
   pets = PetsList.value.slice(0);
   for (let filter in Filters.value) {
     if (Filters.value[filter].length) {

@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 
 const props = defineProps({
   itemForfilter: Array,
+  itemForfilterBreed: Object,
 });
 
 const emit = defineEmits(["change-filterType"]);
@@ -14,16 +15,17 @@ for (let i = 2; i <= props.itemForfilter.length - 1; i++) {
 
 const filterTypeItems = ref([]);
 const showFilter = ref(false);
-const filterSign = ref("Не выбран");
+const filterSign = ref("");
 const filterCounter = ref(0);
+
+if (props.itemForfilter[0] === "breeds") {
+  filterSign.value = "Не выбрана";
+} else {
+  filterSign.value = "Не выбран";
+}
 
 watch(filterItems.value, () => {
   for (let item in filterItems.value) {
-    // if (filterItems.value[item].length) {
-    //   for (let element of filterItems.value[item]) {
-    //     console.log(element);
-    //   }
-    // }
     if (filterItems.value[item]) {
       if (!filterTypeItems.value.includes(item)) {
         filterTypeItems.value.push(item);
@@ -47,6 +49,9 @@ watch(filterItems.value, () => {
 watch(filterCounter, () => {
   if (filterCounter.value === 0) {
     filterSign.value = "Не выбран";
+    if (props.itemForfilter[0] === "breeds") {
+      filterSign.value = "Не выбрана";
+    }
   } else {
     if (filterCounter.value === props.itemForfilter.length - 2) {
       filterSign.value = "Все";
@@ -62,7 +67,11 @@ watch(filterCounter, () => {
     class="filter-type"
     :class="{
       'filter-type-border-all': filterSign === 'Все',
-      'filter-type-border': filterSign != 'Все' && filterSign != 'Не выбран',
+      'filter-type-border':
+        filterSign != 'Все' &&
+        filterSign != 'Не выбран' &&
+        filterSign != 'Не выбрана' &&
+        filterSign != '',
     }"
   >
     <p class="filter-header">{{ props.itemForfilter[1] }}</p>
@@ -70,7 +79,14 @@ watch(filterCounter, () => {
       <p>{{ filterSign }}</p>
       <img src="@/assets/imgarrowdown.svg" width="14" height="8" alt="arrow" />
     </div>
-    <div v-if="showFilter" class="filter">
+    <div
+      v-if="showFilter"
+      :class="{
+        filter: props.itemForfilter[0] != 'breeds',
+        'filter-breed': props.itemForfilter[0] === 'breeds',
+      }"
+    >
+      <div v-if="props.itemForfilter[0] === 'breeds'">Коты</div>
       <label
         v-for="(value, filterItem) in filterItems"
         :key="filterItem.id"
@@ -86,7 +102,7 @@ watch(filterCounter, () => {
 <style scoped>
 .filter-type {
   height: 60px;
-  width: 132px;
+  width: 140px;
   margin-right: 24px;
   display: flex;
   flex-direction: column;
@@ -122,7 +138,19 @@ watch(filterCounter, () => {
 .filter {
   position: absolute;
   top: 84px;
-  width: 132px;
+  width: 140px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+}
+
+.filter-breed {
+  position: absolute;
+  top: 84px;
+  /* width: 140px; */
   padding: 10px;
   display: flex;
   flex-direction: column;
