@@ -1,6 +1,13 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import FilterSingle from "./FeedFilters/FilterSingle.vue";
+
+const props = defineProps({
+  FiltersFromLocalStorage: {
+    type: Object,
+    required: false,
+  },
+});
 
 const emit = defineEmits(["change-filter"]);
 
@@ -36,21 +43,21 @@ const itemForfilterBreed = {
   Птицы: ["Волнистый", "Розелла", "Корелла"],
 };
 
-const Arr = ref([]);
+const ArrTypeFilter = ref([]);
 
 function changeFilterType(filterType, type) {
-  Arr.value.splice(0);
+  ArrTypeFilter.value.splice(0);
   if (type === "type") {
     for (let el of filterType) {
       switch (el) {
         case "Кот":
-          Arr.value.push("Коты");
+          ArrTypeFilter.value.push("Коты");
           break;
         case "Собака":
-          Arr.value.push("Собаки");
+          ArrTypeFilter.value.push("Собаки");
           break;
         case "Птица":
-          Arr.value.push("Птицы");
+          ArrTypeFilter.value.push("Птицы");
           break;
       }
     }
@@ -65,15 +72,18 @@ function changeFilterType(filterType, type) {
       <FilterSingle
         @change-filterType="changeFilterType"
         :itemForFilter="itemForfilterType"
+        :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
       />
       <FilterSingle
         @change-filterType="changeFilterType"
         :itemForFilter="itemForfilterGender"
+        :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
       />
       <FilterSingle
         @change-filterType="changeFilterType"
         :itemForFilter="itemForfilterBreed"
-        :Arr="Arr"
+        :ArrTypeFilter="ArrTypeFilter"
+        :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
       />
     </div>
     <button class="lucky">Мне повезёт</button>

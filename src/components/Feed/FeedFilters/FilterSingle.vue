@@ -3,13 +3,48 @@ import { ref, watch } from "vue";
 
 const props = defineProps({
   itemForFilter: Object,
-  Arr: { type: Array, required: false },
+  ArrTypeFilter: { type: Array, required: false },
+  FiltersFromLocalStorage: {
+    type: Object,
+    required: false,
+  },
 });
 
 const emit = defineEmits(["change-filterType"]);
 
+const filterTypeItems = ref([]);
+let filters = [];
+const filterCounter = ref(0);
+
+if (props.FiltersFromLocalStorage) {
+  watch(props.FiltersFromLocalStorage, () => {
+    for (let index in props.FiltersFromLocalStorage) {
+      if (props.FiltersFromLocalStorage[index].length) {
+        if (index === props.itemForFilter.general[0]) {
+          filters = [];
+          for (let i of props.FiltersFromLocalStorage[index]) {
+            filters.push(i);
+          }
+          filterTypeItems.value = filters;
+        }
+      }
+    }
+  });
+}
+
+watch(filterTypeItems, () => {
+  filterCounter.value = 0;
+  filters = [];
+  for (let i of filterTypeItems.value) {
+    filters.push(i);
+    filterCounter.value++;
+  }
+  emit("change-filterType", filters, props.itemForFilter.general[0]);
+});
+
 const filterItems = ref({});
 let lenghtfilterItems = ref(0);
+
 function getfilterItems(compareItem) {
   filterItems.value = {};
   for (let index in props.itemForFilter) {
@@ -26,11 +61,11 @@ function getfilterItems(compareItem) {
 
 getfilterItems("general");
 
-if (props.Arr) {
-  watch(props.Arr, () => {
-    if (props.Arr.length) {
+if (props.ArrTypeFilter) {
+  watch(props.ArrTypeFilter, () => {
+    if (props.ArrTypeFilter.length) {
       filterItems.value = {};
-      for (let item of props.Arr) {
+      for (let item of props.ArrTypeFilter) {
         for (let index in props.itemForFilter) {
           let filterItem = [];
           if (item === index) {
@@ -47,27 +82,14 @@ if (props.Arr) {
   });
 }
 
-const filterTypeItems = ref([]);
-let filters = [];
 const showFilter = ref(false);
 const filterSign = ref("");
-const filterCounter = ref(0);
 
 if (props.itemForFilter.general[0] === "breeds") {
   filterSign.value = "Не выбрана";
 } else {
   filterSign.value = "Не выбран";
 }
-
-watch(filterTypeItems, () => {
-  filterCounter.value = 0;
-  filters = [];
-  for (let i of filterTypeItems.value) {
-    filters.push(i);
-    filterCounter.value++;
-  }
-  emit("change-filterType", filters, props.itemForFilter.general[0]);
-});
 
 watch(filterCounter, () => {
   if (filterCounter.value === 0) {
@@ -79,7 +101,7 @@ watch(filterCounter, () => {
     if (filterCounter.value === lenghtfilterItems.value) {
       filterSign.value = "Все";
     } else {
-      filterSign.value = String(filterCounter.value);
+      filterSign.value = "Выбрано" + " " + String(filterCounter.value);
     }
   }
 });

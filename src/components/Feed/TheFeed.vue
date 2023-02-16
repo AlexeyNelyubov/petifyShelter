@@ -3,6 +3,9 @@ import { ref, watch } from "vue";
 import FeedFilters from "./FeedFilters.vue";
 import FeedPetsCards from "./FeedPetsCards.vue";
 
+import { usePetsStore } from "@/stores/petsList.js";
+const PetsStore = usePetsStore();
+
 import { useLocationStore } from "@/stores/location.js";
 const storeGeolocation = useLocationStore();
 
@@ -10,6 +13,11 @@ import { useFiltersStore } from "@/stores/filters.js";
 const FiltersStore = useFiltersStore();
 
 const PetsList = ref([]);
+const FiltersFromLocalStorage = ref({
+  type: [],
+  gender: [],
+  breeds: [],
+});
 const PetsListAfterGeoLocation = ref([]);
 const PetsListAfterFilters = ref([]);
 const PetsListForShow = ref([]);
@@ -22,40 +30,58 @@ const Filters = ref({
 });
 let pets = [];
 
-if (localStorage.getItem("type")) {
-  console.log(typeof localStorage.getItem("type"));
-  let arr = localStorage.getItem("type").split(",");
-  for (let item of arr) {
-    Filters.value.type.push(item);
-    console.log(Filters.value);
-  }
-}
-
 function changeFilter(filter, type) {
   Filters.value[type].splice(0);
   // FiltersStore.filters[type].splice(0);
-  for (let item of filter) {
-    Filters.value[type].push(item);
-    localStorage.setItem(`${type}`, filter);
-    // FiltersStore.filters[type].push(item);
-    console.log(Filters.value);
+  if (filter.length) {
+    for (let item of filter) {
+      Filters.value[type].push(item);
+      // FiltersStore.filters[type].push(item);
+      localStorage.setItem(type, filter);
+    }
+  } else {
+    localStorage.removeItem(type);
   }
 }
 
-(async () => {
-  //let response = await fetch("src/assets/feed/Pets.json");
-  let response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/pets`);
-  let json = await response.json();
-
-  if (response.ok) {
-    for (let pet of json) {
-      PetsList.value.push(pet);
-      PetsListForShow.value.push(pet);
+function getFiltersFromLocalStorage() {
+  if (localStorage.getItem("type")) {
+    for (let item of localStorage.getItem("type").split(",")) {
+      FiltersFromLocalStorage.value.type.push(item);
     }
-  } else {
-    console.log("error", json);
   }
-})();
+  if (localStorage.getItem("gender")) {
+    for (let item of localStorage.getItem("gender").split(",")) {
+      FiltersFromLocalStorage.value.gender.push(item);
+    }
+  }
+  if (localStorage.getItem("breeds")) {
+    for (let item of localStorage.getItem("breeds").split(",")) {
+      FiltersFromLocalStorage.value.breeds.push(item);
+    }
+  }
+}
+
+if (!PetsStore.petsList.length) {
+  (async () => {
+    //let response = await fetch("src/assets/feed/Pets.json");
+    let response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/v1/pets`
+    );
+    let json = await response.json();
+
+    if (response.ok) {
+      for (let pet of json) {
+        PetsList.value.push(pet);
+        PetsListForShow.value.push(pet);
+        PetsStore.petsList.push(pet);
+      }
+      getFiltersFromLocalStorage();
+    } else {
+      console.log("error", json);
+    }
+  })();
+}
 
 watch(
   () => storeGeolocation.location,
@@ -98,7 +124,6 @@ function compareFiltersandGeolocation() {
 }
 
 watch(Filters.value, () => {
-  console.log("1");
   pets = PetsList.value.slice(0);
   for (let filter in Filters.value) {
     if (Filters.value[filter].length) {
@@ -188,7 +213,11 @@ watch(Filters.value, () => {
 </script>
 
 <template>
-  <FeedFilters class="filters" @change-filter="changeFilter" />
+  <FeedFilters
+    class="filters"
+    @change-filter="changeFilter"
+    :FiltersFromLocalStorage="FiltersFromLocalStorage"
+  />
 
   <div class="wrapper-for-card">
     <div v-for="pet in PetsListForShow" :key="pet.id">
