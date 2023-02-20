@@ -1,5 +1,7 @@
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
+// import { useClick } from "@/composable/click.js";
+// import { useKeyUp } from "@/composable/keyUp.js";
 import { useLocationStore } from "@/stores/location.js";
 
 const storeGeolocation = useLocationStore();
@@ -10,6 +12,23 @@ const cities = ref([]);
 const arrCities = [];
 const inputActive = ref(false);
 const uncorrectValueLocation = ref(false);
+
+/* todo:
+  [] напрашивается вынесение добавления / удаления обработчиков событий в composable
+  [] 2 onMounted мне тоже не очень нравятся. здесь понятно, что это временное решение, пусть будет пока
+*/
+
+// const { ev } = useClick();
+// watch(ev, () => {
+//   checkLocationAfterInput(ev.value, ev.value.type);
+// });
+
+// const { evkey } = useKeyUp();
+// watch(evkey, () => {
+//   if (evkey.value.key === "Enter") {
+//     checkLocationAfterInput(evkey.value, evkey.value.type);
+//   }
+// });
 
 onMounted(() => {
   document.addEventListener("click", (event) => {
@@ -22,8 +41,19 @@ onMounted(() => {
   });
 });
 
+onUnmounted(() => {
+  document.removeEventListener("click", (event) => {
+    checkLocationAfterInput(event, event.type);
+  });
+  document.removeEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+      checkLocationAfterInput(event, event.type);
+    }
+  });
+});
+
 function checkLocationAfterInput(event, type) {
-  const input = document.querySelector(".input-for-location");
+  const input = document.querySelector(".geolocation__logo-input-input");
   let happendEvent = event.composedPath().includes(input);
   if ((type === "keyup") & happendEvent) {
     happendEvent = false;
@@ -61,10 +91,10 @@ function checkLocationAfterInput(event, type) {
 }
 
 (async () => {
-  //let response = await fetch("src/assets/header/RussiaCities.json");
-  //let response = await fetch("/api/city");
-  let response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/city`);
-  //let response = await fetch("http://localhost:4000/api/v1/city");
+  // let response = await fetch(
+  //   `${import.meta.env.VITE_BACKEND_URI}/api/v1/city/`
+  // );
+  let response = await fetch("/src/assets/data/RussiaCities.json");
   let data = await response.json();
   for (let el of data) {
     arrCities.push(el.city);
@@ -99,38 +129,31 @@ function changeLocation(city) {
   geoAutocomplite.value = false;
   inputActive.value = false;
 }
-
-onUnmounted(() => {
-  document.removeEventListener("click", (event) => {
-    checkLocationAfterInput(event, event.type);
-  });
-  document.removeEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
-      checkLocationAfterInput(event, event.type);
-    }
-  });
-});
 </script>
 
 <template>
-  <div>
+  <div class="geolocation">
     <div
       v-if="inputActive"
       class="inputActive"
-      :class="{ 'inputActive-uncorrect': uncorrectValueLocation }"
+      :class="{ inputActive_uncorrect: uncorrectValueLocation }"
     ></div>
     <div
-      class="geolocation"
-      :class="{ 'geolocation-uncorrect': uncorrectValueLocation }"
+      class="geolocation__logo-input"
+      :class="{
+        'geolocation__logo-input_uncorrect': uncorrectValueLocation,
+      }"
     >
       <img
         alt="geolocation"
-        src="@/assets/header/imggeolocation.svg"
-        class="geolocation-img"
+        src="@/assets/images/Header/geolocation.svg"
+        class="geolocation__logo-input-logo"
       />
       <input
-        class="input-for-location"
-        :class="{ 'input-for-location-uncorrect': uncorrectValueLocation }"
+        class="geolocation__logo-input-input"
+        :class="{
+          'geolocation__logo-input-input_uncorrect': uncorrectValueLocation,
+        }"
         type="text"
         v-model="location"
         @input="
@@ -142,16 +165,19 @@ onUnmounted(() => {
       />
       <div v-if="geoAutocomplite" class="autocomplite">
         <div v-for="city in cities" :key="city">
-          <div class="cityInAutocomplite" @click="changeLocation(city)">
+          <div class="autocomplite__single-city" @click="changeLocation(city)">
             {{ city }}
           </div>
         </div>
       </div>
-      <div v-if="uncorrectValueLocation" class="notValideLocation">
+      <div
+        v-if="uncorrectValueLocation"
+        class="autocomplite__notValideLocation"
+      >
         Такого города нет в нашем списке или название города введено
         некорректно. Ввведите другой город или перейдите к глобальному поиску -
-        <div
-          class="global-search"
+        <span
+          class="autocomplite__notValideLocation-global-search"
           @click="
             (location = 'Весь мир'),
               (inputActive = false),
@@ -160,7 +186,7 @@ onUnmounted(() => {
           "
         >
           Весь мир
-        </div>
+        </span>
       </div>
     </div>
   </div>
@@ -175,7 +201,7 @@ onUnmounted(() => {
   height: 100%;
   z-index: 1;
 }
-.inputActive-uncorrect {
+.inputActive_uncorrect {
   position: fixed;
   left: 0;
   top: 0;
@@ -187,36 +213,32 @@ onUnmounted(() => {
 }
 
 .geolocation {
+  margin-right: 24px;
+}
+
+.geolocation__logo-input {
   display: flex;
   align-items: center;
   width: 224px;
   height: 32px;
-  margin-right: 24px;
   background-color: #60b2ee;
   border-radius: 16px;
-  box-sizing: border-box;
 }
 
-.geolocation-uncorrect {
+.geolocation__logo-input_uncorrect {
   position: relative;
   z-index: 2;
-  display: flex;
-  align-items: center;
-  width: 224px;
-  height: 32px;
-  margin-right: 24px;
   background-color: #ff0000;
-  border-radius: 16px;
-  box-sizing: border-box;
-}
-.geolocation-img {
-  margin: 0 16px 0 16px;
 }
 
-.input-for-location {
+.geolocation__logo-input-logo {
+  margin: 0 16px;
+}
+
+.geolocation__logo-input-input {
   width: 160px;
   text-decoration: none;
-  font-family: "Epilogue";
+  font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -227,35 +249,23 @@ onUnmounted(() => {
   outline: none;
 }
 
-.input-for-location-uncorrect {
-  width: 160px;
-  text-decoration: none;
-  font-family: "Epilogue";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 22px;
-  color: #ffffff;
+.geolocation__logo-input-input_uncorrect {
   background-color: #ff0000;
-  border: none;
-  outline: none;
 }
 
 .autocomplite {
   position: absolute;
   top: 64px;
   z-index: 2;
-  cursor: pointer;
 }
 
-.cityInAutocomplite {
+.autocomplite__single-city {
   display: flex;
   align-items: center;
   width: 224px;
   height: 32px;
   padding: 4px 16px 4px 48px;
-  box-sizing: border-box;
-  font-family: "Epilogue";
+  font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -263,19 +273,19 @@ onUnmounted(() => {
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 16px;
+  cursor: pointer;
 }
-.cityInAutocomplite:hover {
+.autocomplite__single-city:hover {
   color: #fff;
   background-color: #d9d9d9;
 }
 
-.notValideLocation {
+.autocomplite__notValideLocation {
   position: absolute;
   top: 32px;
   width: 256px;
   padding: 16px 0 16px 16px;
   z-index: 2;
-  box-sizing: border-box;
   font-family: "Epilogue";
   font-style: normal;
   font-weight: 400;
@@ -285,7 +295,7 @@ onUnmounted(() => {
   border: 1px solid #d9d9d9;
   border-radius: 16px;
 }
-.global-search {
+.autocomplite__notValideLocation-global-search {
   position: absolute;
   top: 126px;
   left: 85px;

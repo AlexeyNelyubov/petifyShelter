@@ -122,7 +122,12 @@ watch(filterCounter, () => {
     <p class="filter-header">{{ props.itemForFilter.general[1] }}</p>
     <div class="down-part" @click="showFilter = !showFilter">
       <p>{{ filterSign }}</p>
-      <img src="@/assets/imgarrowdown.svg" width="14" height="8" alt="arrow" />
+      <img
+        src="@/assets/images/Header/arrow-down.svg"
+        width="14"
+        height="8"
+        alt="arrow"
+      />
     </div>
     <div
       v-if="showFilter"

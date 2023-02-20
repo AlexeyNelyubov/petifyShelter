@@ -38,13 +38,13 @@ function ColorForPetsFeature() {
 
 switch (props.pet.type) {
   case "Кот":
-    PetsTypeImg.value = "src/assets/feed/cat.svg";
+    PetsTypeImg.value = "src/assets//images/Feed/cat.svg";
     break;
   case "Собака":
-    PetsTypeImg.value = "src/assets/feed/dog.svg";
+    PetsTypeImg.value = "src/assets//images/Feed/dog.svg";
     break;
   case "Птица":
-    PetsTypeImg.value = "src/assets/feed/dog.svg";
+    PetsTypeImg.value = "src/assets//images/Feed/dog.svg";
     break;
 }
 
@@ -90,14 +90,14 @@ if (fullMonth === 1) {
 const Age = `${fullYear} ${year} ${fullMonth} ${month}`;
 
 if (props.pet.gender === "Мальчик") {
-  PetsGender.value = "src/assets/feed/male.svg";
+  PetsGender.value = "src/assets//images/Feed/male.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизован";
   } else {
     PetsSterelization.value = "не стерелизован";
   }
 } else {
-  PetsGender.value = "src/assets/feed/female.svg";
+  PetsGender.value = "src/assets//images/Feed/female.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизована";
   } else {
@@ -129,7 +129,7 @@ if (props.pet.gender === "Мальчик") {
           </p>
           <img
             v-if="props.pet.vaccinated"
-            src="src/assets/feed/vaccinated.svg"
+            src="@/assets/images/Feed/vaccinated.svg"
           />
           <img :src="PetsGender" class="pets-gender" />
         </div>

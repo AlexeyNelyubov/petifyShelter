@@ -1,25 +1,23 @@
 <script setup>
 import TheHeader from "@/components/Header/TheHeader.vue";
-import TheFeed from "@/components/Feed/TheFeed.vue";
+import ProfileFeed from "@/components/Profile/ProfileFeed.vue";
 import TheFooter from "@/components/TheFooter.vue";
 </script>
 
 <template>
-  <div class="wrapper-index">
+  <div class="profile">
     <TheHeader />
 
-    <main class="main-index">
-      <TheFeed />
+    <main class="main-profile">
+      <ProfileFeed />
     </main>
 
-    <footer class="footer-index">
-      <TheFooter />
-    </footer>
+    <TheFooter />
   </div>
 </template>
 
 <style scoped>
-.wrapper-index {
+.profile {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -27,9 +25,10 @@ import TheFooter from "@/components/TheFooter.vue";
   min-height: 100vh;
 }
 
-.main-index {
+.main-profile {
   position: relative;
   z-index: 1;
   flex-grow: 1;
+  background: #ffffff;
 }
 </style>

@@ -8,7 +8,7 @@ import { RouterLink } from "vue-router";
       <div class="logo">
         <img
           alt="petify logo"
-          src="../assets/footer/logoptf.svg"
+          src="@/assets/images/Footer/logoptf.svg"
           width="23"
           height="24"
         />
@@ -28,7 +28,7 @@ import { RouterLink } from "vue-router";
       <a href="" class="link-socialmedia">
         <img
           alt="imgapple"
-          src="../assets/footer/imgfacebook.svg"
+          src="@/assets/images/Footer/imgfacebook.svg"
           width="44"
           height="44"
         />
@@ -36,7 +36,7 @@ import { RouterLink } from "vue-router";
       <a href="" class="link-socialmedia">
         <img
           alt="imgfacebook"
-          src="../assets/footer/imgvk.svg"
+          src="@/assets/images/Footer/imgvk.svg"
           width="44"
           height="44"
         />

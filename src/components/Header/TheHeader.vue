@@ -1,65 +1,60 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import HeaderGeolocation from "./HeaderGeolocation.vue";
-import HeaderPartForGuest from "./HeaderPartForGuest.vue";
-import HeaderPartForUser from "./HeaderPartForUser.vue";
+import HeaderUser from "@/components/Header/User.vue";
+import HeaderGeolocation from "@/components/Header/Geolocation.vue";
 
-const authorization = ref(false);
 const showMenuForUser = ref(false);
 </script>
 
 <template>
-  <div class="wrapper-header">
-    <RouterLink to="/" class="logo-link"
-      ><img alt="petify logo" src="src/assets/header/logoptf.svg " />
-      <span class="logo-sign">petify</span></RouterLink
-    >
-    <div class="wrapper-right-part-header">
+  <header class="header">
+    <RouterLink to="/" class="header__logo-link">
+      <img alt="petify" src="@/assets/images/Header/logoptf.svg" />
+      <span class="header__logo-link-sign">petify</span>
+    </RouterLink>
+    <div class="header-geolocation-authorization">
       <div
+        class="header-geolocation-authorization__geolocation"
         @pointerover="showMenuForUser = true"
         @pointerleave="showMenuForUser = false"
       >
         <HeaderGeolocation />
       </div>
-      <div>
-        <HeaderPartForGuest
-          v-if="!authorization"
-          @change-authorization="authorization = true"
-        />
-        <HeaderPartForUser
-          v-if="authorization"
-          @change-authorization="authorization = false"
-          :showMenuForUser="showMenuForUser"
-        />
+      <div class="header-geolocation-authorization__authorization">
+        <HeaderUser :showMenuForUser="showMenuForUser" />
       </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <style scoped>
-.wrapper-header {
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 96px;
   padding: 0px 48px;
-  box-sizing: border-box;
   background-color: #fff;
 }
 
-.logo-link {
+.header__logo-link {
   display: flex;
   align-items: center;
   text-decoration: none;
 }
 
-.logo-link:visited {
+.header__logo-link:visited {
   text-decoration: none;
   color: #000;
 }
 
-.logo-sign {
+.header__logo-link-sign {
   margin-left: 8px;
   font-family: "Epilogue";
   font-style: normal;
@@ -69,7 +64,7 @@ const showMenuForUser = ref(false);
   letter-spacing: -0.015em;
 }
 
-.wrapper-right-part-header {
+.header-geolocation-authorization {
   display: flex;
   align-items: center;
 }
