@@ -1,32 +1,14 @@
 <script setup>
-import TheHeader from "@/components/Header/TheHeader.vue";
 import TheFeed from "@/components/Feed/TheFeed.vue";
-import TheFooter from "@/components/TheFooter.vue";
 </script>
 
 <template>
-  <div class="wrapper-index">
-    <TheHeader />
-
-    <main class="main-index">
-      <TheFeed />
-    </main>
-
-    <footer class="footer-index">
-      <TheFooter />
-    </footer>
-  </div>
+  <main class="main-index">
+    <TheFeed />
+  </main>
 </template>
 
 <style scoped>
-.wrapper-index {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 100vh;
-}
-
 .main-index {
   position: relative;
   z-index: 1;

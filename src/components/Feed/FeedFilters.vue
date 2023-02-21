@@ -11,6 +11,8 @@ const props = defineProps({
 
 const emit = defineEmits(["change-filter"]);
 
+const clearAllFilters = ref(false);
+
 const itemForfilterType = {
   general: ["type", "Вид животного"],
   filters: ["Кот", "Собака", "Птица"],
@@ -46,8 +48,9 @@ const itemForfilterBreed = {
 const ArrTypeFilter = ref([]);
 
 function changeFilterType(filterType, type) {
-  ArrTypeFilter.value.splice(0);
+  clearAllFilters.value = false;
   if (type === "type") {
+    ArrTypeFilter.value.splice(0);
     for (let el of filterType) {
       switch (el) {
         case "Кот":
@@ -73,18 +76,24 @@ function changeFilterType(filterType, type) {
         @change-filterType="changeFilterType"
         :itemForFilter="itemForfilterType"
         :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
+        :clearAllFilters="clearAllFilters"
       />
       <FilterSingle
         @change-filterType="changeFilterType"
         :itemForFilter="itemForfilterGender"
         :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
+        :clearAllFilters="clearAllFilters"
       />
       <FilterSingle
         @change-filterType="changeFilterType"
         :itemForFilter="itemForfilterBreed"
         :ArrTypeFilter="ArrTypeFilter"
         :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
+        :clearAllFilters="clearAllFilters"
       />
+      <button class="btn-clear-all-filters" @click="clearAllFilters = true">
+        Сбросить фильтры
+      </button>
     </div>
     <button class="lucky">Мне повезёт</button>
   </div>
@@ -103,6 +112,21 @@ function changeFilterType(filterType, type) {
   display: flex;
 }
 
+.btn-clear-all-filters {
+  width: 50px;
+  font-family: "Epilogue";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #939393;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.btn-clear-all-filters:hover {
+  color: #000;
+}
 .lucky {
   margin-top: 14px;
   height: 32px;

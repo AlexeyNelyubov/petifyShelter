@@ -7,7 +7,7 @@ import { useLocationStore } from "@/stores/location.js";
 const storeGeolocation = useLocationStore();
 
 const geoAutocomplite = ref(false);
-const location = ref("Весь мир");
+const location = ref("");
 const cities = ref([]);
 const arrCities = [];
 const inputActive = ref(false);
@@ -30,8 +30,15 @@ const uncorrectValueLocation = ref(false);
 //   }
 // });
 
+if (localStorage.getItem("geolocation")) {
+  location.value = localStorage.getItem("geolocation");
+} else {
+  location.value = "Весь мир";
+}
+
 onMounted(() => {
   document.addEventListener("click", (event) => {
+    // console.log(location.value);
     checkLocationAfterInput(event, event.type);
   });
   document.addEventListener("keyup", (event) => {
@@ -129,6 +136,17 @@ function changeLocation(city) {
   geoAutocomplite.value = false;
   inputActive.value = false;
 }
+
+watch(
+  () => storeGeolocation.location,
+  () => {
+    if (storeGeolocation.location === "Весь мир") {
+      localStorage.removeItem("geolocation");
+    } else {
+      localStorage.setItem("geolocation", storeGeolocation.location);
+    }
+  }
+);
 </script>
 
 <template>
@@ -264,7 +282,7 @@ function changeLocation(city) {
   align-items: center;
   width: 224px;
   height: 32px;
-  padding: 4px 16px 4px 48px;
+  padding: 4px 0 4px 32px;
   font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;

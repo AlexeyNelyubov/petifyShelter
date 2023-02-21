@@ -62,7 +62,6 @@ watch(
 );
 
 watch(Hello.value, () => {
-  console.log(Hello.value[0]);
   if (Hello.value[0] === "Привет друг!") {
     Hello.value[1] = "22px";
   } else {
@@ -160,7 +159,7 @@ watch(Hello.value, () => {
   text-decoration: none;
   font-style: normal;
   font-weight: 400;
-  font-size: v-bind(Hello[1]);
+  font-size: v-bind("Hello[1]");
   line-height: 22px;
 }
 .drop-down-field {

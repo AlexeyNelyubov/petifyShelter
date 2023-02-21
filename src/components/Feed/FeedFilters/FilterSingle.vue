@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, watchEffect } from "vue";
 
 const props = defineProps({
   itemForFilter: Object,
@@ -8,6 +8,7 @@ const props = defineProps({
     type: Object,
     required: false,
   },
+  clearAllFilters: Boolean,
 });
 
 const emit = defineEmits(["change-filterType"]);
@@ -15,6 +16,21 @@ const emit = defineEmits(["change-filterType"]);
 const filterTypeItems = ref([]);
 let filters = [];
 const filterCounter = ref(0);
+
+watch(
+  () => props.clearAllFilters,
+  () => {
+    if (props.clearAllFilters) {
+      filterCounter.value = 0;
+      filterTypeItems.value.splice(0);
+      emit(
+        "change-filterType",
+        filterTypeItems.value,
+        props.itemForFilter.general[0]
+      );
+    }
+  }
+);
 
 if (props.FiltersFromLocalStorage) {
   watch(props.FiltersFromLocalStorage, () => {
@@ -223,9 +239,6 @@ watch(filterCounter, () => {
 
 .breed {
   margin-top: 8px;
-  /* font-family: "Epilogue";
-  font-style: normal;
-  font-weight: 400; */
   font-size: 20px;
 }
 </style>
