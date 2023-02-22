@@ -4,11 +4,9 @@ import FeedFilters from "./FeedFilters.vue";
 import FeedPetsCards from "./FeedPetsCards.vue";
 import { usePetsStore } from "@/stores/petsList.js";
 import { useLocationStore } from "@/stores/location.js";
-import { useFiltersStore } from "@/stores/filters.js";
 
 const PetsStore = usePetsStore();
 const storeGeolocation = useLocationStore();
-const FiltersStore = useFiltersStore();
 
 const PetsList = ref([]);
 const FiltersFromLocalStorage = ref({
@@ -31,11 +29,9 @@ const HeveNotPets = ref(false);
 
 function changeFilter(filter, type) {
   Filters.value[type].splice(0);
-  // FiltersStore.filters[type].splice(0);
   if (filter.length) {
     for (let item of filter) {
       Filters.value[type].push(item);
-      // FiltersStore.filters[type].push(item);
       localStorage.setItem(type, filter);
     }
   } else {
@@ -66,33 +62,33 @@ function getFiltersFromLocalStorage() {
   }
 }
 
-// if (PetsStore.petsList.length) {
-//   PetsList.value.splice(0);
-//   PetsListForShow.value.splice(0);
-//   for (let pet of PetsStore.petsList) {
-//     PetsList.value.push(pet);
-//     PetsListForShow.value.push(pet);
-//   }
-//   console.log(storeGeolocation.location);
-//   getFiltersFromLocalStorage();
-// } else {
-(async () => {
-  //let response = await fetch("src/assets/feed/Pets.json");
-  let response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/pets`);
-  let json = await response.json();
-
-  if (response.ok) {
-    for (let pet of json) {
-      PetsList.value.push(pet);
-      PetsListForShow.value.push(pet);
-      PetsStore.petsList.push(pet);
-    }
-    getFiltersFromLocalStorage();
-  } else {
-    console.log("error", json);
+if (PetsStore.petsList.length) {
+  PetsList.value.splice(0);
+  PetsListForShow.value.splice(0);
+  for (let pet of PetsStore.petsList) {
+    PetsList.value.push(pet);
+    PetsListForShow.value.push(pet);
   }
-})();
-// }
+} else {
+  (async () => {
+    //let response = await fetch("src/assets/feed/Pets.json");
+    let response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/v1/pets`
+    );
+    let json = await response.json();
+
+    if (response.ok) {
+      for (let pet of json) {
+        PetsList.value.push(pet);
+        PetsListForShow.value.push(pet);
+        PetsStore.petsList.push(pet);
+      }
+      getFiltersFromLocalStorage();
+    } else {
+      console.log("error", json);
+    }
+  })();
+}
 
 watchEffect(() => {
   if (storeGeolocation.location === "Весь мир") {
@@ -189,7 +185,6 @@ function compareFiltersandGeolocation() {
 }
 
 function checkHeveNotPets() {
-  console.log(PetsListForShow.value.length, HeveNotPets.value);
   if (!PetsListForShow.value.length) {
     HeveNotPets.value = true;
   } else {

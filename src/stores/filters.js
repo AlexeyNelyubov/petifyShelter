@@ -5,7 +5,7 @@ export const useFiltersStore = defineStore("filters", () => {
   const filters = ref({
     type: [],
     gender: [],
-    breed: [],
+    breeds: [],
   });
   return { filters };
 });

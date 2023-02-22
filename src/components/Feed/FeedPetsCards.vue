@@ -4,11 +4,6 @@ const props = defineProps({
   pet: Object,
 });
 
-//console.log(props.pet);
-// for (let p of props.pet) {
-//   console.log(p);
-// }
-
 const PetsTypeImg = ref("");
 const PetsAge = ref(props.pet.age);
 const PetsSterelization = ref("");

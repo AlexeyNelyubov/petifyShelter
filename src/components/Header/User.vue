@@ -149,56 +149,50 @@ watch(Hello.value, () => {
   cursor: pointer;
 }
 .authorization__userName {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 24px;
   margin: 0 8px;
-  text-decoration: none;
+  display: flex;
+  align-items: center;
   font-family: "Sofia Sans", sans-serif;
-  text-decoration: none;
   font-style: normal;
   font-weight: 400;
   font-size: v-bind("Hello[1]");
   line-height: 22px;
+  text-decoration: none;
 }
 .drop-down-field {
   position: absolute;
   top: 64px;
+  width: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
-  width: 200px;
   background-color: #ffffff;
   box-shadow: 0 0 10px #d9d9d9;
   border-radius: 16px;
 }
-
 .drop-down-field__user-avatar {
   margin: 20px 0;
 }
-
 .drop-down-field__user-name {
   margin: 0 8px;
   font-family: "Sofia Sans", sans-serif;
-  text-decoration: none;
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
   line-height: 22px;
+  text-decoration: none;
 }
-
 .drop-down-field__get-profile-link {
   margin: 16px 4px 8px 4px;
-  text-decoration: none;
   font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
   color: #60b2ee;
+  text-decoration: none;
 }
 .drop-down-field__get-profile-link:hover {
   color: #000;
@@ -221,7 +215,6 @@ hr {
 .drop-down-field__exit-profile:hover {
   color: #000;
 }
-
 .drop-down-field__signin-signup {
   margin: 10px;
 }
@@ -229,13 +222,13 @@ hr {
 .drop-down-field__signin-signup__signin,
 .drop-down-field__signin-signup__signup {
   margin: 8px;
-  text-decoration: none;
   font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 22px;
   color: #d9d9d9;
+  text-decoration: none;
 }
 .drop-down-field__signin-signup__signin:hover,
 .drop-down-field__signin-signup__signup:hover {

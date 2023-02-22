@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import IndexView from "../views/IndexView.vue";
 
+const IndexPage = () => import("../views/IndexView.vue");
+const AboutUsPage = () => import("../views/AboutUsVeiw.vue");
 const ProfilePage = () => import("@/views/ProfileView.vue");
 
 const router = createRouter({
@@ -9,12 +10,12 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: IndexView,
+      component: IndexPage,
     },
     {
       path: "/NewFreature(aboutAs)",
       name: "AboutUs",
-      component: () => import("../views/AboutUsVeiw.vue"),
+      component: AboutUsPage,
     },
     {
       path: "/profile/:id",

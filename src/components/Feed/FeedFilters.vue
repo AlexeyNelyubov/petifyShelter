@@ -47,7 +47,7 @@ const itemForfilterBreed = {
 
 const ArrTypeFilter = ref([]);
 
-function changeFilterType(filterType, type) {
+function changeSingleFilter(filterType, type) {
   clearAllFilters.value = false;
   if (type === "type") {
     ArrTypeFilter.value.splice(0);
@@ -73,19 +73,19 @@ function changeFilterType(filterType, type) {
   <div class="wrapper-filters">
     <div class="filters">
       <FilterSingle
-        @change-filterType="changeFilterType"
+        @change-single-filter="changeSingleFilter"
         :itemForFilter="itemForfilterType"
         :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
         :clearAllFilters="clearAllFilters"
       />
       <FilterSingle
-        @change-filterType="changeFilterType"
+        @change-single-filter="changeSingleFilter"
         :itemForFilter="itemForfilterGender"
         :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
         :clearAllFilters="clearAllFilters"
       />
       <FilterSingle
-        @change-filterType="changeFilterType"
+        @change-single-filter="changeSingleFilter"
         :itemForFilter="itemForfilterBreed"
         :ArrTypeFilter="ArrTypeFilter"
         :FiltersFromLocalStorage="props.FiltersFromLocalStorage"

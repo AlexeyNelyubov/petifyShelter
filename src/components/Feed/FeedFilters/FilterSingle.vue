@@ -1,5 +1,7 @@
 <script setup>
 import { ref, watch, watchEffect } from "vue";
+import { useFiltersStore } from "@/stores/filters.js";
+const FiltersStore = useFiltersStore();
 
 const props = defineProps({
   itemForFilter: Object,
@@ -11,11 +13,35 @@ const props = defineProps({
   clearAllFilters: Boolean,
 });
 
-const emit = defineEmits(["change-filterType"]);
+const emit = defineEmits(["change-single-filter"]);
 
 const filterTypeItems = ref([]);
 let filters = [];
 const filterCounter = ref(0);
+
+watch(filterTypeItems, () => {
+  FiltersStore.filters[props.itemForFilter.general[0]].splice(0);
+  filterCounter.value = 0;
+  filters = [];
+  for (let item of filterTypeItems.value) {
+    filters.push(item);
+    filterCounter.value++;
+    FiltersStore.filters[props.itemForFilter.general[0]].push(item);
+  }
+  emit("change-single-filter", filters, props.itemForFilter.general[0]);
+});
+
+if (FiltersStore.filters[props.itemForFilter.general[0]].length) {
+  for (let index in FiltersStore.filters) {
+    if (index === props.itemForFilter.general[0]) {
+      filters = [];
+      for (let item of FiltersStore.filters[index]) {
+        filters.push(item);
+      }
+      filterTypeItems.value = filters;
+    }
+  }
+}
 
 watch(
   () => props.clearAllFilters,
@@ -23,8 +49,11 @@ watch(
     if (props.clearAllFilters) {
       filterCounter.value = 0;
       filterTypeItems.value.splice(0);
+      FiltersStore.filters.type.splice(0);
+      FiltersStore.filters.gender.splice(0);
+      FiltersStore.filters.breeds.splice(0);
       emit(
-        "change-filterType",
+        "change-single-filter",
         filterTypeItems.value,
         props.itemForFilter.general[0]
       );
@@ -47,16 +76,6 @@ if (props.FiltersFromLocalStorage) {
     }
   });
 }
-
-watch(filterTypeItems, () => {
-  filterCounter.value = 0;
-  filters = [];
-  for (let i of filterTypeItems.value) {
-    filters.push(i);
-    filterCounter.value++;
-  }
-  emit("change-filterType", filters, props.itemForFilter.general[0]);
-});
 
 const filterItems = ref({});
 let lenghtfilterItems = ref(0);

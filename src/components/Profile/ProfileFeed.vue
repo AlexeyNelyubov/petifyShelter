@@ -34,7 +34,6 @@ const AutorizatonStore = useAutorizatonStore();
   padding: 24px 72px;
   display: flex;
 }
-
 .profile-feed__imgprofile {
   height: 300px;
   width: 300px;
@@ -43,7 +42,6 @@ const AutorizatonStore = useAutorizatonStore();
   align-items: center;
   border: 1px solid #c4c4c4;
 }
-
 .profile-feed-user {
   margin-left: 24px;
 }
@@ -52,22 +50,18 @@ const AutorizatonStore = useAutorizatonStore();
   font-weight: bold;
   font-size: 30px;
 }
-
 .profile-feed-user__location {
   font-size: 16px;
 }
-
 .profile-feed__user-options {
   margin-top: 12px;
   font-family: "Sofia Sans", sans-serif;
   font-weight: 400;
   font-size: 24px;
 }
-
 .profile-feed__user-options-item {
   margin-top: 8px;
 }
-
 .profile-feed__user-options-item:hover {
   color: #9d9d9d;
   cursor: pointer;

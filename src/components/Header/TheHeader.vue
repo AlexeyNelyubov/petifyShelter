@@ -34,26 +34,23 @@ const showMenuForUser = ref(false);
   top: 0;
   left: 0;
   width: 100%;
+  height: 96px;
+  padding: 0px 48px;
   z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 96px;
-  padding: 0px 48px;
   background-color: #fff;
 }
-
 .header__logo-link {
   display: flex;
   align-items: center;
   text-decoration: none;
 }
-
 .header__logo-link:visited {
   text-decoration: none;
   color: #000;
 }
-
 .header__logo-link-sign {
   margin-left: 8px;
   font-family: "Epilogue";
@@ -63,7 +60,6 @@ const showMenuForUser = ref(false);
   line-height: 29px;
   letter-spacing: -0.015em;
 }
-
 .header-geolocation-authorization {
   display: flex;
   align-items: center;

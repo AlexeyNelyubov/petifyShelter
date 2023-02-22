@@ -229,11 +229,9 @@ watch(
   background-color: #000;
   opacity: 0.5;
 }
-
 .geolocation {
   margin-right: 24px;
 }
-
 .geolocation__logo-input {
   display: flex;
   align-items: center;
@@ -242,20 +240,16 @@ watch(
   background-color: #60b2ee;
   border-radius: 16px;
 }
-
 .geolocation__logo-input_uncorrect {
   position: relative;
   z-index: 2;
   background-color: #ff0000;
 }
-
 .geolocation__logo-input-logo {
   margin: 0 16px;
 }
-
 .geolocation__logo-input-input {
   width: 160px;
-  text-decoration: none;
   font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -265,18 +259,16 @@ watch(
   background-color: #60b2ee;
   border: none;
   outline: none;
+  text-decoration: none;
 }
-
 .geolocation__logo-input-input_uncorrect {
   background-color: #ff0000;
 }
-
 .autocomplite {
   position: absolute;
   top: 64px;
   z-index: 2;
 }
-
 .autocomplite__single-city {
   display: flex;
   align-items: center;
@@ -297,7 +289,6 @@ watch(
   color: #fff;
   background-color: #d9d9d9;
 }
-
 .autocomplite__notValideLocation {
   position: absolute;
   top: 32px;
