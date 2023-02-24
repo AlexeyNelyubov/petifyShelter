@@ -210,7 +210,7 @@ watch(
   </div>
 </template>
 
-<style scoped>
+<style>
 .inputActive {
   position: fixed;
   left: 0;

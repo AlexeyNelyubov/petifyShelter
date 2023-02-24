@@ -142,7 +142,7 @@ watch(Hello.value, () => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .authorization {
   display: flex;
   align-items: center;

@@ -1,11 +1,16 @@
 <script setup>
 import { ref, watch } from "vue";
+import router from "../../router";
 import FilterSingle from "./FeedFilters/FilterSingle.vue";
 
 const props = defineProps({
   FiltersFromLocalStorage: {
     type: Object,
     required: false,
+  },
+  PetsListForShow: {
+    type: Array,
+    required: true,
   },
 });
 
@@ -67,11 +72,19 @@ function changeSingleFilter(filterType, type) {
   }
   emit("change-filter", filterType, type);
 }
+
+function getRandomPet() {
+  let randomPet =
+    props.PetsListForShow[
+      Math.floor(Math.random() * props.PetsListForShow.length)
+    ];
+  router.push({ name: "PetPage", params: { id: `${randomPet.id}` } });
+}
 </script>
 
 <template>
-  <div class="wrapper-filters">
-    <div class="filters">
+  <div class="filters">
+    <div class="filters__filters">
       <FilterSingle
         @change-single-filter="changeSingleFilter"
         :itemForFilter="itemForfilterType"
@@ -91,28 +104,32 @@ function changeSingleFilter(filterType, type) {
         :FiltersFromLocalStorage="props.FiltersFromLocalStorage"
         :clearAllFilters="clearAllFilters"
       />
-      <button class="btn-clear-all-filters" @click="clearAllFilters = true">
+      <button
+        class="filters__btn-clear-all-filters"
+        @click="clearAllFilters = true"
+      >
         Сбросить фильтры
       </button>
     </div>
-    <button class="lucky">Мне повезёт</button>
+    <button class="filters__btn-lucky" @click="getRandomPet">
+      Мне повезёт
+    </button>
   </div>
 </template>
 
 <style scoped>
-.wrapper-filters {
+.filters {
   padding: 24px 72px 24px 56px;
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  border-top: 2px solid #d9d9d9;
 }
 
-.filters {
+.filters__filters {
   display: flex;
 }
 
-.btn-clear-all-filters {
+.filters__btn-clear-all-filters {
   width: 50px;
   font-family: "Epilogue";
   font-style: normal;
@@ -124,10 +141,10 @@ function changeSingleFilter(filterType, type) {
   cursor: pointer;
 }
 
-.btn-clear-all-filters:hover {
+.filters__btn-clear-all-filters:hover {
   color: #000;
 }
-.lucky {
+.filters__btn-lucky {
   margin-top: 14px;
   height: 32px;
   padding: 0 8px 0 8px;
@@ -138,5 +155,9 @@ function changeSingleFilter(filterType, type) {
   background-color: #bb9bff;
   border-radius: 10px;
   border: none;
+  cursor: pointer;
+}
+.filters__btn-lucky:hover {
+  background-color: #915dff;
 }
 </style>

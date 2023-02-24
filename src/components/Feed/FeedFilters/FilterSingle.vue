@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import { useFiltersStore } from "@/stores/filters.js";
 const FiltersStore = useFiltersStore();
 
@@ -15,15 +15,60 @@ const props = defineProps({
 
 const emit = defineEmits(["change-single-filter"]);
 
-const filterTypeItems = ref([]);
-let filters = [];
+const filterItems = ref({});
+let lenghtfilterItems = ref(0);
+const Checkedfilters = ref([]);
 const filterCounter = ref(0);
+const BreedInput = ref("Введите породу");
+let filters = [];
 
-watch(filterTypeItems, () => {
+getFilterItems("general");
+
+if (props.ArrTypeFilter) {
+  watch(props.ArrTypeFilter, () => getFilterItemsForBreedDependsOfType());
+}
+
+watch(
+  () => BreedInput.value,
+  () => {
+    getFilterItemsForBreedDependsOfType();
+    if (BreedInput.value.length) {
+      console.log(filterItems.value);
+      let filters = JSON.parse(JSON.stringify(filterItems.value));
+      // let filters = {};
+      // for (let index in filterItems.value) {
+      // filters[index] = filterItems.value[index].slice(0);
+      // filters[index] = [...filterItems.value[index]];
+      // }
+      let arrIndex = [];
+      for (let index in filters) {
+        filterItems.value[index].splice(0);
+        for (let item of filters[index]) {
+          if (
+            BreedInput.value.toUpperCase() ===
+            item.substring(0, BreedInput.value.length).toUpperCase()
+          ) {
+            filterItems.value[index].push(item);
+            if (!arrIndex.includes(index)) {
+              arrIndex.push(index);
+            }
+          }
+        }
+      }
+      for (let index in filterItems.value) {
+        if (!arrIndex.includes(index)) {
+          delete filterItems.value[index];
+        }
+      }
+    }
+  }
+);
+
+watch(Checkedfilters, () => {
   FiltersStore.filters[props.itemForFilter.general[0]].splice(0);
   filterCounter.value = 0;
   filters = [];
-  for (let item of filterTypeItems.value) {
+  for (let item of Checkedfilters.value) {
     filters.push(item);
     filterCounter.value++;
     FiltersStore.filters[props.itemForFilter.general[0]].push(item);
@@ -31,30 +76,18 @@ watch(filterTypeItems, () => {
   emit("change-single-filter", filters, props.itemForFilter.general[0]);
 });
 
-if (FiltersStore.filters[props.itemForFilter.general[0]].length) {
-  for (let index in FiltersStore.filters) {
-    if (index === props.itemForFilter.general[0]) {
-      filters = [];
-      for (let item of FiltersStore.filters[index]) {
-        filters.push(item);
-      }
-      filterTypeItems.value = filters;
-    }
-  }
-}
-
 watch(
   () => props.clearAllFilters,
   () => {
     if (props.clearAllFilters) {
       filterCounter.value = 0;
-      filterTypeItems.value.splice(0);
+      Checkedfilters.value.splice(0);
       FiltersStore.filters.type.splice(0);
       FiltersStore.filters.gender.splice(0);
       FiltersStore.filters.breeds.splice(0);
       emit(
         "change-single-filter",
-        filterTypeItems.value,
+        Checkedfilters.value,
         props.itemForFilter.general[0]
       );
     }
@@ -70,52 +103,14 @@ if (props.FiltersFromLocalStorage) {
           for (let i of props.FiltersFromLocalStorage[index]) {
             filters.push(i);
           }
-          filterTypeItems.value = filters;
+          Checkedfilters.value = filters;
         }
       }
     }
   });
 }
 
-const filterItems = ref({});
-let lenghtfilterItems = ref(0);
-
-function getfilterItems(compareItem) {
-  filterItems.value = {};
-  for (let index in props.itemForFilter) {
-    let filterItem = [];
-    if (index != compareItem) {
-      for (let el of props.itemForFilter[index]) {
-        filterItem.push(el);
-        lenghtfilterItems.value++;
-      }
-      filterItems.value[index] = filterItem;
-    }
-  }
-}
-
-getfilterItems("general");
-
-if (props.ArrTypeFilter) {
-  watch(props.ArrTypeFilter, () => {
-    if (props.ArrTypeFilter.length) {
-      filterItems.value = {};
-      for (let item of props.ArrTypeFilter) {
-        for (let index in props.itemForFilter) {
-          let filterItem = [];
-          if (item === index) {
-            for (let el of props.itemForFilter[item]) {
-              filterItem.push(el);
-            }
-            filterItems.value[index] = filterItem;
-          }
-        }
-      }
-    } else {
-      getfilterItems("general");
-    }
-  });
-}
+getCheckedfiltersWithRouting();
 
 const showFilter = ref(false);
 const filterSign = ref("");
@@ -140,22 +135,78 @@ watch(filterCounter, () => {
     }
   }
 });
+
+function checkBreedInput() {
+  if (BreedInput.value === "Введите породу") {
+    BreedInput.value = "";
+  }
+}
+
+function getCheckedfiltersWithRouting() {
+  if (FiltersStore.filters[props.itemForFilter.general[0]].length) {
+    for (let index in FiltersStore.filters) {
+      if (index === props.itemForFilter.general[0]) {
+        filters = [];
+        for (let item of FiltersStore.filters[index]) {
+          filters.push(item);
+        }
+        Checkedfilters.value = filters;
+      }
+    }
+  }
+}
+
+function getFilterItems(compareItem) {
+  filterItems.value = {};
+  for (let index in props.itemForFilter) {
+    let filterItem = [];
+    if (index != compareItem) {
+      for (let el of props.itemForFilter[index]) {
+        filterItem.push(el);
+        lenghtfilterItems.value++;
+      }
+      filterItems.value[index] = filterItem;
+    }
+  }
+}
+
+function getFilterItemsForBreedDependsOfType() {
+  if (props.ArrTypeFilter.length) {
+    filterItems.value = {};
+    for (let item of props.ArrTypeFilter) {
+      for (let index in props.itemForFilter) {
+        let filterItem = [];
+        if (item === index) {
+          for (let el of props.itemForFilter[item]) {
+            filterItem.push(el);
+          }
+          filterItems.value[index] = filterItem;
+        }
+      }
+    }
+  } else {
+    getFilterItems("general");
+  }
+}
 </script>
 
 <template>
   <div
     class="filter-type"
     :class="{
-      'filter-type-border-all': filterSign === 'Все',
-      'filter-type-border':
+      'filter-type_border-all': filterSign === 'Все',
+      'filter-type_border':
         filterSign != 'Все' &&
         filterSign != 'Не выбран' &&
         filterSign != 'Не выбрана' &&
         filterSign != '',
     }"
   >
-    <p class="filter-header">{{ props.itemForFilter.general[1] }}</p>
-    <div class="down-part" @click="showFilter = !showFilter">
+    <p class="filter-type__header">{{ props.itemForFilter.general[1] }}</p>
+    <div
+      class="filter-type__field-for-count-filters"
+      @click="showFilter = !showFilter"
+    >
       <p>{{ filterSign }}</p>
       <img
         src="@/assets/images/Header/arrow-down.svg"
@@ -167,20 +218,31 @@ watch(filterCounter, () => {
     <div
       v-if="showFilter"
       :class="{
-        filter: props.itemForFilter.general[0] != 'breeds',
-        'filter-breed': props.itemForFilter.general[0] === 'breeds',
+        'filter-type__drop-down': props.itemForFilter.general[0] != 'breeds',
+        'filter-type__drop-down-breed':
+          props.itemForFilter.general[0] === 'breeds',
       }"
     >
+      <input
+        v-if="props.itemForFilter.general[0] === 'breeds'"
+        type="text"
+        v-model="BreedInput"
+        @focus="checkBreedInput"
+        class="filter-type__drop-down-breed__input"
+      />
       <div v-for="(value, filterItem) in filterItems" :key="filterItem.id">
-        <div v-if="props.itemForFilter.general[0] === 'breeds'" class="breed">
+        <div
+          v-if="props.itemForFilter.general[0] === 'breeds'"
+          class="filter-type__drop-down-breed__breed"
+        >
           {{ filterItem }}
         </div>
         <label
           v-for="filter in filterItems[filterItem]"
           :key="filter.id"
-          class="filter-label"
+          class="filter-type__drop-down-label"
         >
-          <input type="checkbox" :value="filter" v-model="filterTypeItems" />
+          <input type="checkbox" :value="filter" v-model="Checkedfilters" />
           {{ filter }}
           <br />
         </label>
@@ -189,7 +251,7 @@ watch(filterCounter, () => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .filter-type {
   height: 60px;
   width: 140px;
@@ -201,15 +263,15 @@ watch(filterCounter, () => {
   border-radius: 8px;
 }
 
-.filter-type-border-all {
+.filter-type_border-all {
   border: 2px solid #00ff00;
 }
 
-.filter-type-border {
+.filter-type_border {
   border: 2px solid #00aaff;
 }
 
-.filter-header {
+.filter-type__header {
   margin: 10px 10px 4px 10px;
   font-family: "Epilogue";
   font-style: normal;
@@ -217,7 +279,7 @@ watch(filterCounter, () => {
   font-size: 16px;
   color: #939393;
 }
-.down-part {
+.filter-type__field-for-count-filters {
   margin: 4px 10px 10px 10px;
   display: flex;
   justify-content: space-between;
@@ -225,7 +287,7 @@ watch(filterCounter, () => {
   cursor: pointer;
 }
 
-.filter {
+.filter-type__drop-down {
   position: absolute;
   top: 84px;
   width: 140px;
@@ -237,27 +299,37 @@ watch(filterCounter, () => {
   border: 1px solid #d9d9d9;
 }
 
-.filter-breed {
+.filter-type__drop-down-breed {
   position: absolute;
   top: 84px;
-  /* width: 140px; */
+  height: 300px;
+  width: 260px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
   border-radius: 8px;
   border: 1px solid #d9d9d9;
+  overflow-y: scroll;
 }
-.filter-label {
+
+.filter-type__drop-down-label {
   line-height: 24px;
 }
 
-.filter-label:hover {
+.filter-type__drop-down-label:hover {
   color: #939393;
 }
 
-.breed {
+.filter-type__drop-down-breed__breed {
   margin-top: 8px;
   font-size: 20px;
+}
+
+.filter-type__drop-down-breed__input {
+  width: 235px;
+  border: 1px solid #dadada;
+  border-radius: 5px;
+  outline: none;
 }
 </style>

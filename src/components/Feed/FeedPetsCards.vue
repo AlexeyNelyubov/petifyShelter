@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
 const props = defineProps({
   pet: Object,
 });
@@ -102,22 +103,24 @@ if (props.pet.gender === "Мальчик") {
 </script>
 
 <template>
-  <div class="pets-card">
-    <div class="wrapper-for-avatar">
-      <img :src="props.pet.avatar" class="pets-avatar" />
+  <div class="pet-card">
+    <div class="pet-card__field-for-avatar">
+      <RouterLink :to="{ name: 'PetPage', params: { id: `${props.pet.id}` } }">
+        <img :src="props.pet.avatar" class="pet-card__avatar" />
+      </RouterLink>
     </div>
-    <div class="wrapper-for-cards-discription">
-      <div class="pets-type-name-age">
+    <div class="pet-card__discription">
+      <div class="pet-card__type-name-age">
         <img :src="PetsTypeImg" />
-        <div class="pets-name-age">
-          <p class="pets-name">{{ props.pet.name }}</p>
-          <p class="pets-age">{{ Age }}</p>
+        <div class="pet-card__name-age">
+          <p class="pet-card__name-age__name">{{ props.pet.name }}</p>
+          <p class="pet-card__name-age__age">{{ Age }}</p>
         </div>
       </div>
-      <div class="pets--sterilized-vaccinated-gender-features">
-        <div class="pets-sterilized-gender">
+      <div class="pet-card__sterilized-vaccinated-gender">
+        <div class="pet-card__sterilized-gender">
           <p
-            class="single-feature"
+            class="pet-card__sterilized-gender__sterilized"
             :style="{ backgroundColor: ColorForPetsFeature() }"
           >
             {{ PetsSterelization }}
@@ -126,18 +129,18 @@ if (props.pet.gender === "Мальчик") {
             v-if="props.pet.vaccinated"
             src="@/assets/images/Feed/vaccinated.svg"
           />
-          <img :src="PetsGender" class="pets-gender" />
+          <img :src="PetsGender" class="pet-card__sterilized-gender__gender" />
         </div>
-        <div class="pets-features">
+        <div class="pet-card__features">
           <p
-            class="single-feature"
+            class="pet-card__single-feature"
             :style="{ backgroundColor: ColorForPetsFeature() }"
           >
             {{ props.pet.features[0] }}
           </p>
           <p
             v-if="props.pet.features[1]"
-            class="single-feature"
+            class="pet-card__single-feature"
             @pointerover="showAllFeatures = true"
             :style="{
               backgroundColor: ColorForPetsFeature(),
@@ -149,14 +152,14 @@ if (props.pet.gender === "Мальчик") {
         </div>
         <div
           v-if="showAllFeatures"
-          class="all-features"
+          class="pet-card__all-features"
           @pointerover="showAllFeatures = true"
           @pointerleave="showAllFeatures = false"
         >
           <div
             v-for="item in props.pet.features"
             :key="item.id"
-            class="single-feature-in-all-features"
+            class="pet-card__single-feature-in-all-features"
             :style="{ backgroundColor: ColorForPetsFeature() }"
           >
             {{ item }}
@@ -165,29 +168,92 @@ if (props.pet.gender === "Мальчик") {
       </div>
     </div>
   </div>
+  <!-- <div class="pet-card">
+    <div class="pet-card__field-for-avatar">
+      <img :src="props.pet.avatar" class="pet-card__avatar" />
+    </div>
+    <div class="pet-card__discription">
+      <div class="pet-card__type-name-age">
+        <img :src="PetsTypeImg" />
+        <div class="pet-card__name-age">
+          <p class="pet-card__name-age__name">{{ props.pet.name }}</p>
+          <p class="pet-card__name-age__age">{{ Age }}</p>
+        </div>
+      </div>
+      <div class="pet-card__sterilized-vaccinated-gender">
+        <div class="pet-card__sterilized-gender">
+          <p
+            class="pet-card__sterilized-gender__sterilized"
+            :style="{ backgroundColor: ColorForPetsFeature() }"
+          >
+            {{ PetsSterelization }}
+          </p>
+          <img
+            v-if="props.pet.vaccinated"
+            src="@/assets/images/Feed/vaccinated.svg"
+          />
+          <img :src="PetsGender" class="pet-card__sterilized-gender__gender" />
+        </div>
+        <div class="pet-card__features">
+          <p
+            class="pet-card__single-feature"
+            :style="{ backgroundColor: ColorForPetsFeature() }"
+          >
+            {{ props.pet.features[0] }}
+          </p>
+          <p
+            v-if="props.pet.features[1]"
+            class="pet-card__single-feature"
+            @pointerover="showAllFeatures = true"
+            :style="{
+              backgroundColor: ColorForPetsFeature(),
+              fontWeight: 'bold',
+            }"
+          >
+            ...
+          </p>
+        </div>
+        <div
+          v-if="showAllFeatures"
+          class="pet-card__all-features"
+          @pointerover="showAllFeatures = true"
+          @pointerleave="showAllFeatures = false"
+        >
+          <div
+            v-for="item in props.pet.features"
+            :key="item.id"
+            class="pet-card__single-feature-in-all-features"
+            :style="{ backgroundColor: ColorForPetsFeature() }"
+          >
+            {{ item }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
 </template>
 
-<style scoped>
-.pets-card {
+<style>
+.pet-card {
   width: 480px;
   height: 588px;
   margin: 0 48px 48px 0;
   border: 1px solid #c4c4c4;
-  box-sizing: border-box;
+  text-decoration: none;
 }
 
-.wrapper-for-avatar {
+.pet-card__field-for-avatar {
   width: 478px;
   height: 478px;
 }
 
-.pets-avatar {
+.pet-card__avatar {
   width: 478px;
   height: 478px;
   object-fit: cover;
 }
 
-.wrapper-for-cards-discription {
+.pet-card__discription {
   height: 108px;
   padding: 24px;
   display: flex;
@@ -195,49 +261,48 @@ if (props.pet.gender === "Мальчик") {
   align-items: center;
 }
 
-.pets-type-name-age {
+.pet-card__type-name-age {
   display: flex;
 }
-.pets-name-age {
+.pet-card__name-age {
   margin-left: 16px;
 }
 
-.pets-name {
+.pet-card__name-age__name {
   margin-bottom: 8px;
   font-size: 32px;
 }
 
-.pets-age {
+.pet-card__name-age__age {
   font-size: 24px;
 }
 
-.pets--sterilized-vaccinated-gender-features {
+.pet-card__sterilized-vaccinated-gender {
   position: relative;
   height: 64px;
-  /* margin-left: 70px; */
   padding-top: 4px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   font-size: 16px;
-  /* background-color: aqua; */
 }
 
-.pets-sterilized-gender {
+.pet-card__sterilized-gender {
   display: flex;
   justify-content: flex-end;
 }
 
-.pets-gender {
+.pet-card__sterilized-gender__gender {
   margin-left: 4px;
 }
 
-.pets-features {
+.pet-card__features {
   display: flex;
   justify-content: flex-start;
 }
 
-.single-feature {
+.pet-card__sterilized-gender__sterilized,
+.pet-card__single-feature {
   height: 24px;
   margin-right: 4px;
   padding: 4px;
@@ -247,7 +312,7 @@ if (props.pet.gender === "Мальчик") {
   cursor: pointer;
 }
 
-.all-features {
+.pet-card__all-features {
   position: absolute;
   top: -72px;
   width: 200px;
@@ -261,7 +326,7 @@ if (props.pet.gender === "Мальчик") {
   box-shadow: 0 0 10px #d9d9d9;
 }
 
-.single-feature-in-all-features {
+.pet-card__single-feature-in-all-features {
   height: 28px;
   margin-bottom: 8px;
   padding: 4px;

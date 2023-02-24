@@ -28,7 +28,7 @@ const showMenuForUser = ref(false);
   </header>
 </template>
 
-<style scoped>
+<style>
 .header {
   position: sticky;
   top: 0;

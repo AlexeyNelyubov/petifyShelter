@@ -194,29 +194,31 @@ function checkHeveNotPets() {
 </script>
 
 <template>
-  <FeedFilters
-    class="filters"
-    @change-filter="changeFilter"
-    :FiltersFromLocalStorage="FiltersFromLocalStorage"
-  />
-  <div v-if="HeveNotPets" class="no-pets">
-    По вашему запросу животных не найдено. Попробуйте изменить фильтры.
-  </div>
-  <div class="wrapper-for-card">
-    <div v-for="pet in PetsListForShow" :key="pet.id">
-      <FeedPetsCards :pet="pet" />
+  <div>
+    <FeedFilters
+      class="feed-filters"
+      @change-filter="changeFilter"
+      :FiltersFromLocalStorage="FiltersFromLocalStorage"
+      :PetsListForShow="PetsListForShow"
+    />
+    <div v-if="HeveNotPets" class="feed-no-pets">
+      По вашему запросу животных не найдено. Попробуйте изменить фильтры.
+    </div>
+    <div class="feed-pets-cards">
+      <div v-for="pet in PetsListForShow" :key="pet.id">
+        <FeedPetsCards :pet="pet" />
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.filters {
+<style>
+.feed-filters {
   position: fixed;
   width: 100%;
   z-index: 1;
 }
-
-.no-pets {
+.feed-no-pets {
   margin-top: 132px;
   display: flex;
   justify-content: center;
@@ -225,8 +227,8 @@ function checkHeveNotPets() {
   font-weight: 400;
   font-size: 20px;
 }
-.wrapper-for-card {
-  margin: 132px 0 0 48px;
+.feed-pets-cards {
+  margin: 132px 0;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;

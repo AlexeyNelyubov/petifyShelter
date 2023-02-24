@@ -48,7 +48,7 @@ import { RouterLink } from "vue-router";
   </footer>
 </template>
 
-<style scoped>
+<style>
 .footer {
   height: 234px;
   display: flex;

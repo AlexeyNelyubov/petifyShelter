@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const IndexPage = () => import("../views/IndexView.vue");
 const AboutUsPage = () => import("../views/AboutUsVeiw.vue");
+const PetPage = () => import("@/views/PetView.vue");
 const ProfilePage = () => import("@/views/ProfileView.vue");
 
 const router = createRouter({
@@ -16,6 +17,12 @@ const router = createRouter({
       path: "/NewFreature(aboutAs)",
       name: "AboutUs",
       component: AboutUsPage,
+    },
+    {
+      path: "/pet/:id",
+      name: "PetPage",
+      component: PetPage,
+      props: route=> ({ id: route.params.id}),
     },
     {
       path: "/profile/:id",

@@ -6,20 +6,30 @@ import TheFooter from "@/components/TheFooter.vue";
 
 <template>
   <div class="app">
-    <TheHeader />
-
-    <RouterView />
-
-    <TheFooter />
+    <TheHeader class="app-header" />
+    <RouterView class="app-main" />
+    <TheFooter class="app-footer" />
   </div>
 </template>
 
-<style scoped>
+<style>
 .app {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
   min-height: 100vh;
+}
+
+.app-header {
+  border-bottom: 2px solid #d9d9d9;
+}
+
+.app-main {
+  flex-grow: 1;
+}
+
+.app-footer {
+  border-top: 2px solid #d9d9d9;
 }
 </style>
