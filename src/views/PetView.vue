@@ -64,11 +64,8 @@ if (PetsStore.petsList.length) {
       По вашему id животных в нашем каталоге не найдено. Попробуйте изменить id
       или начните поиск на главной странице с помощью фильтров.
     </p>
-    <div class="pet-page-avatar-discription">
-      <div
-        v-if="!showError && !showNoPet"
-        class="pet-page-avatar-discription__field-for-avatar"
-      >
+    <div v-if="!showError && !showNoPet" class="pet-page-avatar-discription">
+      <div class="pet-page-avatar-discription__field-for-avatar">
         <img
           :src="petForShow.avatar"
           alt="img-profile"

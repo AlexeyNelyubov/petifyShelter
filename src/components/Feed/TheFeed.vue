@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import FeedFilters from "./FeedFilters.vue";
 import FeedPetsCards from "./FeedPetsCards.vue";
 import FeedPagination from "./FeedPagination.vue";
@@ -34,6 +34,10 @@ let pets = [];
 const HeveNotPets = ref(false);
 const paginationPage = ref(1);
 
+const lastPage = computed(() => {
+  return Math.ceil(PetsListForShow.value.length / counterPagination.value);
+});
+
 function changeFilter(filter, type) {
   Filters.value[type].splice(0);
   if (filter.length) {
@@ -44,6 +48,11 @@ function changeFilter(filter, type) {
   } else {
     localStorage.removeItem(type);
   }
+}
+
+function changePage(currentPage) {
+  console.log(currentPage);
+  paginationPage.value = Number(currentPage);
 }
 
 function changepagination() {
@@ -67,14 +76,15 @@ watch(
   () => paginationPage.value,
   () => {
     console.log(
-      Math.ceil(PetsListForShow.value.length / counterPagination.value)
+      lastPage.value
+      // Math.ceil(PetsListForShow.value.length / counterPagination.value)
     );
     if (paginationPage.value < 1) {
       paginationPage.value = 1;
     }
     if (
-      paginationPage.value <=
-      Math.ceil(PetsListForShow.value.length / counterPagination.value)
+      paginationPage.value <= lastPage.value
+      // Math.ceil(PetsListForShow.value.length / counterPagination.value)
     ) {
       PetsListAfterPagination.value.splice(0);
       for (
@@ -300,7 +310,11 @@ function checkFilterGeolocation() {
       </div>
     </div>
     <div v-if="counterPagination" class="feed-pets-cards-pagination">
-      <FeedPagination />
+      <FeedPagination
+        :lastPage="lastPage"
+        :currentPage="paginationPage"
+        @change-page="changePage"
+      />
       <div class="feed-pets-cards-pagination__pets-cards">
         <div v-for="pet in PetsListAfterPagination" :key="pet.id">
           <FeedPetsCards :pet="pet" />
@@ -311,9 +325,7 @@ function checkFilterGeolocation() {
       src="@/assets/images/Feed/arrow-right.svg"
       alt="arrow-left"
       v-if="
-        counterPagination &&
-        paginationPage >= 1 &&
-        paginationPage < Math.ceil(PetsListForShow.length / counterPagination)
+        counterPagination && paginationPage >= 1 && paginationPage < lastPage
       "
       class="feed-arrow-right"
       @click="paginationPage++"
