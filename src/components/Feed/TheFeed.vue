@@ -1,12 +1,15 @@
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import FeedFilters from "./FeedFilters.vue";
 import FeedPetsCards from "./FeedPetsCards.vue";
+import FeedPagination from "./FeedPagination.vue";
 import { usePetsStore } from "@/stores/petsList.js";
 import { useLocationStore } from "@/stores/location.js";
+import { usePaginationStore } from "@/stores/pagination.js";
 
 const PetsStore = usePetsStore();
 const storeGeolocation = useLocationStore();
+const PaginationStore = usePaginationStore();
 
 const PetsList = ref([]);
 const FiltersFromLocalStorage = ref({
@@ -14,11 +17,14 @@ const FiltersFromLocalStorage = ref({
   gender: [],
   breeds: [],
 });
+const PaginationFromLocalStorage = ref();
 const PetsListAfterGeoLocation = ref([]);
 const PetsListAfterFilters = ref([]);
+const PetsListAfterPagination = ref([]);
 const PetsListForShow = ref([]);
 const counterOfFilters = ref([]);
 const counterOfGeoLocation = ref(false);
+const counterPagination = ref("");
 const Filters = ref({
   type: [],
   gender: [],
@@ -26,6 +32,7 @@ const Filters = ref({
 });
 let pets = [];
 const HeveNotPets = ref(false);
+const paginationPage = ref(1);
 
 function changeFilter(filter, type) {
   Filters.value[type].splice(0);
@@ -37,6 +44,62 @@ function changeFilter(filter, type) {
   } else {
     localStorage.removeItem(type);
   }
+}
+
+function changepagination() {
+  if (PaginationStore.pagination && !counterPagination.value) {
+    counterPagination.value =
+      PaginationStore.pagination === "Всех" ? 0 : PaginationStore.pagination;
+  }
+  PetsListAfterPagination.value.splice(0);
+  if (counterPagination.value >= PetsListForShow.value.length) {
+    counterPagination.value = 0;
+  }
+  if (counterPagination.value) {
+    paginationPage.value = 1;
+    for (let i = 0; i <= counterPagination.value - 1; i++) {
+      PetsListAfterPagination.value.push(PetsListForShow.value[i]);
+    }
+  }
+}
+
+watch(
+  () => paginationPage.value,
+  () => {
+    console.log(
+      Math.ceil(PetsListForShow.value.length / counterPagination.value)
+    );
+    if (paginationPage.value < 1) {
+      paginationPage.value = 1;
+    }
+    if (
+      paginationPage.value <=
+      Math.ceil(PetsListForShow.value.length / counterPagination.value)
+    ) {
+      PetsListAfterPagination.value.splice(0);
+      for (
+        let i =
+          paginationPage.value * counterPagination.value -
+          counterPagination.value;
+        i <= paginationPage.value * counterPagination.value - 1;
+        i++
+      ) {
+        if (PetsListForShow.value[i]) {
+          PetsListAfterPagination.value.push(PetsListForShow.value[i]);
+        } else break;
+      }
+    }
+  }
+);
+
+function pagination(numberOfCards) {
+  if (numberOfCards === "Всех") {
+    counterPagination.value = 0;
+  } else {
+    counterPagination.value = Number(numberOfCards);
+  }
+  // console.log("pagination", counterPagination.value);
+  changepagination();
 }
 
 function getFiltersFromLocalStorage() {
@@ -60,6 +123,9 @@ function getFiltersFromLocalStorage() {
   } else {
     storeGeolocation.location = "Весь мир";
   }
+  if (localStorage.getItem("pagination")) {
+    PaginationFromLocalStorage.value = localStorage.getItem("pagination");
+  }
 }
 
 if (PetsStore.petsList.length) {
@@ -69,6 +135,7 @@ if (PetsStore.petsList.length) {
     PetsList.value.push(pet);
     PetsListForShow.value.push(pet);
   }
+  checkFilterGeolocation();
 } else {
   (async () => {
     //let response = await fetch("src/assets/feed/Pets.json");
@@ -90,36 +157,16 @@ if (PetsStore.petsList.length) {
   })();
 }
 
-watchEffect(() => {
-  if (storeGeolocation.location === "Весь мир") {
-    counterOfGeoLocation.value = false;
-    PetsListForShow.value.splice(0);
-    PetsListAfterGeoLocation.value.splice(0);
-    for (let pet of PetsList.value) {
-      PetsListAfterGeoLocation.value.push(pet);
-      PetsListForShow.value.push(pet);
-    }
-  } else {
-    if (storeGeolocation.location != "") {
-      PetsListForShow.value.splice(0);
-      PetsListAfterGeoLocation.value.splice(0);
-      for (let pet of PetsList.value) {
-        if (storeGeolocation.location === pet.shelter.address) {
-          PetsListAfterGeoLocation.value.push(pet);
-          PetsListForShow.value.push(pet);
-        }
-      }
-      counterOfGeoLocation.value = true;
+watch(
+  () => storeGeolocation.location,
+  () => {
+    checkFilterGeolocation();
+    if (!counterOfFilters.value.length) {
+      // console.log(PetsListForShow.value.length);
+      changepagination();
     }
   }
-  if (counterOfFilters.value.length) {
-    compareFiltersandGeolocation();
-  } else {
-    if (counterOfGeoLocation.value) {
-      checkHeveNotPets();
-    }
-  }
-});
+);
 
 watch(Filters.value, () => {
   pets = PetsList.value.slice(0);
@@ -169,6 +216,8 @@ watch(Filters.value, () => {
     compareFiltersandGeolocation();
   } else {
     checkHeveNotPets();
+    // console.log(PetsListForShow.value.length);
+    changepagination();
   }
 });
 
@@ -182,6 +231,7 @@ function compareFiltersandGeolocation() {
     }
   }
   checkHeveNotPets();
+  changepagination();
 }
 
 function checkHeveNotPets() {
@@ -191,6 +241,37 @@ function checkHeveNotPets() {
     HeveNotPets.value = false;
   }
 }
+
+function checkFilterGeolocation() {
+  if (storeGeolocation.location === "Весь мир") {
+    counterOfGeoLocation.value = false;
+    PetsListForShow.value.splice(0);
+    PetsListAfterGeoLocation.value.splice(0);
+    for (let pet of PetsList.value) {
+      PetsListAfterGeoLocation.value.push(pet);
+      PetsListForShow.value.push(pet);
+    }
+  } else {
+    if (storeGeolocation.location != "") {
+      PetsListForShow.value.splice(0);
+      PetsListAfterGeoLocation.value.splice(0);
+      for (let pet of PetsList.value) {
+        if (storeGeolocation.location === pet.shelter.address) {
+          PetsListAfterGeoLocation.value.push(pet);
+          PetsListForShow.value.push(pet);
+        }
+      }
+      counterOfGeoLocation.value = true;
+    }
+  }
+  if (counterOfFilters.value.length) {
+    compareFiltersandGeolocation();
+  } else {
+    if (counterOfGeoLocation.value) {
+      checkHeveNotPets();
+    }
+  }
+}
 </script>
 
 <template>
@@ -198,17 +279,45 @@ function checkHeveNotPets() {
     <FeedFilters
       class="feed-filters"
       @change-filter="changeFilter"
+      @pagination="pagination"
       :FiltersFromLocalStorage="FiltersFromLocalStorage"
+      :PaginationFromLocalStorage="PaginationFromLocalStorage"
       :PetsListForShow="PetsListForShow"
     />
     <div v-if="HeveNotPets" class="feed-no-pets">
       По вашему запросу животных не найдено. Попробуйте изменить фильтры.
     </div>
-    <div class="feed-pets-cards">
+    <img
+      src="@/assets/images/Feed/arrow-left.svg"
+      alt="arrow-left"
+      v-if="counterPagination && paginationPage > 1"
+      class="feed-arrow-left"
+      @click="paginationPage--"
+    />
+    <div class="feed-pets-cards" v-if="!counterPagination">
       <div v-for="pet in PetsListForShow" :key="pet.id">
         <FeedPetsCards :pet="pet" />
       </div>
     </div>
+    <div v-if="counterPagination" class="feed-pets-cards-pagination">
+      <FeedPagination />
+      <div class="feed-pets-cards-pagination__pets-cards">
+        <div v-for="pet in PetsListAfterPagination" :key="pet.id">
+          <FeedPetsCards :pet="pet" />
+        </div>
+      </div>
+    </div>
+    <img
+      src="@/assets/images/Feed/arrow-right.svg"
+      alt="arrow-left"
+      v-if="
+        counterPagination &&
+        paginationPage >= 1 &&
+        paginationPage < Math.ceil(PetsListForShow.length / counterPagination)
+      "
+      class="feed-arrow-right"
+      @click="paginationPage++"
+    />
   </div>
 </template>
 
@@ -218,6 +327,7 @@ function checkHeveNotPets() {
   width: 100%;
   z-index: 1;
 }
+
 .feed-no-pets {
   margin-top: 132px;
   display: flex;
@@ -232,5 +342,32 @@ function checkHeveNotPets() {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.feed-pets-cards-pagination {
+  margin: 132px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feed-pets-cards-pagination__pets-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.feed-arrow-left {
+  position: fixed;
+  top: 450px;
+  left: 50px;
+  width: 40px;
+}
+
+.feed-arrow-right {
+  position: fixed;
+  top: 450px;
+  right: 50px;
+  width: 40px;
 }
 </style>

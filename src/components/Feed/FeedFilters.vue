@@ -1,20 +1,22 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import router from "../../router";
 import FilterSingle from "./FeedFilters/FilterSingle.vue";
+import FilterPagination from "./FeedFilters/FilterPagination.vue";
 
 const props = defineProps({
   FiltersFromLocalStorage: {
     type: Object,
     required: false,
   },
+  PaginationFromLocalStorage: String,
   PetsListForShow: {
     type: Array,
     required: true,
   },
 });
 
-const emit = defineEmits(["change-filter"]);
+const emit = defineEmits(["change-filter", "pagination"]);
 
 const clearAllFilters = ref(false);
 
@@ -73,6 +75,10 @@ function changeSingleFilter(filterType, type) {
   emit("change-filter", filterType, type);
 }
 
+function pagination(numberOfCards) {
+  emit("pagination", numberOfCards);
+}
+
 function getRandomPet() {
   let randomPet =
     props.PetsListForShow[
@@ -111,9 +117,16 @@ function getRandomPet() {
         Сбросить фильтры
       </button>
     </div>
-    <button class="filters__btn-lucky" @click="getRandomPet">
-      Мне повезёт
-    </button>
+    <div class="filters__lucky-pagination">
+      <button class="filters__btn-lucky" @click="getRandomPet">
+        Мне повезёт
+      </button>
+      <FilterPagination
+        class="filters__pagination"
+        @pagination="pagination"
+        :PaginationFromLocalStorage="props.PaginationFromLocalStorage"
+      />
+    </div>
   </div>
 </template>
 
@@ -143,6 +156,10 @@ function getRandomPet() {
 
 .filters__btn-clear-all-filters:hover {
   color: #000;
+}
+
+.filters__lucky-pagination {
+  display: flex;
 }
 .filters__btn-lucky {
   margin-top: 14px;

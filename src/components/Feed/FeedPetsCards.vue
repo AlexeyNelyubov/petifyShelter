@@ -1,36 +1,18 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import getAge from "@/Helpers/getAge.js";
+import getColores from "@/Helpers/getColores.js";
+
 const props = defineProps({
   pet: Object,
 });
 
 const PetsTypeImg = ref("");
-const PetsAge = ref(props.pet.age);
+const PetsAge = getAge(props.pet.age);
 const PetsSterelization = ref("");
 const PetsGender = ref("");
 const showAllFeatures = ref(false);
-
-const Colors = [
-  "#00FF00",
-  "#FFFF00",
-  "#FF00FF",
-  "#00FFFF",
-  "#F4A460",
-  "#FF00FF",
-  "#EE82EE",
-  "#FF7F50",
-  "#FFA500",
-  "#FF69B4",
-  "#FA8072",
-  "#00FA9A",
-  "#7FFFD4",
-  "#FFE4E1",
-];
-
-function ColorForPetsFeature() {
-  return Colors[Math.floor(Math.random() * Colors.length)];
-}
 
 switch (props.pet.type) {
   case "Кот":
@@ -43,47 +25,6 @@ switch (props.pet.type) {
     PetsTypeImg.value = "src/assets//images/Feed/dog.svg";
     break;
 }
-
-let now = new Date();
-const dateBorn = now - Date.parse(PetsAge.value);
-let date = new Date(dateBorn);
-let fullYear = date.getFullYear() - 1970;
-let fullMonth = date.getMonth();
-let year = "";
-let month = "";
-
-if (fullYear === 1 || fullYear % 10 === 1) {
-  year = "год";
-} else {
-  if (
-    (fullYear >= 2) & (fullYear <= 4) ||
-    (fullYear % 10 >= 2) & (fullYear % 10 <= 4)
-  ) {
-    year = "года";
-  } else {
-    if (fullYear === 0) {
-      fullYear = "";
-    } else {
-      year = "лет";
-    }
-  }
-}
-
-if (fullMonth === 1) {
-  month = "месяц";
-} else {
-  if ((fullMonth >= 2) & (fullMonth <= 4)) {
-    month = "месяца";
-  } else {
-    if (fullMonth === 0) {
-      fullMonth = "";
-    } else {
-      month = "месяцев";
-    }
-  }
-}
-
-const Age = `${fullYear} ${year} ${fullMonth} ${month}`;
 
 if (props.pet.gender === "Мальчик") {
   PetsGender.value = "src/assets//images/Feed/male.svg";
@@ -114,14 +55,14 @@ if (props.pet.gender === "Мальчик") {
         <img :src="PetsTypeImg" />
         <div class="pet-card__name-age">
           <p class="pet-card__name-age__name">{{ props.pet.name }}</p>
-          <p class="pet-card__name-age__age">{{ Age }}</p>
+          <p class="pet-card__name-age__age">{{ PetsAge }}</p>
         </div>
       </div>
       <div class="pet-card__sterilized-vaccinated-gender">
         <div class="pet-card__sterilized-gender">
           <p
             class="pet-card__sterilized-gender__sterilized"
-            :style="{ backgroundColor: ColorForPetsFeature() }"
+            :style="{ backgroundColor: getColores() }"
           >
             {{ PetsSterelization }}
           </p>
@@ -134,7 +75,7 @@ if (props.pet.gender === "Мальчик") {
         <div class="pet-card__features">
           <p
             class="pet-card__single-feature"
-            :style="{ backgroundColor: ColorForPetsFeature() }"
+            :style="{ backgroundColor: getColores() }"
           >
             {{ props.pet.features[0] }}
           </p>
@@ -143,7 +84,7 @@ if (props.pet.gender === "Мальчик") {
             class="pet-card__single-feature"
             @pointerover="showAllFeatures = true"
             :style="{
-              backgroundColor: ColorForPetsFeature(),
+              backgroundColor: getColores(),
               fontWeight: 'bold',
             }"
           >
@@ -160,7 +101,7 @@ if (props.pet.gender === "Мальчик") {
             v-for="item in props.pet.features"
             :key="item.id"
             class="pet-card__single-feature-in-all-features"
-            :style="{ backgroundColor: ColorForPetsFeature() }"
+            :style="{ backgroundColor: getColores() }"
           >
             {{ item }}
           </div>
@@ -168,76 +109,13 @@ if (props.pet.gender === "Мальчик") {
       </div>
     </div>
   </div>
-  <!-- <div class="pet-card">
-    <div class="pet-card__field-for-avatar">
-      <img :src="props.pet.avatar" class="pet-card__avatar" />
-    </div>
-    <div class="pet-card__discription">
-      <div class="pet-card__type-name-age">
-        <img :src="PetsTypeImg" />
-        <div class="pet-card__name-age">
-          <p class="pet-card__name-age__name">{{ props.pet.name }}</p>
-          <p class="pet-card__name-age__age">{{ Age }}</p>
-        </div>
-      </div>
-      <div class="pet-card__sterilized-vaccinated-gender">
-        <div class="pet-card__sterilized-gender">
-          <p
-            class="pet-card__sterilized-gender__sterilized"
-            :style="{ backgroundColor: ColorForPetsFeature() }"
-          >
-            {{ PetsSterelization }}
-          </p>
-          <img
-            v-if="props.pet.vaccinated"
-            src="@/assets/images/Feed/vaccinated.svg"
-          />
-          <img :src="PetsGender" class="pet-card__sterilized-gender__gender" />
-        </div>
-        <div class="pet-card__features">
-          <p
-            class="pet-card__single-feature"
-            :style="{ backgroundColor: ColorForPetsFeature() }"
-          >
-            {{ props.pet.features[0] }}
-          </p>
-          <p
-            v-if="props.pet.features[1]"
-            class="pet-card__single-feature"
-            @pointerover="showAllFeatures = true"
-            :style="{
-              backgroundColor: ColorForPetsFeature(),
-              fontWeight: 'bold',
-            }"
-          >
-            ...
-          </p>
-        </div>
-        <div
-          v-if="showAllFeatures"
-          class="pet-card__all-features"
-          @pointerover="showAllFeatures = true"
-          @pointerleave="showAllFeatures = false"
-        >
-          <div
-            v-for="item in props.pet.features"
-            :key="item.id"
-            class="pet-card__single-feature-in-all-features"
-            :style="{ backgroundColor: ColorForPetsFeature() }"
-          >
-            {{ item }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <style>
 .pet-card {
   width: 480px;
   height: 588px;
-  margin: 0 48px 48px 0;
+  margin: 0 24px 48px 24px;
   border: 1px solid #c4c4c4;
   text-decoration: none;
 }

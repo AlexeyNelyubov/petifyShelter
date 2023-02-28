@@ -70,7 +70,6 @@ watch(Hello.value, () => {
 });
 </script>
 
-<!-- todo: [] я что-то потерял версию хедера с демо-режимом -->
 <template>
   <div class="authorization" @pointerover="showMenuForProfile = true">
     <img alt="avatar" :src="imgHeader" />

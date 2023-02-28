@@ -115,6 +115,13 @@ getCheckedfiltersWithRouting();
 const showFilter = ref(false);
 const filterSign = ref("");
 
+// watch(
+//   () => props.closeFilters,
+//   () => {
+//     showFilter.value = props.closeFilters;
+//   }
+// );
+
 if (props.itemForFilter.general[0] === "breeds") {
   filterSign.value = "Не выбрана";
 } else {
@@ -188,6 +195,18 @@ function getFilterItemsForBreedDependsOfType() {
     getFilterItems("general");
   }
 }
+
+onMounted(() => {
+  document.addEventListener("click", () => {
+    showFilter.value = false;
+  });
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", () => {
+    showFilter.value = false;
+  });
+});
 </script>
 
 <template>
@@ -205,7 +224,7 @@ function getFilterItemsForBreedDependsOfType() {
     <p class="filter-type__header">{{ props.itemForFilter.general[1] }}</p>
     <div
       class="filter-type__field-for-count-filters"
-      @click="showFilter = !showFilter"
+      @click.stop="showFilter = !showFilter"
     >
       <p>{{ filterSign }}</p>
       <img
@@ -222,6 +241,7 @@ function getFilterItemsForBreedDependsOfType() {
         'filter-type__drop-down-breed':
           props.itemForFilter.general[0] === 'breeds',
       }"
+      @click.stop=""
     >
       <input
         v-if="props.itemForFilter.general[0] === 'breeds'"
@@ -258,8 +278,8 @@ function getFilterItemsForBreedDependsOfType() {
   margin-right: 24px;
   display: flex;
   flex-direction: column;
-  background-color: rgba(217, 217, 217, 0.41);
-  border: 2px solid rgba(217, 217, 217, 0.41);
+  background-color: #d9d9d969;
+  border: 2px solid #d9d9d969;
   border-radius: 8px;
 }
 
