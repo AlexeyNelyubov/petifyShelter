@@ -3,6 +3,7 @@ import { ref, watch, computed } from "vue";
 import FeedFilters from "./FeedFilters.vue";
 import FeedPetsCards from "./FeedPetsCards.vue";
 import FeedPagination from "./FeedPagination.vue";
+import FeedPaginationArrow from "./FeedPaginationArrow.vue";
 import { usePetsStore } from "@/stores/petsList.js";
 import { useLocationStore } from "@/stores/location.js";
 import { usePaginationStore } from "@/stores/pagination.js";
@@ -24,7 +25,7 @@ const PetsListAfterPagination = ref([]);
 const PetsListForShow = ref([]);
 const counterOfFilters = ref([]);
 const counterOfGeoLocation = ref(false);
-const counterPagination = ref("");
+const counterPagination = ref(0);
 const Filters = ref({
   type: [],
   gender: [],
@@ -50,15 +51,12 @@ function changeFilter(filter, type) {
   }
 }
 
-function changePage(currentPage) {
-  console.log(currentPage);
-  paginationPage.value = Number(currentPage);
-}
-
 function changepagination() {
   if (PaginationStore.pagination && !counterPagination.value) {
     counterPagination.value =
-      PaginationStore.pagination === "Всех" ? 0 : PaginationStore.pagination;
+      PaginationStore.pagination === "Всех"
+        ? 0
+        : Number(PaginationStore.pagination);
   }
   PetsListAfterPagination.value.splice(0);
   if (counterPagination.value >= PetsListForShow.value.length) {
@@ -75,10 +73,10 @@ function changepagination() {
 watch(
   () => paginationPage.value,
   () => {
-    console.log(
-      lastPage.value
-      // Math.ceil(PetsListForShow.value.length / counterPagination.value)
-    );
+    // console.log(
+    //   lastPage.value
+    //   // Math.ceil(PetsListForShow.value.length / counterPagination.value)
+    // );
     if (paginationPage.value < 1) {
       paginationPage.value = 1;
     }
@@ -286,6 +284,13 @@ function checkFilterGeolocation() {
 
 <template>
   <div>
+    <FeedPaginationArrow
+      :counterPagination="counterPagination"
+      :lastPage="lastPage"
+      :currentPage="paginationPage"
+      @change-page-arrow-minus="paginationPage--"
+      @change-page-arrow-plus="paginationPage++"
+    />
     <FeedFilters
       class="feed-filters"
       @change-filter="changeFilter"
@@ -297,13 +302,13 @@ function checkFilterGeolocation() {
     <div v-if="HeveNotPets" class="feed-no-pets">
       По вашему запросу животных не найдено. Попробуйте изменить фильтры.
     </div>
-    <img
+    <!-- <img
       src="@/assets/images/Feed/arrow-left.svg"
       alt="arrow-left"
       v-if="counterPagination && paginationPage > 1"
       class="feed-arrow-left"
       @click="paginationPage--"
-    />
+    /> -->
     <div class="feed-pets-cards" v-if="!counterPagination">
       <div v-for="pet in PetsListForShow" :key="pet.id">
         <FeedPetsCards :pet="pet" />
@@ -313,15 +318,21 @@ function checkFilterGeolocation() {
       <FeedPagination
         :lastPage="lastPage"
         :currentPage="paginationPage"
-        @change-page="changePage"
+        @change-page="(page) => (paginationPage = Number(page))"
       />
       <div class="feed-pets-cards-pagination__pets-cards">
         <div v-for="pet in PetsListAfterPagination" :key="pet.id">
           <FeedPetsCards :pet="pet" />
         </div>
       </div>
+      <FeedPagination
+        :counterPagination="counterPagination"
+        :lastPage="lastPage"
+        :currentPage="paginationPage"
+        @change-page="(page) => (paginationPage = Number(page))"
+      />
     </div>
-    <img
+    <!-- <img
       src="@/assets/images/Feed/arrow-right.svg"
       alt="arrow-left"
       v-if="
@@ -329,7 +340,7 @@ function checkFilterGeolocation() {
       "
       class="feed-arrow-right"
       @click="paginationPage++"
-    />
+    /> -->
   </div>
 </template>
 
@@ -357,7 +368,7 @@ function checkFilterGeolocation() {
 }
 
 .feed-pets-cards-pagination {
-  margin: 132px 0;
+  margin: 132px 0 24px 0;
   display: flex;
   flex-direction: column;
   align-items: center;

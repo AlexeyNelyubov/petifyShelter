@@ -33,7 +33,6 @@ watch(
   () => {
     getFilterItemsForBreedDependsOfType();
     if (BreedInput.value.length) {
-      console.log(filterItems.value);
       let filters = JSON.parse(JSON.stringify(filterItems.value));
       // let filters = {};
       // for (let index in filterItems.value) {

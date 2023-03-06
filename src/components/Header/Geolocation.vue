@@ -99,7 +99,7 @@ function checkLocationAfterInput(event, type) {
 
 (async () => {
   // let response = await fetch(
-  //   `${import.meta.env.VITE_BACKEND_URI}/api/v1/city/`
+  //   `${import.meta.env.VITE_SERVER_URL}/api/v1/city/`
   // );
   let response = await fetch("/src/assets/data/RussiaCities.json");
   let data = await response.json();

@@ -62,19 +62,10 @@ function getPages(currentPage) {
     }
   }
 }
-
-// for (let i = 1; i <= props.lastPage; i++) {
-//       if (i != currentPage) {
-//         pages.value.push(i);
-//       } else {
-//         pages.value.push("_");
-//       }
-//     }
 </script>
 
 <template>
   <div class="feed-pets-cards-pagination__pagination">
-    {{ props.currentPage }}
     [
     <div v-for="page in pages" :key="page.id">
       <p
@@ -95,7 +86,7 @@ function getPages(currentPage) {
   font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 24px;
   color: #9d9d9d;
 }
 
