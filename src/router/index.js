@@ -4,13 +4,14 @@ const IndexPage = () => import("../views/IndexView.vue");
 const AboutUsPage = () => import("../views/AboutUsVeiw.vue");
 const PetPage = () => import("@/views/PetView.vue");
 const ProfilePage = () => import("@/views/ProfileView.vue");
+const SignUpPage = () => import("@/views/SignUpView.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "IndexPage",
       component: IndexPage,
     },
     {
@@ -22,12 +23,17 @@ const router = createRouter({
       path: "/pet/:id",
       name: "PetPage",
       component: PetPage,
-      props: route=> ({ id: route.params.id}),
+      props: (route) => ({ id: route.params.id }),
     },
     {
       path: "/profile/:id",
       name: "ProfilePage",
       component: ProfilePage,
+    },
+    {
+      path: "/signup",
+      name: "SignUpPage",
+      component: SignUpPage,
     },
   ],
 });

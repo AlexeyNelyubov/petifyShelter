@@ -30,8 +30,8 @@ watch(
   () => AutorizatonStore.autorization,
   () => {
     if (AutorizatonStore.autorization) {
-      AutorizatonStore.user.userName = "Николас Кейдж";
-      AutorizatonStore.user.userId = "nickolas";
+      // AutorizatonStore.user.userName = "Николас Кейдж";
+      // AutorizatonStore.user.userId = "nickolas";
       Hello.value[0] = AutorizatonStore.user.userName;
       imgHeader.value = "/src/assets/images/Header/imgava.svg";
       imgProfile.value = "/src/assets/images/Header/imgava.svg";
@@ -133,7 +133,9 @@ watch(Hello.value, () => {
           "
           >Вход</RouterLink
         >
-        <RouterLink to="/" class="drop-down-field__signin-signup__signup"
+        <RouterLink
+          :to="{ name: 'SignUpPage' }"
+          class="drop-down-field__signin-signup__signup"
           >Регистрация</RouterLink
         >
       </div>
@@ -162,6 +164,7 @@ watch(Hello.value, () => {
 .drop-down-field {
   position: absolute;
   top: 64px;
+  right: 20px;
   width: 200px;
   display: flex;
   flex-direction: column;

@@ -6,6 +6,7 @@ export const useAutorizatonStore = defineStore("autorization", () => {
   const user = ref({
     userName: "Гость",
     userId: "guest",
+    city: "Москва",
   });
   // const userName = ref("Гость");
 

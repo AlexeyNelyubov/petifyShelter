@@ -16,7 +16,7 @@ const AutorizatonStore = useAutorizatonStore();
       <p class="profile-user__username">
         {{ AutorizatonStore.user.userName }}
       </p>
-      <p class="profile-user__location">Москва</p>
+      <p class="profile-user__location">{{ AutorizatonStore.user.city }}</p>
       <div class="profile__user-options">
         <p class="profile__user-options-item">Посты</p>
         <p class="profile__user-options-item">Поддержка</p>
