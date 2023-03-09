@@ -5,12 +5,12 @@ import LastName from "@/components/Authorization/LastName.vue";
 import Email from "@/components/Authorization/Email.vue";
 import City from "@/components/Authorization/City.vue";
 import Password from "@/components/Authorization/Password.vue";
-import AuthorizationBatton from "@/components/Authorization/AuthorizationBatton.vue";
+import SignUpButton from "@/components/Authorization/SignUpButton.vue";
 import EnformationField from "@/components/Authorization/EnformationField.vue";
 
 import { useAutorizatonStore } from "@/stores/autorization.js";
-import { useRouter } from "vue-router";
-const router = useRouter();
+// import { useRouter } from "vue-router";
+// const router = useRouter();
 
 const AutorizatonStore = useAutorizatonStore();
 
@@ -24,9 +24,9 @@ const city = ref("");
 const password = ref("");
 const isCorrectPassword = ref(false);
 const showError = ref("");
-const showSign = ref("");
+const showSignUpInformation = ref("");
 
-const getAuthorization = () => {
+const signUp = () => {
   const user = JSON.stringify({
     firstName: firstName.value,
     lastName: lastName.value,
@@ -34,7 +34,6 @@ const getAuthorization = () => {
     city: city.value,
     password: password.value,
   });
-  console.log("1");
   (async () => {
     try {
       let resoponse = await fetch(
@@ -49,16 +48,16 @@ const getAuthorization = () => {
       );
       let json = await resoponse.json();
       if (resoponse.ok) {
-        console.log(json);
         AutorizatonStore.autorization = true;
         AutorizatonStore.user.userName = json.firstName + " " + json.lastName;
         AutorizatonStore.user.userId = json.firstName;
         AutorizatonStore.user.city = json.city;
-        showSign.value = "Вам на email отправлено письмо для подтверждения.";
+        showSignUpInformation.value =
+          "Вам на email отправлено письмо для подтверждения электронной почты";
         // router.push({ name: "IndexPage" });
       } else {
-        if (json === "Пользователь с таким email уже зарегистрирован") {
-          showSign.value = json;
+        if (json === "Пользователь с таким email уже существует") {
+          showSignUpInformation.value = json;
         } else {
           console.log(json);
           showError.value =
@@ -99,43 +98,50 @@ const getAuthorization = () => {
       <div class="sigUp-firstName-lastName">
         <FirstName
           @change-firstName="
-            (value, correctName) => {
-              (firstName = value), (isCorrectFirstName = correctName);
+            (newName, isCorrectNewName) => {
+              (firstName = newName), (isCorrectFirstName = isCorrectNewName);
             }
           "
         />
         <LastName
           @change-lastName="
-            (value, correctName) => {
-              (lastName = value), (isCorrectLastName = correctName);
+            (newLastName, isCorrectNewLastName) => {
+              (lastName = newLastName),
+                (isCorrectLastName = isCorrectNewLastName);
             }
           "
         />
       </div>
       <Email
         @change-email="
-          (value, correctMail) => {
-            (email = value), (isCorrectEmail = correctMail);
+          (newEmail, isCorrectNewEmail) => {
+            (email = newEmail), (isCorrectEmail = isCorrectNewEmail);
           }
         "
       />
-      <City @change-city="(value) => (city = value)" />
+      <City @change-city="(newCity) => (city = newCity)" />
       <Password
         @change-password="
-          (value, correctPassword) => {
-            (password = value), (isCorrectPassword = correctPassword);
+          (newPassword, isCorrectNewPassword) => {
+            (password = newPassword),
+              (isCorrectPassword = isCorrectNewPassword);
           }
         "
       />
-      <div class="sigUp-authorizationBatton">
-        <AuthorizationBatton
-          :correctFirstName="isCorrectFirstName"
-          :correctLastName="isCorrectLastName"
-          :correctEmail="isCorrectEmail"
-          :correctPassword="isCorrectPassword"
-          @authorization="getAuthorization"
+      <div class="signUp-signUpButton">
+        <SignUpButton
+          :isCorrectNewUserInformation="
+            isCorrectFirstName &&
+            isCorrectLastName &&
+            isCorrectEmail &&
+            isCorrectPassword
+          "
+          @signUp="signUp"
         />
-        <EnformationField v-if="showSign" :showSign="showSign" />
+        <EnformationField
+          v-if="showSignUpInformation"
+          :showSignUpInformation="showSignUpInformation"
+        />
       </div>
     </div>
   </main>
@@ -170,7 +176,7 @@ const getAuthorization = () => {
   margin-top: 40px;
   display: flex;
 }
-.sigUp-authorizationBatton {
+.signUp-signUpButton {
   margin-top: 40px;
   display: flex;
   justify-content: flex-start;

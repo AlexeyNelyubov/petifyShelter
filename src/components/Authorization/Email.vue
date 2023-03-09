@@ -1,23 +1,23 @@
 <script setup>
 import { ref } from "vue";
 const email = ref("");
-const correctEmail = ref(false);
+const isCorrectEmail = ref(false);
 const showPopup = ref(false);
-const color = ref("#000");
+const colorForBorder = ref("#000");
 
 const emit = defineEmits(["change-email"]);
 
 const checkInput = () => {
   if (email.value.length && /^\w+@\w{2,}\.\w{2,3}$/.test(email.value)) {
-    color.value = "#008000";
-    correctEmail.value = true;
+    colorForBorder.value = "#008000";
+    isCorrectEmail.value = true;
     showPopup.value = false;
   } else {
-    color.value = "#ff0000";
-    correctEmail.value = false;
+    colorForBorder.value = "#ff0000";
+    isCorrectEmail.value = false;
     showPopup.value = true;
   }
-  emit("change-email", email.value, correctEmail.value);
+  emit("change-email", email.value, isCorrectEmail.value);
 };
 </script>
 
@@ -42,7 +42,7 @@ const checkInput = () => {
   margin-top: 24px;
   padding: 16px 16px 16px 24px;
   font-size: 18px;
-  border: 1px solid v-bind(color);
+  border: 1px solid v-bind(colorForBorder);
   outline: none;
 }
 .popup-email {

@@ -1,20 +1,20 @@
 <script setup>
 import { ref } from "vue";
 const lastName = ref("");
-const correctLastName = ref(false);
-const color = ref("#000");
+const isCorrectLastName = ref(false);
+const colorForBorder = ref("#000");
 
 const emit = defineEmits(["change-lastName"]);
 
 const checkInput = () => {
   if (lastName.value.length) {
-    color.value = "#008000";
-    correctLastName.value = true;
+    colorForBorder.value = "#008000";
+    isCorrectLastName.value = true;
   } else {
-    correctLastName.value = false;
-    color.value = "#ff0000";
+    isCorrectLastName.value = false;
+    colorForBorder.value = "#ff0000";
   }
-  emit("change-lastName", lastName.value, correctLastName.value);
+  emit("change-lastName", lastName.value, isCorrectLastName.value);
 };
 </script>
 
@@ -38,7 +38,7 @@ const checkInput = () => {
   margin-left: 24px;
   padding: 16px 16px 16px 24px;
   font-size: 18px;
-  border: 1px solid v-bind(color);
+  border: 1px solid v-bind(colorForBorder);
   outline: none;
 }
 </style>

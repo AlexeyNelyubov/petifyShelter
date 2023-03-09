@@ -1,23 +1,23 @@
 <script setup>
 import { ref } from "vue";
 const password = ref("");
-const correctPassword = ref(false);
+const isCorrectPassword = ref(false);
 const showPopup = ref(false);
-const color = ref("#000");
+const colorForBorder = ref("#000");
 
 const emit = defineEmits(["change-password"]);
 
 const checkInput = () => {
   if (password.value.length && /^\S{8,64}$/.test(password.value)) {
-    color.value = "#008000";
-    correctPassword.value = true;
+    colorForBorder.value = "#008000";
+    isCorrectPassword.value = true;
     showPopup.value = false;
   } else {
-    color.value = "#ff0000";
-    correctPassword.value = false;
+    colorForBorder.value = "#ff0000";
+    isCorrectPassword.value = false;
     showPopup.value = true;
   }
-  emit("change-password", password.value, correctPassword.value);
+  emit("change-password", password.value, isCorrectPassword.value);
 };
 </script>
 
@@ -31,6 +31,7 @@ const checkInput = () => {
     @input="checkInput"
     @blur="checkInput"
     required
+    autocomplete="off"
   />
   <div v-if="showPopup" class="popup-password">Пароль должен состоять ...</div>
 </template>
@@ -42,7 +43,7 @@ const checkInput = () => {
   margin-top: 24px;
   padding: 16px 16px 16px 24px;
   font-size: 18px;
-  border: 1px solid v-bind(color);
+  border: 1px solid v-bind(colorForBorder);
   outline: none;
 }
 

@@ -2,22 +2,23 @@
 import { computed } from "vue";
 
 const props = defineProps({
-  showSign: {
+  showSignUpInformation: {
     type: String,
     required: true,
   },
 });
 
-const color = computed(() => {
-  return props.showSign === "Пользователь с таким email уже зарегистрирован"
+const colorForSignUpInformation = computed(() => {
+  return props.showSignUpInformation ===
+    "Пользователь с таким email уже существует"
     ? "#ff0000"
-    : "#008000";
+    : "#00BC22";
 });
 </script>
 
 <template>
   <div class="enformation-field">
-    {{ props.showSign }}
+    {{ props.showSignUpInformation }}
   </div>
 </template>
 
@@ -32,7 +33,10 @@ const color = computed(() => {
   align-items: center;
   font-size: 20px;
   font-weight: 400;
-  background-color: v-bind(color);
+  color: #fff;
+  background-color: v-bind(colorForSignUpInformation);
   border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 </style>

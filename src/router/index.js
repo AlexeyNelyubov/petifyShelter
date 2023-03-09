@@ -5,6 +5,7 @@ const AboutUsPage = () => import("../views/AboutUsVeiw.vue");
 const PetPage = () => import("@/views/PetView.vue");
 const ProfilePage = () => import("@/views/ProfileView.vue");
 const SignUpPage = () => import("@/views/SignUpView.vue");
+const SignInPage = () => import("@/views/SignInView.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,11 @@ const router = createRouter({
       path: "/signup",
       name: "SignUpPage",
       component: SignUpPage,
+    },
+    {
+      path: "/signin",
+      name: "SignInPage",
+      component: SignInPage,
     },
   ],
 });
