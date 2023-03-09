@@ -126,11 +126,8 @@ watch(Hello.value, () => {
         class="drop-down-field__signin-signup"
       >
         <RouterLink
-          to="/"
+          :to="{ name: 'SignInPage' }"
           class="drop-down-field__signin-signup__signin"
-          @click="
-            AutorizatonStore.autorization = !AutorizatonStore.autorization
-          "
           >Вход</RouterLink
         >
         <RouterLink

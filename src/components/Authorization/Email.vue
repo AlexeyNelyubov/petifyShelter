@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from "vue";
+
+const emit = defineEmits(["change-email"]);
+
 const email = ref("");
 const isCorrectEmail = ref(false);
 const showPopup = ref(false);
 const colorForBorder = ref("#000");
-
-const emit = defineEmits(["change-email"]);
 
 const checkInput = () => {
   if (email.value.length && /^\w+@\w{2,}\.\w{2,3}$/.test(email.value)) {
@@ -22,24 +23,29 @@ const checkInput = () => {
 </script>
 
 <template>
-  <input
-    type="text"
-    v-model="email"
-    placeholder="Email"
-    class="email-input"
-    @focus="checkInput"
-    @input="checkInput"
-    @blur="checkInput"
-    required
-  />
-  <div v-if="showPopup" class="popup-email">example@example.com</div>
+  <div class="email">
+    <input
+      type="text"
+      v-model="email"
+      placeholder="Email"
+      class="email-input"
+      @focus="checkInput"
+      @input="checkInput"
+      @blur="checkInput"
+      required
+    />
+    <div v-if="showPopup" class="popup-email">example@example.com</div>
+  </div>
 </template>
 
 <style>
+.email {
+  position: relative;
+  margin-top: 24px;
+}
 .email-input {
   height: 84px;
   width: 768px;
-  margin-top: 24px;
   padding: 16px 16px 16px 24px;
   font-size: 18px;
   border: 1px solid v-bind(colorForBorder);
@@ -47,10 +53,12 @@ const checkInput = () => {
 }
 .popup-email {
   position: absolute;
-  top: 368px;
-  right: 40px;
+  top: 0;
+  left: 788px;
   height: 84px;
+  min-width: 200px;
   display: flex;
+  justify-content: center;
   align-items: center;
   padding: 0 8px;
   font-size: 18px;

@@ -2,15 +2,18 @@
 import { computed } from "vue";
 
 const props = defineProps({
-  showSignUpInformation: {
+  showValidationFromServer: {
     type: String,
     required: true,
   },
 });
 
-const colorForSignUpInformation = computed(() => {
-  return props.showSignUpInformation ===
-    "Пользователь с таким email уже существует"
+const errorFromBackSignIn = "Неверно указан email и пароль";
+const errorFromBackSignUp = "Пользователь с таким email уже существует";
+
+const colorForValidationFromServer = computed(() => {
+  return props.showValidationFromServer === errorFromBackSignUp ||
+    props.showValidationFromServer === errorFromBackSignIn
     ? "#ff0000"
     : "#00BC22";
 });
@@ -18,7 +21,7 @@ const colorForSignUpInformation = computed(() => {
 
 <template>
   <div class="enformation-field">
-    {{ props.showSignUpInformation }}
+    {{ props.showValidationFromServer }}
   </div>
 </template>
 
@@ -34,7 +37,7 @@ const colorForSignUpInformation = computed(() => {
   font-size: 20px;
   font-weight: 400;
   color: #fff;
-  background-color: v-bind(colorForSignUpInformation);
+  background-color: v-bind(colorForValidationFromServer);
   border: none;
   border-radius: 8px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);

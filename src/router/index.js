@@ -6,6 +6,7 @@ const PetPage = () => import("@/views/PetView.vue");
 const ProfilePage = () => import("@/views/ProfileView.vue");
 const SignUpPage = () => import("@/views/SignUpView.vue");
 const SignInPage = () => import("@/views/SignInView.vue");
+const PasswordRecoveryPage = () => import("@/views/PasswordRecovery.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
       path: "/signin",
       name: "SignInPage",
       component: SignInPage,
+    },
+    {
+      path: "/passwordrecovery",
+      name: "PasswordRecoveryPage",
+      component: PasswordRecoveryPage,
     },
   ],
 });
