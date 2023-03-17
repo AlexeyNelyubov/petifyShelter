@@ -1,22 +1,22 @@
 <script setup>
-import { useAutorizatonStore } from "@/stores/autorization.js";
-const AutorizatonStore = useAutorizatonStore();
+import { useUserStore } from "@/stores/userStore.js";
+const userStore = useUserStore();
 </script>
 <template>
   <div class="profile">
     <div class="profile__imgprofile">
       <img
-        src="@/assets/images/Header/imgava.svg"
+        :src="userStore.user.avatar"
         alt="img-profile"
-        width="80"
-        height="80"
+        width="100"
+        height="100"
       />
     </div>
     <div class="profile-user">
       <p class="profile-user__username">
-        {{ AutorizatonStore.user.userName }}
+        {{ userStore.user.userName }}
       </p>
-      <p class="profile-user__location">{{ AutorizatonStore.user.city }}</p>
+      <p class="profile-user__location">{{ userStore.user.city }}</p>
       <div class="profile__user-options">
         <p class="profile__user-options-item">Посты</p>
         <p class="profile__user-options-item">Поддержка</p>

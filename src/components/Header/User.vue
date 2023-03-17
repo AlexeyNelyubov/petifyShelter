@@ -1,79 +1,81 @@
 <script setup>
 import { ref, watch } from "vue";
 import { RouterLink } from "vue-router";
+import { useUserStore } from "@/stores/userStore.js";
 
-import { useAutorizatonStore } from "@/stores/autorization.js";
+const userStore = useUserStore();
 
-const AutorizatonStore = useAutorizatonStore();
-
-const showMenuForProfile = ref(false);
-const Hello = ref(["Привет друг!", "22px"]);
-const imgHeader = ref("/src/assets/images/Header/Hello.svg");
-const imgProfile = ref("/src/assets/images/Header/guestava.png");
+const showProfileDropDown = ref(false);
+// const userName = ref(["Привет друг!", "22px"]);
+// const userAvatarHeader = ref("/src/assets/images/Header/Hello.svg");
+// const userAvatarDropDown = ref("/src/assets/images/Header/guestava.png");
 
 const props = defineProps({
-  showMenuForUser: Boolean,
+  hideProfileDropDown: {
+    type: Boolean,
+    required: false,
+  },
 });
 
-if (JSON.parse(localStorage.getItem("autorization"))) {
-  AutorizatonStore.autorization = true;
-}
-if (JSON.parse(localStorage.getItem("user"))) {
-  AutorizatonStore.user = JSON.parse(localStorage.getItem("user"));
-  Hello.value[0] = AutorizatonStore.user.userName;
-  Hello.value[1] = "18px";
-  imgHeader.value = "/src/assets/images/Header/imgava.svg";
-  imgProfile.value = "/src/assets/images/Header/imgava.svg";
-}
-
 watch(
-  () => AutorizatonStore.autorization,
+  () => props.hideProfileDropDown,
   () => {
-    if (AutorizatonStore.autorization) {
-      // AutorizatonStore.user.userName = "Николас Кейдж";
-      // AutorizatonStore.user.userId = "nickolas";
-      Hello.value[0] = AutorizatonStore.user.userName;
-      imgHeader.value = "/src/assets/images/Header/imgava.svg";
-      imgProfile.value = "/src/assets/images/Header/imgava.svg";
-      localStorage.setItem(
-        "autorization",
-        JSON.stringify(AutorizatonStore.autorization)
-      );
-      localStorage.setItem("user", JSON.stringify(AutorizatonStore.user));
-    } else {
-      localStorage.removeItem("user");
-      localStorage.removeItem("autorization");
-      AutorizatonStore.user.userName = "Гость";
-      AutorizatonStore.user.userId = "guest";
-      Hello.value[0] = "Привет друг!";
-      imgHeader.value = "/src/assets/images/Header/Hello.svg";
-      imgProfile.value = "/src/assets/images/Header/guestava.png";
+    if (props.hideProfileDropDown) {
+      showProfileDropDown.value = false;
     }
   }
 );
 
-watch(
-  () => props.showMenuForUser,
-  () => {
-    if (props.showMenuForUser) {
-      showMenuForProfile.value = false;
-    }
-  }
-);
+// if (localStorage.getItem("user")) {
+//   userStore.authentificated = true;
+//   userStore.user = JSON.parse(localStorage.getItem("user"));
+//   // userName.value[0] = userStore.user.userName;
+//   // userName.value[1] = "18px";
+//   // userAvatarHeader.value = userStore.user.avatar;
+//   // userAvatarDropDown.value = userStore.user.avatar;
+// }
 
-watch(Hello.value, () => {
-  if (Hello.value[0] === "Привет друг!") {
-    Hello.value[1] = "22px";
-  } else {
-    Hello.value[1] = "18px";
-  }
-});
+// watch(
+//   () => userStore.authentificated,
+//   () => {
+//     if (userStore.authentificated) {
+//       userName.value[0] = userStore.user.userName;
+//       userName.value[1] = "18px";
+//       // userAvatarHeader.value = userStore.user.avatar;
+//       // userAvatarDropDown.value = userStore.user.avatar;
+//     }
+//   }
+// );
+
+// const logOut = () => {
+//   // localStorage.removeItem("user");
+//   // userStore.authentificated = false;
+//   // userStore.user.userName = "Гость";
+//   // userStore.user.userId = "guest";
+//   // userStore.user.city = "Москва";
+//   // userStore.user.avatar = "/src/assets/images/Header/guestava.png";
+//   // userStore.logOut();
+//   // userName.value[0] = "Привет друг!";
+//   // userName.value[1] = "22px";
+//   // userAvatarHeader.value = "/src/assets/images/Header/Hello.svg";
+//   // userAvatarDropDown.value = userStore.user.avatar;
+// };
 </script>
 
 <template>
-  <div class="authorization" @pointerover="showMenuForProfile = true">
-    <img alt="avatar" :src="imgHeader" />
-    <div class="authorization__userName">{{ Hello[0] }}</div>
+  <div class="authentification" @pointerover="showProfileDropDown = true">
+    <img
+      v-if="userStore.authentificated"
+      alt="avatar"
+      :src="userStore.user.avatar"
+    />
+    <img v-else alt="avatar" src="/src/assets/images/Header/Hello.svg" />
+    <div v-if="userStore.authentificated" class="authentification__userName">
+      {{ userStore.user.userName }}
+    </div>
+    <div v-else class="authentification__userName" style="font-size: 22px">
+      Привет, друг!
+    </div>
     <img
       alt="arrow"
       src="@/assets/images/Header/arrow-down.svg"
@@ -81,48 +83,48 @@ watch(Hello.value, () => {
       height="10"
     />
     <div
-      v-if="showMenuForProfile"
-      @pointerleave="showMenuForProfile = false"
+      v-if="showProfileDropDown"
+      @pointerleave="showProfileDropDown = false"
       class="drop-down-field"
     >
       <img
         alt="avatar"
-        :src="imgProfile"
+        :src="userStore.user.avatar"
         width="48"
         height="48"
         class="drop-down-field__user-avatar"
       />
       <p class="drop-down-field__user-name">
-        {{ AutorizatonStore.user.userName }}
+        {{ userStore.user.userName }}
       </p>
       <RouterLink
-        v-if="AutorizatonStore.autorization"
+        v-if="userStore.authentificated"
         :to="{
           name: 'ProfilePage',
-          params: { id: `${AutorizatonStore.user.userId}` },
+          params: { id: `${userStore.user.userId}` },
         }"
         class="drop-down-field__get-profile-link"
         >Перейти в профиль</RouterLink
       >
       <RouterLink
-        v-if="!AutorizatonStore.autorization"
+        v-if="!userStore.authentificated"
         :to="{
           name: 'ProfilePage',
-          params: { id: `${AutorizatonStore.user.userId}` },
+          params: { id: `${userStore.user.userId}` },
         }"
         class="drop-down-field__get-profile-link"
         >Хочешь посмотреть свой будущий профиль?</RouterLink
       >
       <hr />
       <RouterLink
-        v-if="AutorizatonStore.autorization"
+        v-if="userStore.authentificated"
         to="/"
         class="drop-down-field__exit-profile"
-        @click="AutorizatonStore.autorization = !AutorizatonStore.autorization"
+        @click="userStore.logOut()"
         >Выход</RouterLink
       >
       <div
-        v-if="!AutorizatonStore.autorization"
+        v-if="!userStore.authentificated"
         class="drop-down-field__signin-signup"
       >
         <RouterLink
@@ -141,12 +143,12 @@ watch(Hello.value, () => {
 </template>
 
 <style>
-.authorization {
+.authentification {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
-.authorization__userName {
+.authentification__userName {
   height: 24px;
   margin: 0 8px;
   display: flex;
@@ -154,7 +156,7 @@ watch(Hello.value, () => {
   font-family: "Sofia Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: v-bind("Hello[1]");
+  font-size: 18px;
   line-height: 22px;
   text-decoration: none;
 }

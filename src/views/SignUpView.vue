@@ -1,18 +1,15 @@
 <script setup>
 import { ref } from "vue";
-import FirstName from "@/components/Authorization/FirstName.vue";
-import LastName from "@/components/Authorization/LastName.vue";
-import Email from "@/components/Authorization/Email.vue";
-import City from "@/components/Authorization/City.vue";
-import Password from "@/components/Authorization/Password.vue";
-import SignUpInButton from "@/components/Authorization/SignUpInButton.vue";
-import EnformationField from "@/components/Authorization/EnformationField.vue";
+import FirstName from "@/components/Authentification/FirstName.vue";
+import LastName from "@/components/Authentification/LastName.vue";
+import Email from "@/components/Authentification/Email.vue";
+import City from "@/components/Authentification/City.vue";
+import Password from "@/components/Authentification/Password.vue";
+import SignUpInButton from "@/components/Authentification/SignUpInButton.vue";
+import EnformationField from "@/components/Authentification/EnformationField.vue";
+import { useUserStore } from "@/stores/userStore.js";
 
-import { useAutorizatonStore } from "@/stores/autorization.js";
-// import { useRouter } from "vue-router";
-// const router = useRouter();
-
-const AutorizatonStore = useAutorizatonStore();
+const userStore = useUserStore();
 
 const firstName = ref("");
 const isCorrectFirstName = ref(false);
@@ -48,14 +45,9 @@ const signUp = () => {
       );
       let json = await resoponse.json();
       if (resoponse.ok) {
-        console.log(json);
-        AutorizatonStore.autorization = true;
-        AutorizatonStore.user.userName = json.firstName + " " + json.lastName;
-        AutorizatonStore.user.userId = json.firstName;
-        AutorizatonStore.user.city = json.city;
+        userStore.logIn(json);
         showValidationFromServer.value =
           "На указанный email отправлено письмо для подтверждения электронной почты";
-        // router.push({ name: "IndexPage" });
       } else {
         if (json === "Пользователь с таким email уже существует") {
           showValidationFromServer.value = json;

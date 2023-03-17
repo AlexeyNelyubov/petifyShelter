@@ -4,25 +4,25 @@ import { RouterLink } from "vue-router";
 import HeaderUser from "@/components/Header/User.vue";
 import HeaderGeolocation from "@/components/Header/Geolocation.vue";
 
-const showMenuForUser = ref(false);
+const hideProfileDropDown = ref(true);
 </script>
 
 <template>
   <header class="header">
-    <RouterLink to="/" class="header__logo-link">
+    <RouterLink :to="{ name: 'IndexPage' }" class="header__logo-link">
       <img alt="petify" src="@/assets/images/Header/logoptf.svg" />
       <span class="header__logo-link-sign">petify</span>
     </RouterLink>
-    <div class="header-geolocation-authorization">
+    <div class="header-geolocation-authentification">
       <div
-        class="header-geolocation-authorization__geolocation"
-        @pointerover="showMenuForUser = true"
-        @pointerleave="showMenuForUser = false"
+        class="header-geolocation-authentification__geolocation"
+        @pointerover="hideProfileDropDown = false"
+        @pointerleave="hideProfileDropDown = true"
       >
         <HeaderGeolocation />
       </div>
-      <div class="header-geolocation-authorization__authorization">
-        <HeaderUser :showMenuForUser="showMenuForUser" />
+      <div class="header-geolocation-authentification__authentification">
+        <HeaderUser :hideProfileDropDown="hideProfileDropDown" />
       </div>
     </div>
   </header>
@@ -60,7 +60,7 @@ const showMenuForUser = ref(false);
   line-height: 29px;
   letter-spacing: -0.015em;
 }
-.header-geolocation-authorization {
+.header-geolocation-authentification {
   display: flex;
   align-items: center;
 }

@@ -1,15 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import Email from "@/components/Authorization/Email.vue";
-import Password from "@/components/Authorization/Password.vue";
-import SignUpInButton from "@/components/Authorization/SignUpInButton.vue";
-import EnformationField from "@/components/Authorization/EnformationField.vue";
-
-import { useAutorizatonStore } from "@/stores/autorization.js";
-import { useRouter } from "vue-router";
-const router = useRouter();
-
-const AutorizatonStore = useAutorizatonStore();
+import Email from "@/components/Authentification/Email.vue";
+import SignUpInButton from "@/components/Authentification/SignUpInButton.vue";
+import EnformationField from "@/components/Authentification/EnformationField.vue";
 
 const email = ref("");
 const isCorrectEmail = ref(false);

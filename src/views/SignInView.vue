@@ -1,16 +1,15 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import Email from "@/components/Authorization/Email.vue";
-import Password from "@/components/Authorization/Password.vue";
-import SignUpInButton from "@/components/Authorization/SignUpInButton.vue";
-import EnformationField from "@/components/Authorization/EnformationField.vue";
-
-import { useAutorizatonStore } from "@/stores/autorization.js";
+import Email from "@/components/Authentification/Email.vue";
+import Password from "@/components/Authentification/Password.vue";
+import SignUpInButton from "@/components/Authentification/SignUpInButton.vue";
+import EnformationField from "@/components/Authentification/EnformationField.vue";
+import { useUserStore } from "@/stores/userStore.js";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const AutorizatonStore = useAutorizatonStore();
+const userStore = useUserStore();
 
 const email = ref("");
 const isCorrectEmail = ref(false);
@@ -23,16 +22,23 @@ const signIn = () => {
   (async () => {
     try {
       let resoponse = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/v1/signin/${email.value}.${
-          password.value
-        }`
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/signin/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+          }),
+        }
       );
       let json = await resoponse.json();
       if (resoponse.ok) {
-        AutorizatonStore.autorization = true;
-        AutorizatonStore.user.userName = json.firstName + " " + json.lastName;
-        AutorizatonStore.user.userId = json.firstName;
-        AutorizatonStore.user.city = json.city;
+        // authentification(json);
+        userStore.logIn(json);
+        // localStorage.setItem("user", JSON.stringify(userStore.user));
         router.push({ name: "IndexPage" });
       } else {
         if (json === "Неверно указан email и пароль") {
