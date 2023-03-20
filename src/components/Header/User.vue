@@ -1,20 +1,27 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/userStore.js";
 
 const userStore = useUserStore();
 
 const showProfileDropDown = ref(false);
-// const userName = ref(["Привет друг!", "22px"]);
-// const userAvatarHeader = ref("/src/assets/images/Header/Hello.svg");
-// const userAvatarDropDown = ref("/src/assets/images/Header/guestava.png");
 
 const props = defineProps({
   hideProfileDropDown: {
     type: Boolean,
     required: false,
   },
+});
+
+const userName = computed(() => {
+  return userStore.authentificated ? userStore.user.userName : "Привет, друг!";
+});
+
+const userAvatar = computed(() => {
+  return userStore.authentificated
+    ? userStore.user.avatar
+    : "/src/assets/images/Header/Hello.svg";
 });
 
 watch(
@@ -25,57 +32,14 @@ watch(
     }
   }
 );
-
-// if (localStorage.getItem("user")) {
-//   userStore.authentificated = true;
-//   userStore.user = JSON.parse(localStorage.getItem("user"));
-//   // userName.value[0] = userStore.user.userName;
-//   // userName.value[1] = "18px";
-//   // userAvatarHeader.value = userStore.user.avatar;
-//   // userAvatarDropDown.value = userStore.user.avatar;
-// }
-
-// watch(
-//   () => userStore.authentificated,
-//   () => {
-//     if (userStore.authentificated) {
-//       userName.value[0] = userStore.user.userName;
-//       userName.value[1] = "18px";
-//       // userAvatarHeader.value = userStore.user.avatar;
-//       // userAvatarDropDown.value = userStore.user.avatar;
-//     }
-//   }
-// );
-
-// const logOut = () => {
-//   // localStorage.removeItem("user");
-//   // userStore.authentificated = false;
-//   // userStore.user.userName = "Гость";
-//   // userStore.user.userId = "guest";
-//   // userStore.user.city = "Москва";
-//   // userStore.user.avatar = "/src/assets/images/Header/guestava.png";
-//   // userStore.logOut();
-//   // userName.value[0] = "Привет друг!";
-//   // userName.value[1] = "22px";
-//   // userAvatarHeader.value = "/src/assets/images/Header/Hello.svg";
-//   // userAvatarDropDown.value = userStore.user.avatar;
-// };
 </script>
 
 <template>
   <div class="authentification" @pointerover="showProfileDropDown = true">
-    <img
-      v-if="userStore.authentificated"
-      alt="avatar"
-      :src="userStore.user.avatar"
-    />
-    <img v-else alt="avatar" src="/src/assets/images/Header/Hello.svg" />
-    <div v-if="userStore.authentificated" class="authentification__userName">
-      {{ userStore.user.userName }}
-    </div>
-    <div v-else class="authentification__userName" style="font-size: 22px">
-      Привет, друг!
-    </div>
+    <img alt="avatar" :src="userAvatar" />
+    <p class="authentification__userName">
+      {{ userName }}
+    </p>
     <img
       alt="arrow"
       src="@/assets/images/Header/arrow-down.svg"

@@ -15,7 +15,6 @@ const uncorrectValueLocation = ref(false);
 
 /* todo:
   [] напрашивается вынесение добавления / удаления обработчиков событий в composable
-  [] 2 onMounted мне тоже не очень нравятся. здесь понятно, что это временное решение, пусть будет пока
 */
 
 // const { ev } = useClick();
@@ -38,7 +37,6 @@ if (localStorage.getItem("geolocation")) {
 
 onMounted(() => {
   document.addEventListener("click", (event) => {
-    // console.log(location.value);
     checkLocationAfterInput(event, event.type);
   });
   document.addEventListener("keyup", (event) => {

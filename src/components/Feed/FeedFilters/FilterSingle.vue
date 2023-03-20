@@ -34,11 +34,6 @@ watch(
     getFilterItemsForBreedDependsOfType();
     if (BreedInput.value.length) {
       let filters = JSON.parse(JSON.stringify(filterItems.value));
-      // let filters = {};
-      // for (let index in filterItems.value) {
-      // filters[index] = filterItems.value[index].slice(0);
-      // filters[index] = [...filterItems.value[index]];
-      // }
       let arrIndex = [];
       for (let index in filters) {
         filterItems.value[index].splice(0);
@@ -113,13 +108,6 @@ getCheckedfiltersWithRouting();
 
 const showFilter = ref(false);
 const filterSign = ref("");
-
-// watch(
-//   () => props.closeFilters,
-//   () => {
-//     showFilter.value = props.closeFilters;
-//   }
-// );
 
 if (props.itemForFilter.general[0] === "breeds") {
   filterSign.value = "Не выбрана";

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { usePetsStore } from "@/stores/petsList.js";
+import MessageForShow from "@/views/MessageForShow.vue";
 import getAge from "@/Helpers/getAge.js";
 import getColores from "@/Helpers/getColores.js";
 const PetsStore = usePetsStore();
@@ -13,10 +14,10 @@ const petForShow = ref({});
 let PetsAge = "";
 let PetSterilization = "";
 let PetVactination = "";
-const showError = ref(false);
-const showNoPet = ref(false);
+const showError = ref("");
+const showNoPet = ref("");
 
-function changepetForShowItemForShow() {
+const changePetsFeaturesForShow = () => {
   PetsAge = getAge(petForShow.value.age);
   if (petForShow.value.sterilized) {
     PetSterilization = "Да";
@@ -28,7 +29,7 @@ function changepetForShowItemForShow() {
   } else {
     PetVactination = "Нет";
   }
-}
+};
 
 if (PetsStore.petsList.length) {
   for (let pet of PetsStore.petsList) {
@@ -36,124 +37,127 @@ if (PetsStore.petsList.length) {
       petForShow.value = pet;
     }
   }
-  changepetForShowItemForShow();
+  changePetsFeaturesForShow();
 } else {
   (async () => {
-    let response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/v1/pet/${props.id}`
-    );
-    let json = await response.json();
-    if (json === "error") {
-      showError.value = true;
-    } else {
-      if (json === "pet not found") {
-        showNoPet.value = true;
+    try {
+      let response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/pet/${props.id}`
+      );
+      let json = await response.json();
+      if (response.ok) {
+        if (json === "pet not found") {
+          showNoPet.value =
+            "По вашему id животных в нашем каталоге не найдено. Попробуйте изменить id или начните поиск на главной странице с помощью фильтров.";
+        } else {
+          petForShow.value = json;
+        }
+        changePetsFeaturesForShow();
       } else {
-        petForShow.value = json;
+        console.error(json);
+        showError.value =
+          "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
       }
+    } catch (error) {
+      console.error(error.message);
+      showError.value =
+        "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
     }
-    changepetForShowItemForShow();
   })();
 }
 </script>
 
 <template>
-  <div class="pet-page">
-    <p v-if="showError" class="pet-page-error">Eror Server</p>
-    <p v-if="showNoPet" class="pet-page-error">
-      По вашему id животных в нашем каталоге не найдено. Попробуйте изменить id
-      или начните поиск на главной странице с помощью фильтров.
-    </p>
-    <div v-if="!showError && !showNoPet" class="pet-page-avatar-discription">
-      <div class="pet-page-avatar-discription__field-for-avatar">
-        <img
-          :src="petForShow.avatar"
-          alt="img-profile"
-          class="pet-page-avatar-discription__avatar"
-        />
-      </div>
-      <div class="pet-page-avatar-discription__discription">
-        <p class="pet-page-avatar-discription__discription-name-age">
-          {{ petForShow.name }}, {{ PetsAge }}
-        </p>
-        <div class="pet-page-avatar-discription__discription-features">
-          <p
-            v-for="feature in petForShow.features"
-            :key="feature.id"
-            class="pet-page-avatar-discription__discription-features-feature"
-            :style="{ backgroundColor: getColores() }"
-          >
-            {{ feature }}
-          </p>
+  <main>
+    <MessageForShow v-if="showError" :message="showError" />
+    <MessageForShow v-if="showNoPet" :message="showNoPet" />
+    <div class="pet-page">
+      <div v-if="!showError && !showNoPet" class="pet-page-avatar-discription">
+        <div class="pet-page-avatar-discription__field-for-avatar">
+          <img
+            :src="petForShow.avatar"
+            alt="img-profile"
+            class="pet-page-avatar-discription__avatar"
+          />
         </div>
-        <div class="pet-page-avatar-discription__all-discription">
-          <p
-            class="pet-page-avatar-discription__all-discription-item"
-            :style="{ backgroundColor: getColores() }"
-          >
-            Пол: {{ petForShow.gender }}
+        <div class="pet-page-avatar-discription__discription">
+          <p class="pet-page-avatar-discription__discription-name-age">
+            {{ petForShow.name }}, {{ PetsAge }}
           </p>
-          <div
-            v-if="petForShow.breeds"
-            class="pet-page-avatar-discription__all-discription-item"
-            :style="{ backgroundColor: getColores() }"
-          >
-            <p>Порода: {{ petForShow.breeds[0] }}</p>
-            <p v-if="petForShow.breeds[1]">, {{ petForShow.breeds[1] }}</p>
+          <div class="pet-page-avatar-discription__discription-features">
+            <p
+              v-for="feature in petForShow.features"
+              :key="feature.id"
+              class="pet-page-avatar-discription__discription-features-feature"
+              :style="{ backgroundColor: getColores() }"
+            >
+              {{ feature }}
+            </p>
           </div>
-          <p
-            class="pet-page-avatar-discription__all-discription-item"
-            :style="{ backgroundColor: getColores() }"
+          <div class="pet-page-avatar-discription__all-discription">
+            <p
+              class="pet-page-avatar-discription__all-discription-item"
+              :style="{ backgroundColor: getColores() }"
+            >
+              Пол: {{ petForShow.gender }}
+            </p>
+            <div
+              v-if="petForShow.breeds"
+              class="pet-page-avatar-discription__all-discription-item"
+              :style="{ backgroundColor: getColores() }"
+            >
+              <p>Порода: {{ petForShow.breeds[0] }}</p>
+              <p v-if="petForShow.breeds[1]">, {{ petForShow.breeds[1] }}</p>
+            </div>
+            <p
+              class="pet-page-avatar-discription__all-discription-item"
+              :style="{ backgroundColor: getColores() }"
+            >
+              Вес: {{ petForShow.weight }}кг
+            </p>
+            <p
+              class="pet-page-avatar-discription__all-discription-item"
+              :style="{ backgroundColor: getColores() }"
+            >
+              Рост: {{ petForShow.height }}см
+            </p>
+            <p
+              class="pet-page-avatar-discription__all-discription-item"
+              :style="{ backgroundColor: getColores() }"
+            >
+              Стерилизация: {{ PetSterilization }}
+            </p>
+            <p
+              class="pet-page-avatar-discription__all-discription-item"
+              :style="{ backgroundColor: getColores() }"
+            >
+              Вакцинация: {{ PetVactination }}
+            </p>
+          </div>
+          <div
+            v-if="petForShow.shelter"
+            class="pet-page-avatar-discription__all-discription-location"
           >
-            Вес: {{ petForShow.weight }}кг
-          </p>
-          <p
-            class="pet-page-avatar-discription__all-discription-item"
-            :style="{ backgroundColor: getColores() }"
-          >
-            Рост: {{ petForShow.height }}см
-          </p>
-          <p
-            class="pet-page-avatar-discription__all-discription-item"
-            :style="{ backgroundColor: getColores() }"
-          >
-            Стерилизация: {{ PetSterilization }}
-          </p>
-          <p
-            class="pet-page-avatar-discription__all-discription-item"
-            :style="{ backgroundColor: getColores() }"
-          >
-            Вакцинация: {{ PetVactination }}
+            <p>Питомец находится:</p>
+            &nbsp
+            <p
+              class="pet-page-avatar-discription__all-discription-location-location"
+            >
+              {{ petForShow.shelter.description }} "{{
+                petForShow.shelter.name
+              }}" (г. {{ petForShow.shelter.address }})
+            </p>
+          </div>
+          <p class="pet-page-avatar-discription__all-discription-story">
+            {{ petForShow.bio }}
           </p>
         </div>
-        <div
-          v-if="petForShow.shelter"
-          class="pet-page-avatar-discription__all-discription-location"
-        >
-          <p>Питомец находится:</p>
-          &nbsp
-          <p
-            class="pet-page-avatar-discription__all-discription-location-location"
-          >
-            {{ petForShow.shelter.description }} "{{ petForShow.shelter.name }}"
-            (г. {{ petForShow.shelter.address }})
-          </p>
-        </div>
-        <p class="pet-page-avatar-discription__all-discription-story">
-          {{ petForShow.bio }}
-        </p>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style>
-.pet-page-error {
-  margin-top: 100px;
-  font-size: 24px;
-  text-align: center;
-}
-
 .pet-page-avatar-discription {
   margin: 72px 0 72px 72px;
   max-width: 1500px;

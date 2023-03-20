@@ -1,14 +1,14 @@
 <script setup>
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
+import MessageForShow from "@/views/MessageForShow.vue";
+import AuthentificationWithAppleFacebookGoogle from "@/components/Authentification/AuthentificationWithAppleFacebookGoogle.vue";
 import Email from "@/components/Authentification/Email.vue";
 import Password from "@/components/Authentification/Password.vue";
-import SignUpInButton from "@/components/Authentification/SignUpInButton.vue";
-import EnformationField from "@/components/Authentification/EnformationField.vue";
+import AuthentificationButtonAndEnformation from "@/components/Authentification/AuthentificationButtonAndEnformation.vue";
 import { useUserStore } from "@/stores/userStore.js";
 import { useRouter } from "vue-router";
-const router = useRouter();
 
+const router = useRouter();
 const userStore = useUserStore();
 
 const email = ref("");
@@ -36,9 +36,7 @@ const signIn = () => {
       );
       let json = await resoponse.json();
       if (resoponse.ok) {
-        // authentification(json);
         userStore.logIn(json);
-        // localStorage.setItem("user", JSON.stringify(userStore.user));
         router.push({ name: "IndexPage" });
       } else {
         if (json === "Неверно указан email и пароль") {
@@ -46,71 +44,47 @@ const signIn = () => {
         } else {
           console.log(json);
           showError.value =
-            "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз";
+            "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
         }
       }
     } catch (error) {
       console.error(error.message);
       showError.value =
-        "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз";
+        "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
     }
   })();
 };
 </script>
 
 <template>
-  <main class="signIn">
-    <div v-if="showError">{{ showError }}</div>
-    <div v-if="!showError" class="signIn-field">
-      <div class="signIn-sign-other-vaies">
-        <p>Войти через</p>
-        <img
-          src="@/assets/images/SignInUp/imgapple.svg"
-          alt="logo-apple"
-          class="signIn__logo"
+  <main>
+    <MessageForShow v-if="showError" :message="showError" />
+    <div class="signIn">
+      <div v-if="!showError" class="signIn-field">
+        <AuthentificationWithAppleFacebookGoogle :typeAuth="'Войти через'" />
+        <Email
+          @change-email="
+            (newEmail, isCorrectNewEmail) => {
+              (email = newEmail),
+                (isCorrectEmail = isCorrectNewEmail),
+                (showValidationFromServer = '');
+            }
+          "
         />
-        <img
-          src="@/assets/images/SignInUp/imgfacebook.svg"
-          alt="logo-facebook"
-          class="signIn__logo"
+        <Password
+          @change-password="
+            (newPassword, isCorrectNewPassword) => {
+              (password = newPassword),
+                (isCorrectPassword = isCorrectNewPassword),
+                (showValidationFromServer = '');
+            }
+          "
         />
-        <img
-          src="@/assets/images/SignInUp/imggoogle.svg"
-          alt="logo-google"
-          class="signIn__logo"
-        />
-      </div>
-      <Email
-        @change-email="
-          (newEmail, isCorrectNewEmail) => {
-            (email = newEmail), (isCorrectEmail = isCorrectNewEmail);
-          }
-        "
-      />
-      <Password
-        @change-password="
-          (newPassword, isCorrectNewPassword) => {
-            (password = newPassword),
-              (isCorrectPassword = isCorrectNewPassword);
-          }
-        "
-      />
-      <div class="signIn-signInButton">
-        <SignUpInButton
+        <AuthentificationButtonAndEnformation
           :buttonName="'Войти'"
           :isCorrectNewUserInformation="isCorrectEmail && isCorrectPassword"
-          @signIn="signIn"
-        />
-        <RouterLink
-          :to="{ name: 'PasswordRecoveryPage' }"
-          v-if="!showValidationFromServer"
-          class="signIn-recovery-password"
-        >
-          Забыли пароль?
-        </RouterLink>
-        <EnformationField
-          v-if="showValidationFromServer"
           :showValidationFromServer="showValidationFromServer"
+          @authentification="signIn"
         />
       </div>
     </div>
@@ -119,7 +93,6 @@ const signIn = () => {
 
 <style>
 .signIn {
-  margin: 84px 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -129,26 +102,7 @@ const signIn = () => {
 .signIn-field {
   height: auto;
   width: 768px;
-}
-
-.signIn-sign-other-vaies {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  font-size: 30px;
-}
-
-.signIn__logo {
-  height: 40px;
-  width: 40px;
-  margin-left: 20px;
-}
-
-.signIn-signInButton {
-  margin-top: 40px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  margin: 84px 0px;
 }
 
 .signIn-recovery-password {

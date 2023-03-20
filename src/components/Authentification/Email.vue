@@ -29,7 +29,6 @@ const checkInput = () => {
       v-model="email"
       placeholder="Email"
       class="email-input"
-      @focus="checkInput"
       @input="checkInput"
       @blur="checkInput"
       required
@@ -37,7 +36,7 @@ const checkInput = () => {
     <div v-if="showPopup" class="popup-email">example@example.com</div>
   </div>
 </template>
-
+<!-- @focus="checkInput" -->
 <style>
 .email {
   position: relative;

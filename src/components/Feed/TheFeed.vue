@@ -73,17 +73,10 @@ function changepagination() {
 watch(
   () => paginationPage.value,
   () => {
-    // console.log(
-    //   lastPage.value
-    //   // Math.ceil(PetsListForShow.value.length / counterPagination.value)
-    // );
     if (paginationPage.value < 1) {
       paginationPage.value = 1;
     }
-    if (
-      paginationPage.value <= lastPage.value
-      // Math.ceil(PetsListForShow.value.length / counterPagination.value)
-    ) {
+    if (paginationPage.value <= lastPage.value) {
       PetsListAfterPagination.value.splice(0);
       for (
         let i =
@@ -106,7 +99,6 @@ function pagination(numberOfCards) {
   } else {
     counterPagination.value = Number(numberOfCards);
   }
-  // console.log("pagination", counterPagination.value);
   changepagination();
 }
 
@@ -146,7 +138,6 @@ if (PetsStore.petsList.length) {
   checkFilterGeolocation();
 } else {
   (async () => {
-    //let response = await fetch("src/assets/feed/Pets.json");
     let response = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/api/v1/pets`
     );
@@ -170,7 +161,6 @@ watch(
   () => {
     checkFilterGeolocation();
     if (!counterOfFilters.value.length) {
-      // console.log(PetsListForShow.value.length);
       changepagination();
     }
   }
@@ -224,7 +214,6 @@ watch(Filters.value, () => {
     compareFiltersandGeolocation();
   } else {
     checkHeveNotPets();
-    // console.log(PetsListForShow.value.length);
     changepagination();
   }
 });

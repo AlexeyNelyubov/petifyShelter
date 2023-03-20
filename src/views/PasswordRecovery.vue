@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import Email from "@/components/Authentification/Email.vue";
-import SignUpInButton from "@/components/Authentification/SignUpInButton.vue";
+import AuthentificationButton from "@/components/Authentification/AuthentificationButton.vue";
 import EnformationField from "@/components/Authentification/EnformationField.vue";
 
 const email = ref("");
@@ -55,7 +55,7 @@ const recovery = () => {
         "
       />
       <div class="recovery-recoveryButton">
-        <SignUpInButton
+        <AuthentificationButton
           :buttonName="'Восстановить'"
           :isCorrectNewUserInformation="isCorrectEmail"
           @signIn="signIn"

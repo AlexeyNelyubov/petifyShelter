@@ -23,13 +23,12 @@ const checkInput = () => {
 </script>
 
 <template>
-  <div class="password">
+  <form class="password">
     <input
       type="password"
       v-model="password"
       placeholder="Password"
       class="password-input"
-      @focus="checkInput"
       @input="checkInput"
       @blur="checkInput"
       required
@@ -38,7 +37,7 @@ const checkInput = () => {
     <div v-if="showPopup" class="popup-password">
       Пароль должен состоять ...
     </div>
-  </div>
+  </form>
 </template>
 
 <style>
