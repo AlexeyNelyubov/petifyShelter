@@ -36,10 +36,34 @@ const signIn = () => {
       );
       let json = await resoponse.json();
       if (resoponse.ok) {
-        userStore.logIn(json);
+        localStorage.setItem("token", json.token);
+        userStore.logIn(json.user);
         router.push({ name: "IndexPage" });
+        document.cookie = `token=${json.cookie}`;
+
+        // (async () => {
+        //   try {
+        //     let response = await fetch(
+        //       `${
+        //         import.meta.env.VITE_SERVER_URL
+        //       }/api/v1/pet/aafsdsdfgsdfg352423`,
+        //       {
+        //         credentials: "include",
+        //       }
+        //     );
+        //     let json = await response.json();
+        //     console.error(json);
+        //   } catch (error) {
+        //     console.error(error.message);
+        //     showError.value =
+        //       "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
+        //   }
+        // })();
       } else {
-        if (json === "Неверно указан email и пароль") {
+        if (
+          json === "Неверно указан email" ||
+          json === "Неверно указан пароль"
+        ) {
           showValidationFromServer.value = json;
         } else {
           console.log(json);

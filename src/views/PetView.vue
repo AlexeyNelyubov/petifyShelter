@@ -39,10 +39,14 @@ if (PetsStore.petsList.length) {
   }
   changePetsFeaturesForShow();
 } else {
+  // document.cookie = "token=gfhfghdfhfhddfhfdgh";
   (async () => {
     try {
       let response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/v1/pet/${props.id}`
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/pet/${props.id}`,
+        {
+          credentials: "include",
+        }
       );
       let json = await response.json();
       if (response.ok) {

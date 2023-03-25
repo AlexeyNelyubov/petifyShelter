@@ -10,6 +10,7 @@ const colorForBorder = ref("#000");
 
 const checkInput = () => {
   if (email.value.length && /^\w+@\w{2,}\.\w{2,3}$/.test(email.value)) {
+    // if (email.value.length) {
     colorForBorder.value = "#008000";
     isCorrectEmail.value = true;
     showPopup.value = false;

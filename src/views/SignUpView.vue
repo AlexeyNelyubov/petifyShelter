@@ -46,7 +46,8 @@ const signUp = () => {
       );
       let json = await resoponse.json();
       if (resoponse.ok) {
-        userStore.logIn(json);
+        localStorage.setItem("token", json.token);
+        userStore.logIn(json.user);
         showValidationFromServer.value =
           "На указанный email отправлено письмо для подтверждения электронной почты";
       } else {
@@ -95,7 +96,9 @@ const signUp = () => {
         <Email
           @change-email="
             (newEmail, isCorrectNewEmail) => {
-              (email = newEmail), (isCorrectEmail = isCorrectNewEmail);
+              (email = newEmail),
+                (isCorrectEmail = isCorrectNewEmail),
+                (showValidationFromServer = '');
             }
           "
         />

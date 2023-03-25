@@ -17,9 +17,9 @@ export const useUserStore = defineStore("user", () => {
 
   const logIn = (json) => {
     authentificated.value = true;
-    user.value.userName = json.firstName + " " + json.lastName;
-    user.value.userId = json.firstName;
-    user.value.city = json.city;
+    user.value.userName = json["firstName"] + " " + json["lastName"];
+    user.value.userId = json["firstName"];
+    user.value.city = json["city"];
     user.value.avatar = "/src/assets/images/Header/imgava.svg";
     localStorage.setItem("user", JSON.stringify(user.value));
   };

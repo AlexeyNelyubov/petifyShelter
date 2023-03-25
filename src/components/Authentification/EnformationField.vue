@@ -8,12 +8,14 @@ const props = defineProps({
   },
 });
 
-const errorFromBackSignIn = "Неверно указан email и пароль";
+const errorFromBackSignIn1 = "Неверно указан email";
+const errorFromBackSignIn2 = "Неверно указан пароль";
 const errorFromBackSignUp = "Пользователь с таким email уже существует";
 
 const colorForValidationFromServer = computed(() => {
   return props.showValidationFromServer === errorFromBackSignUp ||
-    props.showValidationFromServer === errorFromBackSignIn
+    props.showValidationFromServer === errorFromBackSignIn1 ||
+    props.showValidationFromServer === errorFromBackSignIn2
     ? "#ff0000"
     : "#00BC22";
 });

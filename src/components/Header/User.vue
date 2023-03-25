@@ -32,6 +32,12 @@ watch(
     }
   }
 );
+
+const logOut = () => {
+  localStorage.removeItem("token");
+  document.cookie = "token=; expires=-1";
+  userStore.logOut();
+};
 </script>
 
 <template>
@@ -84,7 +90,7 @@ watch(
         v-if="userStore.authentificated"
         to="/"
         class="drop-down-field__exit-profile"
-        @click="userStore.logOut()"
+        @click="logOut()"
         >Выход</RouterLink
       >
       <div
