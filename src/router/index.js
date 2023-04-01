@@ -46,7 +46,7 @@ const router = createRouter({
       path: "/passwordrecovery",
       name: "PasswordRecoveryPage",
       component: PasswordRecoveryPage,
-    },
+    }
   ],
 });
 

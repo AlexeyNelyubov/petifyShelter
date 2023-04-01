@@ -1,9 +1,11 @@
 <script setup>
 import { ref, watch, computed } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/userStore.js";
+import MessageForShow from "@/views/MessageForShow.vue";
 
 const userStore = useUserStore();
+// const router = useRouter();
 
 const showProfileDropDown = ref(false);
 
@@ -13,6 +15,8 @@ const props = defineProps({
     required: false,
   },
 });
+
+const showError = ref("");
 
 const userName = computed(() => {
   return userStore.authentificated ? userStore.user.userName : "Привет, друг!";
@@ -35,12 +39,38 @@ watch(
 
 const logOut = () => {
   localStorage.removeItem("token");
-  document.cookie = "token=; expires=-1";
+  // document.cookie = "token=; expires=-1";
   userStore.logOut();
+  // (async () => {
+  //   try {
+  //     const resoponse = await fetch(
+  //       `${import.meta.env.VITE_SERVER_URL}/api/v1/logout/`
+  //     );
+  //     let json = await resoponse.json();
+  //     console.log(json);
+  //     if (resoponse.ok) {
+  //       localStorage.removeItem("token");
+  //       userStore.logOut();
+  //     } else {
+  //       console.error(error.message);
+  //       showError.value =
+  //         "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message);
+  //     showError.value =
+  //       "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
+  //     // router.push({
+  //     //   name: "MessageForShowPage2",
+  //     //   props: { message: `${showError.value}` },
+  //     // });
+  //   }
+  // })();
 };
 </script>
 
 <template>
+  <MessageForShow v-if="showError" :message="showError" />
   <div class="authentification" @pointerover="showProfileDropDown = true">
     <img alt="avatar" :src="userAvatar" />
     <p class="authentification__userName">

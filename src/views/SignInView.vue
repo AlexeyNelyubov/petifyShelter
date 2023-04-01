@@ -22,7 +22,8 @@ const signIn = () => {
   (async () => {
     try {
       let resoponse = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/v1/signin/`,
+        // "/api/signin",
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/signin`,
         {
           method: "POST",
           headers: {
@@ -39,26 +40,7 @@ const signIn = () => {
         localStorage.setItem("token", json.token);
         userStore.logIn(json.user);
         router.push({ name: "IndexPage" });
-        document.cookie = `token=${json.cookie}`;
-
-        // (async () => {
-        //   try {
-        //     let response = await fetch(
-        //       `${
-        //         import.meta.env.VITE_SERVER_URL
-        //       }/api/v1/pet/aafsdsdfgsdfg352423`,
-        //       {
-        //         credentials: "include",
-        //       }
-        //     );
-        //     let json = await response.json();
-        //     console.error(json);
-        //   } catch (error) {
-        //     console.error(error.message);
-        //     showError.value =
-        //       "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
-        //   }
-        // })();
+        // document.cookie = `token=${json.cookie}`;
       } else {
         if (
           json === "Неверно указан email" ||
@@ -108,6 +90,7 @@ const signIn = () => {
           :buttonName="'Войти'"
           :isCorrectNewUserInformation="isCorrectEmail && isCorrectPassword"
           :showValidationFromServer="showValidationFromServer"
+          :successAuth="false"
           @authentification="signIn"
         />
       </div>

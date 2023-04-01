@@ -135,6 +135,7 @@ function getRandomPet() {
   padding: 24px 72px 24px 56px;
   display: flex;
   justify-content: space-between;
+  z-index: 1;
   background-color: #fff;
 }
 

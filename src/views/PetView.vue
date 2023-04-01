@@ -9,7 +9,6 @@ const PetsStore = usePetsStore();
 const props = defineProps({
   id: String,
 });
-
 const petForShow = ref({});
 let PetsAge = "";
 let PetSterilization = "";
@@ -39,7 +38,6 @@ if (PetsStore.petsList.length) {
   }
   changePetsFeaturesForShow();
 } else {
-  // document.cookie = "token=gfhfghdfhfhddfhfdgh";
   (async () => {
     try {
       let response = await fetch(

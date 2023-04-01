@@ -4,6 +4,7 @@ import FeedFilters from "./FeedFilters.vue";
 import FeedPetsCards from "./FeedPetsCards.vue";
 import FeedPagination from "./FeedPagination.vue";
 import FeedPaginationArrow from "./FeedPaginationArrow.vue";
+import MessageForShow from "@/views/MessageForShow.vue";
 import { usePetsStore } from "@/stores/petsList.js";
 import { useLocationStore } from "@/stores/location.js";
 import { usePaginationStore } from "@/stores/pagination.js";
@@ -32,7 +33,7 @@ const Filters = ref({
   breeds: [],
 });
 let pets = [];
-const HeveNotPets = ref(false);
+const HeveNotPets = ref("");
 const paginationPage = ref(1);
 
 const lastPage = computed(() => {
@@ -160,6 +161,7 @@ watch(
   () => storeGeolocation.location,
   () => {
     checkFilterGeolocation();
+    checkHeveNotPets();
     if (!counterOfFilters.value.length) {
       changepagination();
     }
@@ -233,9 +235,10 @@ function compareFiltersandGeolocation() {
 
 function checkHeveNotPets() {
   if (!PetsListForShow.value.length) {
-    HeveNotPets.value = true;
+    HeveNotPets.value =
+      "По вашему запросу животных не найдено. Попробуйте изменить фильтры.";
   } else {
-    HeveNotPets.value = false;
+    HeveNotPets.value = "";
   }
 }
 
@@ -288,16 +291,7 @@ function checkFilterGeolocation() {
       :PaginationFromLocalStorage="PaginationFromLocalStorage"
       :PetsListForShow="PetsListForShow"
     />
-    <div v-if="HeveNotPets" class="feed-no-pets">
-      По вашему запросу животных не найдено. Попробуйте изменить фильтры.
-    </div>
-    <!-- <img
-      src="@/assets/images/Feed/arrow-left.svg"
-      alt="arrow-left"
-      v-if="counterPagination && paginationPage > 1"
-      class="feed-arrow-left"
-      @click="paginationPage--"
-    /> -->
+    <MessageForShow v-if="HeveNotPets" :message="HeveNotPets" />
     <div class="feed-pets-cards" v-if="!counterPagination">
       <div v-for="pet in PetsListForShow" :key="pet.id">
         <FeedPetsCards :pet="pet" />
@@ -321,15 +315,6 @@ function checkFilterGeolocation() {
         @change-page="(page) => (paginationPage = Number(page))"
       />
     </div>
-    <!-- <img
-      src="@/assets/images/Feed/arrow-right.svg"
-      alt="arrow-left"
-      v-if="
-        counterPagination && paginationPage >= 1 && paginationPage < lastPage
-      "
-      class="feed-arrow-right"
-      @click="paginationPage++"
-    /> -->
   </div>
 </template>
 

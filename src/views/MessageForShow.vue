@@ -1,9 +1,6 @@
 <script setup>
 const props = defineProps({
-  message: {
-    type: String,
-    required: true,
-  },
+  message: String,
 });
 </script>
 
@@ -15,9 +12,15 @@ const props = defineProps({
 
 <style>
 .message-for-show {
-  margin: 132px auto;
-  width: 1000px;
-  text-align: center;
-  font-size: 22px;
+  position: fixed;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 132px;
+  display: flex;
+  justify-content: center;
+  z-index: 0;
+  font-size: 26px;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from "vue";
-// import { useClick } from "@/composable/click.js";
-// import { useKeyUp } from "@/composable/keyUp.js";
+import { ref, watch } from "vue";
+import { useDocumentClick } from "@/composable/useDocumentClick.js";
+import { useDocumentKeyUp } from "@/composable/useDocumentKeyUp.js";
 import { useLocationStore } from "@/stores/location.js";
 
 const storeGeolocation = useLocationStore();
@@ -13,21 +13,16 @@ const arrCities = [];
 const inputActive = ref(false);
 const uncorrectValueLocation = ref(false);
 
-/* todo:
-  [] напрашивается вынесение добавления / удаления обработчиков событий в composable
-*/
-
-// const { ev } = useClick();
-// watch(ev, () => {
-//   checkLocationAfterInput(ev.value, ev.value.type);
-// });
-
-// const { evkey } = useKeyUp();
-// watch(evkey, () => {
-//   if (evkey.value.key === "Enter") {
-//     checkLocationAfterInput(evkey.value, evkey.value.type);
-//   }
-// });
+(async () => {
+  // let response = await fetch(
+  //   `${import.meta.env.VITE_SERVER_URL}/api/v1/city/`
+  // );
+  let response = await fetch("/src/assets/data/RussiaCities.json");
+  let data = await response.json();
+  for (let el of data) {
+    arrCities.push(el.city);
+  }
+})();
 
 if (localStorage.getItem("geolocation")) {
   location.value = localStorage.getItem("geolocation");
@@ -35,27 +30,40 @@ if (localStorage.getItem("geolocation")) {
   location.value = "Весь мир";
 }
 
-onMounted(() => {
-  document.addEventListener("click", (event) => {
-    checkLocationAfterInput(event, event.type);
-  });
-  document.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
-      checkLocationAfterInput(event, event.type);
-    }
-  });
+watch(location, () => {
+  getFiveCitiesForAutocomplite();
 });
 
-onUnmounted(() => {
-  document.removeEventListener("click", (event) => {
-    checkLocationAfterInput(event, event.type);
-  });
-  document.removeEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
-      checkLocationAfterInput(event, event.type);
+watch(
+  () => storeGeolocation.location,
+  () => {
+    if (storeGeolocation.location === "Весь мир") {
+      localStorage.removeItem("geolocation");
+    } else {
+      localStorage.setItem("geolocation", storeGeolocation.location);
     }
-  });
-});
+  }
+);
+
+function getFiveCitiesForAutocomplite() {
+  cities.value.splice(0, cities.value.length);
+  let i = 1;
+  if (location.value.length) {
+    for (let city of arrCities) {
+      if (
+        (i <= 5) &
+        (location.value.toUpperCase() ===
+          city.substring(0, location.value.length).toUpperCase())
+      ) {
+        i++;
+        cities.value.push(city);
+      }
+    }
+  }
+}
+
+useDocumentClick(checkLocationAfterInput);
+useDocumentKeyUp(checkLocationAfterInput, "Enter");
 
 function checkLocationAfterInput(event, type) {
   const input = document.querySelector(".geolocation__logo-input-input");
@@ -95,34 +103,6 @@ function checkLocationAfterInput(event, type) {
   }
 }
 
-(async () => {
-  // let response = await fetch(
-  //   `${import.meta.env.VITE_SERVER_URL}/api/v1/city/`
-  // );
-  let response = await fetch("/src/assets/data/RussiaCities.json");
-  let data = await response.json();
-  for (let el of data) {
-    arrCities.push(el.city);
-  }
-})();
-
-watch(location, () => {
-  cities.value.splice(0, cities.value.length);
-  let i = 1;
-  if (location.value.length) {
-    for (let city of arrCities) {
-      if (
-        (i <= 5) &
-        (location.value.toUpperCase() ===
-          city.substring(0, location.value.length).toUpperCase())
-      ) {
-        i++;
-        cities.value.push(city);
-      }
-    }
-  }
-});
-
 function changeDefoultInput() {
   if (location.value === "Весь мир") {
     location.value = "";
@@ -134,17 +114,6 @@ function changeLocation(city) {
   geoAutocomplite.value = false;
   inputActive.value = false;
 }
-
-watch(
-  () => storeGeolocation.location,
-  () => {
-    if (storeGeolocation.location === "Весь мир") {
-      localStorage.removeItem("geolocation");
-    } else {
-      localStorage.setItem("geolocation", storeGeolocation.location);
-    }
-  }
-);
 </script>
 
 <template>

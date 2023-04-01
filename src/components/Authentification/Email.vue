@@ -9,7 +9,7 @@ const showPopup = ref(false);
 const colorForBorder = ref("#000");
 
 const checkInput = () => {
-  if (email.value.length && /^\w+@\w{2,}\.\w{2,3}$/.test(email.value)) {
+  if (email.value.length && /^\S+@\w{2,}\.\w{2,3}$/.test(email.value)) {
     // if (email.value.length) {
     colorForBorder.value = "#008000";
     isCorrectEmail.value = true;
@@ -34,10 +34,12 @@ const checkInput = () => {
       @blur="checkInput"
       required
     />
-    <div v-if="showPopup" class="popup-email">example@example.com</div>
+    <div v-if="showPopup" class="popup-email">
+      Email должен соответствовать шаблону example@example.com
+    </div>
   </div>
 </template>
-<!-- @focus="checkInput" -->
+
 <style>
 .email {
   position: relative;
@@ -56,12 +58,14 @@ const checkInput = () => {
   top: 0;
   left: 788px;
   height: 84px;
-  min-width: 200px;
+  width: 250px;
   display: flex;
-  justify-content: center;
   align-items: center;
   padding: 0 8px;
   font-size: 18px;
+  color: #fff;
+  text-align: center;
   background-color: #60b2ee;
+  border-radius: 8px;
 }
 </style>

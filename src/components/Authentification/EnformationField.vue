@@ -6,18 +6,14 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  successAuth: {
+    type: Boolean,
+    required: true,
+  },
 });
 
-const errorFromBackSignIn1 = "Неверно указан email";
-const errorFromBackSignIn2 = "Неверно указан пароль";
-const errorFromBackSignUp = "Пользователь с таким email уже существует";
-
 const colorForValidationFromServer = computed(() => {
-  return props.showValidationFromServer === errorFromBackSignUp ||
-    props.showValidationFromServer === errorFromBackSignIn1 ||
-    props.showValidationFromServer === errorFromBackSignIn2
-    ? "#ff0000"
-    : "#00BC22";
+  return props.successAuth ? "#00BC22" : "#ff0000";
 });
 </script>
 

@@ -15,6 +15,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  successAuth: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 defineEmits(["authentification"]);
@@ -37,6 +41,7 @@ defineEmits(["authentification"]);
     <EnformationField
       v-if="props.showValidationFromServer"
       :showValidationFromServer="props.showValidationFromServer"
+      :successAuth="props.successAuth"
     />
   </div>
 </template>

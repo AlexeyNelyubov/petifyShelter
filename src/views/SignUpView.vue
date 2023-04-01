@@ -2,8 +2,9 @@
 import { ref } from "vue";
 import MessageForShow from "@/views/MessageForShow.vue";
 import AuthentificationWithAppleFacebookGoogle from "@/components/Authentification/AuthentificationWithAppleFacebookGoogle.vue";
-import FirstName from "@/components/Authentification/FirstName.vue";
-import LastName from "@/components/Authentification/LastName.vue";
+import UserName from "@/components/Authentification/UserName.vue";
+// import FirstName from "@/components/Authentification/FirstName.vue";
+// import LastName from "@/components/Authentification/LastName.vue";
 import Email from "@/components/Authentification/Email.vue";
 import City from "@/components/Authentification/City.vue";
 import Password from "@/components/Authentification/Password.vue";
@@ -23,6 +24,7 @@ const password = ref("");
 const isCorrectPassword = ref(false);
 const showError = ref("");
 const showValidationFromServer = ref("");
+const successAuth = ref(false);
 
 const signUp = () => {
   const user = JSON.stringify({
@@ -48,11 +50,13 @@ const signUp = () => {
       if (resoponse.ok) {
         localStorage.setItem("token", json.token);
         userStore.logIn(json.user);
+        successAuth.value = true;
         showValidationFromServer.value =
           "На указанный email отправлено письмо для подтверждения электронной почты";
       } else {
         if (json === "Пользователь с таким email уже существует") {
           showValidationFromServer.value = json;
+          successAuth.value = false;
         } else {
           console.log(json);
           showError.value =
@@ -77,7 +81,23 @@ const signUp = () => {
           :typeAuth="'Регистрация через'"
         />
         <div class="sigUp-firstName-lastName">
-          <FirstName
+          <UserName
+            :placeholder="'Имя'"
+            @change-userName="
+              (newName, isCorrectNewName) => {
+                (firstName = newName), (isCorrectFirstName = isCorrectNewName);
+              }
+            "
+          />
+          <UserName
+            :placeholder="'Фамилия'"
+            @change-userName="
+              (newName, isCorrectNewName) => {
+                (lastName = newName), (isCorrectLastName = isCorrectNewName);
+              }
+            "
+          />
+          <!-- <FirstName
             @change-firstName="
               (newName, isCorrectNewName) => {
                 (firstName = newName), (isCorrectFirstName = isCorrectNewName);
@@ -91,7 +111,7 @@ const signUp = () => {
                   (isCorrectLastName = isCorrectNewLastName);
               }
             "
-          />
+          /> -->
         </div>
         <Email
           @change-email="
@@ -120,6 +140,7 @@ const signUp = () => {
             isCorrectPassword
           "
           :showValidationFromServer="showValidationFromServer"
+          :successAuth="successAuth"
           @authentification="signUp"
         />
       </div>

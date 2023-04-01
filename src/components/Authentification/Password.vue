@@ -35,7 +35,8 @@ const checkInput = () => {
       autocomplete="off"
     />
     <div v-if="showPopup" class="popup-password">
-      Пароль должен состоять ...
+      Пароль должен состоять не менее чем из 8 любых символов (пробел
+      использовать нельзя)
     </div>
   </form>
 </template>
@@ -59,12 +60,14 @@ const checkInput = () => {
   top: 0;
   left: 788px;
   height: 84px;
-  min-width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 250px;
   padding: 0 8px;
+  display: flex;
+  align-items: center;
   font-size: 18px;
+  color: #fff;
+  text-align: center;
   background-color: #60b2ee;
+  border-radius: 8px;
 }
 </style>
