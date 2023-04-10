@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import getAge from "@/Helpers/getAge.js";
-import getColores from "@/Helpers/getColores.js";
+import { getAge } from "@/Helpers/getAge.js";
+import { getColores } from "@/Helpers/getColores.js";
+import { useUserStore } from "@/stores/userStore.js";
+const userStore = useUserStore();
 
 const props = defineProps({
   pet: Object,
@@ -13,6 +15,7 @@ const PetsAge = getAge(props.pet.age);
 const PetsSterelization = ref("");
 const PetsGender = ref("");
 const showAllFeatures = ref(false);
+const isAuthorized = ref(true);
 
 switch (props.pet.type) {
   case "Кот":
@@ -41,12 +44,24 @@ if (props.pet.gender === "Мальчик") {
     PetsSterelization.value = "не стерелизована";
   }
 }
+const putPetInMarkers = () => {
+  if (!userStore.authentificated) {
+    isAuthorized.value = false;
+  }
+};
 </script>
 
 <template>
   <div class="pet-card">
+    <img
+      @click="putPetInMarkers"
+      class="pet-card__field-for-avatar__imgStar"
+      src="@/assets/images/Feed/star.svg"
+      alt="imgstar"
+      width="23"
+    />
     <div class="pet-card__field-for-avatar">
-      <RouterLink :to="{ name: 'PetPage', params: { id: `${props.pet.id}` } }">
+      <RouterLink :to="{ name: 'PetPage', params: { id: `${props.pet._id}` } }">
         <img :src="props.pet.avatar" class="pet-card__avatar" />
       </RouterLink>
     </div>
@@ -106,6 +121,13 @@ if (props.pet.gender === "Мальчик") {
             {{ item }}
           </div>
         </div>
+        <div
+          v-if="!isAuthorized"
+          class="pet-card__all-features"
+          @pointerleave="isAuthorized = true"
+        >
+          Для добавления карточки в закладки необходимо зарегистрироваться
+        </div>
       </div>
     </div>
   </div>
@@ -113,6 +135,7 @@ if (props.pet.gender === "Мальчик") {
 
 <style>
 .pet-card {
+  position: relative;
   width: 480px;
   height: 588px;
   margin: 0 24px 48px 24px;
@@ -129,6 +152,13 @@ if (props.pet.gender === "Мальчик") {
   width: 478px;
   height: 478px;
   object-fit: cover;
+}
+
+.pet-card__field-for-avatar__imgStar {
+  position: absolute;
+  top: 562px;
+  right: 0;
+  cursor: pointer;
 }
 
 .pet-card__discription {

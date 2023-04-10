@@ -1,4 +1,4 @@
-function getColores() {
+export function getColores() {
   const Colors = [
     "#00FF00",
     "#FFFF00",
@@ -18,5 +18,3 @@ function getColores() {
 
   return Colors[Math.floor(Math.random() * Colors.length)];
 }
-
-export default getColores;

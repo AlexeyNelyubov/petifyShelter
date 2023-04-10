@@ -7,6 +7,7 @@ const ProfilePage = () => import("@/views/ProfileView.vue");
 const SignUpPage = () => import("@/views/SignUpView.vue");
 const SignInPage = () => import("@/views/SignInView.vue");
 const PasswordRecoveryPage = () => import("@/views/PasswordRecovery.vue");
+const CreateNewPetCardPage = () => import("@/views/CreateNewPetCard.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,7 +47,12 @@ const router = createRouter({
       path: "/passwordrecovery",
       name: "PasswordRecoveryPage",
       component: PasswordRecoveryPage,
-    }
+    },
+    {
+      path: "/newPetCard",
+      name: "CreateNewPetCardPage",
+      component: CreateNewPetCardPage,
+    },
   ],
 });
 

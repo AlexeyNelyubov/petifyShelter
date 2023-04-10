@@ -1,6 +1,7 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import { ref, watch } from "vue";
 import { useFiltersStore } from "@/stores/filters.js";
+import { useDocumentClick } from "@/composable/useDocumentClick.js";
 const FiltersStore = useFiltersStore();
 
 const props = defineProps({
@@ -183,16 +184,8 @@ function getFilterItemsForBreedDependsOfType() {
   }
 }
 
-onMounted(() => {
-  document.addEventListener("click", () => {
-    showFilter.value = false;
-  });
-});
-
-onUnmounted(() => {
-  document.removeEventListener("click", () => {
-    showFilter.value = false;
-  });
+useDocumentClick(() => {
+  showFilter.value = false;
 });
 </script>
 

@@ -13,6 +13,7 @@ const PetsStore = usePetsStore();
 const storeGeolocation = useLocationStore();
 const PaginationStore = usePaginationStore();
 
+const showError = ref("");
 const PetsList = ref([]);
 const FiltersFromLocalStorage = ref({
   type: [],
@@ -139,20 +140,28 @@ if (PetsStore.petsList.length) {
   checkFilterGeolocation();
 } else {
   (async () => {
-    let response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/v1/pets`
-    );
-    let json = await response.json();
+    try {
+      let response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/pets`
+      );
+      let json = await response.json();
 
-    if (response.ok) {
-      for (let pet of json) {
-        PetsList.value.push(pet);
-        PetsListForShow.value.push(pet);
-        PetsStore.petsList.push(pet);
+      if (response.ok) {
+        for (let pet of json) {
+          PetsList.value.push(pet);
+          PetsListForShow.value.push(pet);
+          PetsStore.petsList.push(pet);
+        }
+        getFiltersFromLocalStorage();
+      } else {
+        console.log(json);
+        showError.value =
+          "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
       }
-      getFiltersFromLocalStorage();
-    } else {
-      console.log("error", json);
+    } catch (error) {
+      console.error(error);
+      showError.value =
+        "Сервер не отвечает! Перезагрузите страницу и попробуйте ещё раз.";
     }
   })();
 }
@@ -276,7 +285,9 @@ function checkFilterGeolocation() {
 
 <template>
   <div>
+    <MessageForShow v-if="showError" :message="showError" />
     <FeedPaginationArrow
+      v-if="!showError"
       :counterPagination="counterPagination"
       :lastPage="lastPage"
       :currentPage="paginationPage"
@@ -284,6 +295,7 @@ function checkFilterGeolocation() {
       @change-page-arrow-plus="paginationPage++"
     />
     <FeedFilters
+      v-if="!showError"
       class="feed-filters"
       @change-filter="changeFilter"
       @pagination="pagination"
@@ -292,12 +304,15 @@ function checkFilterGeolocation() {
       :PetsListForShow="PetsListForShow"
     />
     <MessageForShow v-if="HeveNotPets" :message="HeveNotPets" />
-    <div class="feed-pets-cards" v-if="!counterPagination">
+    <div class="feed-pets-cards" v-if="!counterPagination && !showError">
       <div v-for="pet in PetsListForShow" :key="pet.id">
         <FeedPetsCards :pet="pet" />
       </div>
     </div>
-    <div v-if="counterPagination" class="feed-pets-cards-pagination">
+    <div
+      v-if="counterPagination && !showError"
+      class="feed-pets-cards-pagination"
+    >
       <FeedPagination
         :lastPage="lastPage"
         :currentPage="paginationPage"

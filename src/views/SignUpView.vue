@@ -3,8 +3,6 @@ import { ref } from "vue";
 import MessageForShow from "@/views/MessageForShow.vue";
 import AuthentificationWithAppleFacebookGoogle from "@/components/Authentification/AuthentificationWithAppleFacebookGoogle.vue";
 import UserName from "@/components/Authentification/UserName.vue";
-// import FirstName from "@/components/Authentification/FirstName.vue";
-// import LastName from "@/components/Authentification/LastName.vue";
 import Email from "@/components/Authentification/Email.vue";
 import City from "@/components/Authentification/City.vue";
 import Password from "@/components/Authentification/Password.vue";
@@ -97,21 +95,6 @@ const signUp = () => {
               }
             "
           />
-          <!-- <FirstName
-            @change-firstName="
-              (newName, isCorrectNewName) => {
-                (firstName = newName), (isCorrectFirstName = isCorrectNewName);
-              }
-            "
-          />
-          <LastName
-            @change-lastName="
-              (newLastName, isCorrectNewLastName) => {
-                (lastName = newLastName),
-                  (isCorrectLastName = isCorrectNewLastName);
-              }
-            "
-          /> -->
         </div>
         <Email
           @change-email="

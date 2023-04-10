@@ -1,32 +1,59 @@
 <script setup>
+import MenuItem from "@/components/Profile/MenuItem.vue";
 import { useUserStore } from "@/stores/userStore.js";
 const userStore = useUserStore();
 </script>
 <template>
-  <div class="profile">
-    <div class="profile__imgprofile">
-      <img
-        :src="userStore.user.avatar"
-        alt="img-profile"
-        width="100"
-        height="100"
-      />
-    </div>
-    <div class="profile-user">
-      <p class="profile-user__username">
-        {{ userStore.user.userName }}
-      </p>
-      <p class="profile-user__location">{{ userStore.user.city }}</p>
-      <div class="profile__user-options">
-        <p class="profile__user-options-item">Посты</p>
-        <p class="profile__user-options-item">Поддержка</p>
-        <p class="profile__user-options-item">Закладки</p>
-        <p class="profile__user-options-item">Сообщения</p>
-        <p class="profile__user-options-item">Профиль</p>
-        <p class="profile__user-options-item">Настройки</p>
+  <main>
+    <div class="profile">
+      <div class="profile__imgprofile">
+        <img
+          :src="userStore.user.avatar"
+          alt="img-profile"
+          width="100"
+          height="100"
+        />
+      </div>
+      <div class="profile-user">
+        <p class="profile-user__username">
+          {{ userStore.user.userName }}
+        </p>
+        <p class="profile-user__location">{{ userStore.user.city }}</p>
+        <div class="profile__user-options">
+          <MenuItem
+            :item="'Закладки'"
+            :dropDownSign="'Здесь хранятся карточки животных, которые были отмечены'"
+            :starimg="true"
+          />
+          <MenuItem
+            :item="'Поддержка'"
+            :dropDownSign="'Здесь хранятся карточки животных или страницы питомников, которым вы осуществляете денежные переводы'"
+          />
+          <MenuItem
+            :item="'Сообщения'"
+            :dropDownSign="'Здесь вы можете общаться с другими пользователями'"
+          />
+          <MenuItem
+            :item="'Создать'"
+            :dropDownSign="'Здесь вы можете создать страницу питомника или карточку животного'"
+            :pageNameForRoute="'CreateNewPetCardPage'"
+          />
+          <MenuItem
+            :item="'Редактировать'"
+            :dropDownSign="'Здесь вы можете изменить информацию в созданных вами карточках животных'"
+          />
+          <MenuItem
+            :item="'Настройки'"
+            :dropDownSign="'Здесь вы можете изменить некоторые параметры для более удобного использования приложения'"
+          />
+        </div>
       </div>
     </div>
-  </div>
+    <div class="profile-information-sign">
+      <p>На данный момент функционал профиля не в полной мере реализован.</p>
+      <p>Поэтому некоторые возможности пока не доступны!</p>
+    </div>
+  </main>
 </template>
 
 <style>
@@ -59,11 +86,15 @@ const userStore = useUserStore();
   font-weight: 400;
   font-size: 24px;
 }
-.profile__user-options-item {
-  margin-top: 8px;
-}
-.profile__user-options-item:hover {
-  color: #9d9d9d;
-  cursor: pointer;
+.profile-information-sign {
+  height: 75px;
+  width: 900px;
+  margin: 96px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 20px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 </style>

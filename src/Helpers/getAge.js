@@ -1,4 +1,4 @@
-function getAge(PetsAge) {
+export function getAge(PetsAge) {
   let now = new Date();
   const dateBorn = now - Date.parse(PetsAge);
   let date = new Date(dateBorn);
@@ -41,5 +41,3 @@ function getAge(PetsAge) {
   const Age = `${fullYear} ${year} ${fullMonth} ${month}`;
   return Age;
 }
-
-export default getAge;

@@ -6,7 +6,7 @@ export const useUserStore = defineStore("user", () => {
   const user = ref({
     userName: "Гость",
     userId: "guest",
-    city: "Москва",
+    city: "",
     avatar: "/src/assets/images/Header/guestava.png",
   });
 
@@ -29,7 +29,7 @@ export const useUserStore = defineStore("user", () => {
     authentificated.value = false;
     user.value.userName = "Гость";
     user.value.userId = "guest";
-    user.value.city = "Москва";
+    user.value.city = "";
     user.value.avatar = "/src/assets/images/Header/guestava.png";
   };
 

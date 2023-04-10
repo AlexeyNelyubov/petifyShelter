@@ -1,11 +1,10 @@
 <script setup>
 import { ref, watch, computed } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/userStore.js";
 import MessageForShow from "@/views/MessageForShow.vue";
 
 const userStore = useUserStore();
-// const router = useRouter();
 
 const showProfileDropDown = ref(false);
 

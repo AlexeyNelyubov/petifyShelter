@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import { usePetsStore } from "@/stores/petsList.js";
 import MessageForShow from "@/views/MessageForShow.vue";
-import getAge from "@/Helpers/getAge.js";
-import getColores from "@/Helpers/getColores.js";
+import { getAge } from "@/Helpers/getAge.js";
+import { getColores } from "@/Helpers/getColores.js";
 const PetsStore = usePetsStore();
 
 const props = defineProps({
@@ -32,7 +32,7 @@ const changePetsFeaturesForShow = () => {
 
 if (PetsStore.petsList.length) {
   for (let pet of PetsStore.petsList) {
-    if (pet.id === props.id) {
+    if (pet._id === props.id) {
       petForShow.value = pet;
     }
   }
