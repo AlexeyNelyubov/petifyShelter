@@ -72,7 +72,7 @@ watch(
         v-if="nextItem === 'avatar'"
         @change-pet-avatar="
           (item, value) => {
-            changeItem(item, value), (nextItem = 'ензу');
+            changeItem(item, value), (nextItem = 'type');
           }
         "
       />
@@ -114,7 +114,8 @@ watch(
 }
 
 .new-pet-card-fill__enformation-sign {
-  margin-top: 12px;
+  position: absolute;
+  top: 150px;
   width: 768px;
 }
 
