@@ -21,12 +21,12 @@ const userName = computed(() => {
   return userStore.authentificated ? userStore.user.userName : "Привет, друг!";
 });
 
-// const userAvatar = computed(() => {
-//   return userStore.authentificated
-//     ? userStore.user.avatar
-//     : "@/assets/images/Header/Hello.svg";
-// });
-const userAvatar = ref("@/assets/images/Header/Hello.svg");
+const userAvatar = computed(() => {
+  return userStore.authentificated
+    ? userStore.user.avatar
+    : "@/assets/images/Header/Hello.svg";
+});
+const userAvatar1 = "@/assets/images/Header/Hello.svg";
 watch(
   () => props.hideProfileDropDown,
   () => {
@@ -71,7 +71,8 @@ const logOut = () => {
 <template>
   <MessageForShow v-if="showError" :message="showError" />
   <div class="authentification" @pointerover="showProfileDropDown = true">
-    <img alt="avatar" src="userAvatar" />
+    <img alt="avatar" :src="userAvatar" />
+    <img alt="avatar" :src="userAvatar1" />
     <img alt="avatar" src="src / assets / images / Header / Hello.svg" />
     <img alt="avatar" src="/src/assets/images/Header/Hello.svg" />
     <p class="authentification__userName">
