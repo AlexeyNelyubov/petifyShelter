@@ -14,10 +14,8 @@ const inputActive = ref(false);
 const uncorrectValueLocation = ref(false);
 
 (async () => {
-  // let response = await fetch(
-  //   `${import.meta.env.VITE_SERVER_URL}/api/v1/city/`
-  // );
-  let response = await fetch("/src/assets/data/RussiaCities.json");
+  let response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/city`);
+  // let response = await fetch("/src/assets/data/RussiaCities.json");
   let data = await response.json();
   for (let el of data) {
     arrCities.push(el.city);
