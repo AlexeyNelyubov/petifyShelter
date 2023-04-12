@@ -7,7 +7,7 @@ export const useUserStore = defineStore("user", () => {
     userName: "Гость",
     userId: "guest",
     city: "",
-    avatar: "@/assets/images/Header/guestava.png",
+    avatar: "/src/assets/images/Header/guestava.png",
   });
 
   if (localStorage.getItem("user")) {
@@ -20,7 +20,7 @@ export const useUserStore = defineStore("user", () => {
     user.value.userName = json["firstName"] + " " + json["lastName"];
     user.value.userId = json["firstName"];
     user.value.city = json["city"];
-    user.value.avatar = "@/assets/images/Header/imgava.svg";
+    user.value.avatar = "/src/assets/images/Header/imgava.svg";
     localStorage.setItem("user", JSON.stringify(user.value));
   };
 
