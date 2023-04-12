@@ -24,7 +24,7 @@ const userName = computed(() => {
 const userAvatar = computed(() => {
   return userStore.authentificated
     ? userStore.user.avatar
-    : "/src/assets/images/Header/Hello.svg";
+    : "@/assets/images/Header/Hello.svg";
 });
 
 watch(

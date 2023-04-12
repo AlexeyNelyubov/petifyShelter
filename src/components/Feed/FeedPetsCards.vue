@@ -19,18 +19,18 @@ const isAuthorized = ref(true);
 
 switch (props.pet.type) {
   case "Кот":
-    PetsTypeImg.value = "src/assets//images/Feed/cat.svg";
+    PetsTypeImg.value = "@/assets//images/Feed/cat.svg";
     break;
   case "Собака":
-    PetsTypeImg.value = "src/assets//images/Feed/dog.svg";
+    PetsTypeImg.value = "@/assets//images/Feed/dog.svg";
     break;
   case "Птица":
-    PetsTypeImg.value = "src/assets//images/Feed/dog.svg";
+    PetsTypeImg.value = "@/assets//images/Feed/dog.svg";
     break;
 }
 
 if (props.pet.gender === "Мальчик") {
-  PetsGender.value = "src/assets//images/Feed/male.svg";
+  PetsGender.value = "@/assets//images/Feed/male.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизован";
   } else {
