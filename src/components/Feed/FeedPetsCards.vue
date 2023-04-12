@@ -30,14 +30,14 @@ switch (props.pet.type) {
 }
 
 if (props.pet.gender === "Мальчик") {
-  PetsGender.value = "@/assets//images/Feed/male.svg";
+  PetsGender.value = "@/assets/images/Feed/male.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизован";
   } else {
     PetsSterelization.value = "не стерелизован";
   }
 } else {
-  PetsGender.value = "src/assets//images/Feed/female.svg";
+  PetsGender.value = "@/assets/images/Feed/female.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизована";
   } else {
