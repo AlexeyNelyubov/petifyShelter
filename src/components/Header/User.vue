@@ -73,7 +73,6 @@ const logOut = () => {
   <div class="authentification" @pointerover="showProfileDropDown = true">
     <img alt="avatar" :src="userAvatar" />
     <img alt="avatar" :src="userAvatar1" />
-    <img alt="avatar" src="src / assets / images / Header / Hello.svg" />
     <img alt="avatar" src="/src/assets/images/Header/Hello.svg" />
     <p class="authentification__userName">
       {{ userName }}

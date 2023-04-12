@@ -87,10 +87,6 @@ const putPetInMarkers = () => {
           />
           <img
             v-if="props.pet.vaccinated"
-            src="src/assets/images/Feed/vaccinated.svg"
-          />
-          <img
-            v-if="props.pet.vaccinated"
             src="/src/assets/images/Feed/vaccinated.svg"
           />
           <img :src="PetsGender" class="pet-card__sterilized-gender__gender" />
