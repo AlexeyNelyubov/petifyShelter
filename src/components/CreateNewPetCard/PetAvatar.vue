@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { useDocumentKeyUp } from "@/composable/useDocumentKeyUp.js";
+import { useDocumentKeyUp } from "/src/composable/useDocumentKeyUp.js";
 
 const emit = defineEmits(["change-pet-avatar"]);
 
@@ -48,7 +48,11 @@ const getAvatar = (e) => {
   <main class="pet-avatar">
     <p class="pet-avatar__title">Загрузите основное фото животного</p>
     <div class="pet-avatar__download">
-      <img src="@/assets/images/Feed/upload.svg" alt="img-upload" width="50" />
+      <img
+        src="/src/assets/images/Feed/upload.svg"
+        alt="img-upload"
+        width="50"
+      />
       <label class="pet-avatar__label"
         >Выберите файл<input
           type="file"

@@ -13,14 +13,14 @@ defineEmits(["change-page-arrow-minus", "change-page-arrow-plus"]);
 
 <template>
   <img
-    src="@/assets/images/Feed/arrow-left.svg"
+    src="/src/assets/images/Feed/arrow-left.svg"
     alt="arrow-left"
     v-if="props.counterPagination && props.currentPage > 1"
     class="feed-arrow-left"
     @click="$emit('change-page-arrow-minus')"
   />
   <img
-    src="@/assets/images/Feed/arrow-right.svg"
+    src="/src/assets/images/Feed/arrow-right.svg"
     alt="arrow-left"
     v-if="
       props.counterPagination &&

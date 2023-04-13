@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import Email from "@/components/Authentification/Email.vue";
-import AuthentificationButton from "@/components/Authentification/AuthentificationButton.vue";
-import EnformationField from "@/components/Authentification/EnformationField.vue";
+import Email from "/src/components/Authentification/Email.vue";
+import AuthentificationButton from "/src/components/Authentification/AuthentificationButton.vue";
+import EnformationField from "/src/components/Authentification/EnformationField.vue";
 
 const email = ref("");
 const isCorrectEmail = ref(false);

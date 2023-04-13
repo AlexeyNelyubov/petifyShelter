@@ -1,13 +1,13 @@
 <script setup>
 import { ref, watch, computed } from "vue";
-import FeedFilters from "./FeedFilters.vue";
-import FeedPetsCards from "./FeedPetsCards.vue";
-import FeedPagination from "./FeedPagination.vue";
-import FeedPaginationArrow from "./FeedPaginationArrow.vue";
-import MessageForShow from "@/views/MessageForShow.vue";
-import { usePetsStore } from "@/stores/petsList.js";
-import { useLocationStore } from "@/stores/location.js";
-import { usePaginationStore } from "@/stores/pagination.js";
+import FeedFilters from "/src/components/Feed/FeedFilters.vue";
+import FeedPetsCards from "/src/components/Feed/FeedPetsCards.vue";
+import FeedPagination from "/src/components/Feed/FeedPagination.vue";
+import FeedPaginationArrow from "/src/components/Feed/FeedPaginationArrow.vue";
+import MessageForShow from "/src/views/MessageForShow.vue";
+import { usePetsStore } from "/src/stores/petsList.js";
+import { useLocationStore } from "/src/stores/location.js";
+import { usePaginationStore } from "/src/stores/pagination.js";
 
 const PetsStore = usePetsStore();
 const storeGeolocation = useLocationStore();
@@ -233,7 +233,7 @@ function compareFiltersandGeolocation() {
   PetsListForShow.value.splice(0);
   for (let petInGeoLocation of PetsListAfterGeoLocation.value) {
     for (let petInFilters of PetsListAfterFilters.value) {
-      if (petInFilters.id === petInGeoLocation.id) {
+      if (petInFilters._id === petInGeoLocation._id) {
         PetsListForShow.value.push(petInGeoLocation);
       }
     }

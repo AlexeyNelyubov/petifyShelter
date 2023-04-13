@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import AuthentificationButton from "@/components/Authentification/AuthentificationButton.vue";
-import EnformationField from "@/components/Authentification/EnformationField.vue";
+import AuthentificationButton from "/src/components/Authentification/AuthentificationButton.vue";
+import EnformationField from "/src/components/Authentification/EnformationField.vue";
 const props = defineProps({
   buttonName: {
     type: String,

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from "vue";
-import { usePaginationStore } from "@/stores/pagination.js";
+import { usePaginationStore } from "/src/stores/pagination.js";
 const PaginationStore = usePaginationStore();
 
 const props = defineProps({

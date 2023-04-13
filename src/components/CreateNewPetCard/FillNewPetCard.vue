@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch } from "vue";
-import PetType from "@/components/CreateNewPetCard/PetType.vue";
-import PetGender from "@/components/CreateNewPetCard/PetGender.vue";
-import PetName from "@/components/CreateNewPetCard/PetName.vue";
-import PetAvatar from "@/components/CreateNewPetCard/PetAvatar.vue";
+import PetType from "/src/components/CreateNewPetCard/PetType.vue";
+import PetGender from "/src/components/CreateNewPetCard/PetGender.vue";
+import PetName from "/src/components/CreateNewPetCard/PetName.vue";
+import PetAvatar from "/src/components/CreateNewPetCard/PetAvatar.vue";
 
 const props = defineProps({
   currentItem: {

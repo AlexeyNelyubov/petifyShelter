@@ -1,8 +1,8 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import { RouterLink } from "vue-router";
-import { useUserStore } from "@/stores/userStore.js";
-import MessageForShow from "@/views/MessageForShow.vue";
+import { useUserStore } from "/src/stores/userStore.js";
+import MessageForShow from "/src/views/MessageForShow.vue";
 
 const userStore = useUserStore();
 
@@ -26,12 +26,6 @@ const userAvatar = computed(() => {
     ? userStore.user.avatar
     : "/src/assets/images/Header/Hello.svg";
 });
-
-// const userAvatar = computed(() => {
-//   return userStore.authentificated
-//     ? userStore.user.avatar
-//     : "require(../assets/images/Header/Hello.svg)";
-// });
 
 watch(
   () => props.hideProfileDropDown,
@@ -78,13 +72,12 @@ const logOut = () => {
   <MessageForShow v-if="showError" :message="showError" />
   <div class="authentification" @pointerover="showProfileDropDown = true">
     <img alt="avatar" :src="userAvatar" />
-    {{ userAvatar }}
     <p class="authentification__userName">
       {{ userName }}
     </p>
     <img
       alt="arrow"
-      src="@/assets/images/Header/arrow-down.svg"
+      src="/src/assets/images/Header/arrow-down.svg"
       width="16"
       height="10"
     />

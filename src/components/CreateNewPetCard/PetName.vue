@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { useDocumentKeyUp } from "@/composable/useDocumentKeyUp.js";
+import { useDocumentKeyUp } from "/src/composable/useDocumentKeyUp.js";
 
 const emit = defineEmits(["change-pet-name", "validate-error"]);
 

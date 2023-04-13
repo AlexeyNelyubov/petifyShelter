@@ -11,17 +11,17 @@ const props = defineProps({
   <div class="authentification-apple-facebook-google">
     {{ props.typeAuth }}
     <img
-      src="@/assets/images/SignInUp/imgapple.svg"
+      src="/src/assets/images/SignInUp/imgapple.svg"
       alt="logo-apple"
       class="authentification__logo"
     />
     <img
-      src="@/assets/images/SignInUp/imgfacebook.svg"
+      src="/src/assets/images/SignInUp/imgfacebook.svg"
       alt="logo-facebook"
       class="authentification__logo"
     />
     <img
-      src="@/assets/images/SignInUp/imggoogle.svg"
+      src="/src/assets/images/SignInUp/imggoogle.svg"
       alt="logo-google"
       class="authentification__logo"
     />

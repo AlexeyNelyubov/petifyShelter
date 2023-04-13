@@ -1,10 +1,10 @@
 <script setup>
 import { ref, watch, computed } from "vue";
-import MessageForShow from "@/views/MessageForShow.vue";
-import FillNewPetCard from "@/components/CreateNewPetCard/FillNewPetCard.vue";
-import ShowNewPetCard from "@/components/CreateNewPetCard/ShowNewPetCard.vue";
-import AuthentificationButton from "@/components/Authentification/AuthentificationButton.vue";
-import { useUserStore } from "@/stores/userStore.js";
+import MessageForShow from "/src/views/MessageForShow.vue";
+import FillNewPetCard from "/src/components/CreateNewPetCard/FillNewPetCard.vue";
+import ShowNewPetCard from "/src/components/CreateNewPetCard/ShowNewPetCard.vue";
+import AuthentificationButton from "/src/components/Authentification/AuthentificationButton.vue";
+import { useUserStore } from "/src/stores/userStore.js";
 const userStore = useUserStore();
 
 const showError = ref("");

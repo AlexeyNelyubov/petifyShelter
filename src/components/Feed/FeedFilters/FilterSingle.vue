@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
-import { useFiltersStore } from "@/stores/filters.js";
-import { useDocumentClick } from "@/composable/useDocumentClick.js";
+import { useFiltersStore } from "/src/stores/filters.js";
+import { useDocumentClick } from "/src/composable/useDocumentClick.js";
 const FiltersStore = useFiltersStore();
 
 const props = defineProps({
@@ -208,7 +208,7 @@ useDocumentClick(() => {
     >
       <p>{{ filterSign }}</p>
       <img
-        src="@/assets/images/Header/arrow-down.svg"
+        src="/src/assets/images/Header/arrow-down.svg"
         width="14"
         height="8"
         alt="arrow"

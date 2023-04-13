@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import { usePetsStore } from "@/stores/petsList.js";
-import MessageForShow from "@/views/MessageForShow.vue";
-import { getAge } from "@/Helpers/getAge.js";
-import { getColores } from "@/Helpers/getColores.js";
+import { usePetsStore } from "/src/stores/petsList.js";
+import MessageForShow from "/src/views/MessageForShow.vue";
+import { getAge } from "/src/Helpers/getAge.js";
+import { getColores } from "/src/Helpers/getColores.js";
 const PetsStore = usePetsStore();
 
 const props = defineProps({

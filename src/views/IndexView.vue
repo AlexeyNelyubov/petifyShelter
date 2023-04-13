@@ -1,5 +1,5 @@
 <script setup>
-import TheFeed from "@/components/Feed/TheFeed.vue";
+import TheFeed from "/src/components/Feed/TheFeed.vue";
 </script>
 
 <template>

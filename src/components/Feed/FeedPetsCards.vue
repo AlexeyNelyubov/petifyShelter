@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import { getAge } from "@/Helpers/getAge.js";
-import { getColores } from "@/Helpers/getColores.js";
-import { useUserStore } from "@/stores/userStore.js";
+import { getAge } from "/src/Helpers/getAge.js";
+import { getColores } from "/src/Helpers/getColores.js";
+import { useUserStore } from "/src/stores/userStore.js";
 const userStore = useUserStore();
 
 const props = defineProps({
@@ -19,25 +19,25 @@ const isAuthorized = ref(true);
 
 switch (props.pet.type) {
   case "Кот":
-    PetsTypeImg.value = "@/assets//images/Feed/cat.svg";
+    PetsTypeImg.value = "/src/assets//images/Feed/cat.svg";
     break;
   case "Собака":
-    PetsTypeImg.value = "@/assets//images/Feed/dog.svg";
+    PetsTypeImg.value = "/src/assets//images/Feed/dog.svg";
     break;
   case "Птица":
-    PetsTypeImg.value = "@/assets//images/Feed/dog.svg";
+    PetsTypeImg.value = "/src/assets//images/Feed/dog.svg";
     break;
 }
 
 if (props.pet.gender === "Мальчик") {
-  PetsGender.value = "@/assets/images/Feed/male.svg";
+  PetsGender.value = "/src/assets/images/Feed/male.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизован";
   } else {
     PetsSterelization.value = "не стерелизован";
   }
 } else {
-  PetsGender.value = "@/assets/images/Feed/female.svg";
+  PetsGender.value = "/src/assets/images/Feed/female.svg";
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизована";
   } else {
@@ -56,7 +56,7 @@ const putPetInMarkers = () => {
     <img
       @click="putPetInMarkers"
       class="pet-card__field-for-avatar__imgStar"
-      src="@/assets/images/Feed/star.svg"
+      src="/src/assets/images/Feed/star.svg"
       alt="imgstar"
       width="23"
     />
@@ -81,10 +81,6 @@ const putPetInMarkers = () => {
           >
             {{ PetsSterelization }}
           </p>
-          <img
-            v-if="props.pet.vaccinated"
-            src="@/assets/images/Feed/vaccinated.svg"
-          />
           <img
             v-if="props.pet.vaccinated"
             src="/src/assets/images/Feed/vaccinated.svg"

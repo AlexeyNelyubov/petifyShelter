@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import router from "../../router";
-import FilterSingle from "./FeedFilters/FilterSingle.vue";
-import FilterPagination from "./FeedFilters/FilterPagination.vue";
+import router from "/src/router";
+import FilterSingle from "/src/components/Feed/FeedFilters/FilterSingle.vue";
+import FilterPagination from "/src/components/Feed/FeedFilters/FilterPagination.vue";
 
 const props = defineProps({
   FiltersFromLocalStorage: {
@@ -84,7 +84,7 @@ function getRandomPet() {
     props.PetsListForShow[
       Math.floor(Math.random() * props.PetsListForShow.length)
     ];
-  router.push({ name: "PetPage", params: { id: `${randomPet.id}` } });
+  router.push({ name: "PetPage", params: { id: `${randomPet._id}` } });
 }
 </script>
 

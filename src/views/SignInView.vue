@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from "vue";
-import MessageForShow from "@/views/MessageForShow.vue";
-import AuthentificationWithAppleFacebookGoogle from "@/components/Authentification/AuthentificationWithAppleFacebookGoogle.vue";
-import Email from "@/components/Authentification/Email.vue";
-import Password from "@/components/Authentification/Password.vue";
-import AuthentificationButtonAndEnformation from "@/components/Authentification/AuthentificationButtonAndEnformation.vue";
-import { useUserStore } from "@/stores/userStore.js";
+import MessageForShow from "/src/views/MessageForShow.vue";
+import AuthentificationWithAppleFacebookGoogle from "/src/components/Authentification/AuthentificationWithAppleFacebookGoogle.vue";
+import Email from "/src/components/Authentification/Email.vue";
+import Password from "/src/components/Authentification/Password.vue";
+import AuthentificationButtonAndEnformation from "/src/components/Authentification/AuthentificationButtonAndEnformation.vue";
+import { useUserStore } from "/src/stores/userStore.js";
 import { useRouter } from "vue-router";
 
 const router = useRouter();

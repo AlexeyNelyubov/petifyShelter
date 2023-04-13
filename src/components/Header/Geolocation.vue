@@ -1,8 +1,8 @@
 <script setup>
 import { ref, watch } from "vue";
-import { useDocumentClick } from "@/composable/useDocumentClick.js";
-import { useDocumentKeyUp } from "@/composable/useDocumentKeyUp.js";
-import { useLocationStore } from "@/stores/location.js";
+import { useDocumentClick } from "/src/composable/useDocumentClick.js";
+import { useDocumentKeyUp } from "/src/composable/useDocumentKeyUp.js";
+import { useLocationStore } from "/src/stores/location.js";
 
 const storeGeolocation = useLocationStore();
 
@@ -129,7 +129,7 @@ function changeLocation(city) {
     >
       <img
         alt="geolocation"
-        src="@/assets/images/Header/geolocation.svg"
+        src="/src/assets/images/Header/geolocation.svg"
         class="geolocation__logo-input-logo"
       />
       <input

@@ -1,6 +1,6 @@
 <script setup>
-import MenuItem from "@/components/Profile/MenuItem.vue";
-import { useUserStore } from "@/stores/userStore.js";
+import MenuItem from "/src/components/Profile/MenuItem.vue";
+import { useUserStore } from "/src/stores/userStore.js";
 const userStore = useUserStore();
 </script>
 <template>

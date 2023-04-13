@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import HeaderUser from "@/components/Header/User.vue";
-import HeaderGeolocation from "@/components/Header/Geolocation.vue";
+import HeaderUser from "/src/components/Header/User.vue";
+import HeaderGeolocation from "/src/components/Header/Geolocation.vue";
 
 const hideProfileDropDown = ref(true);
 </script>
@@ -10,7 +10,7 @@ const hideProfileDropDown = ref(true);
 <template>
   <header class="header">
     <RouterLink :to="{ name: 'IndexPage' }" class="header__logo-link">
-      <img alt="petify" src="@/assets/images/Header/logoptf.svg" />
+      <img alt="petify" src="/src/assets/images/Header/logoptf.svg" />
       <span class="header__logo-link-sign">petify</span>
     </RouterLink>
     <div class="header-geolocation-authentification">
