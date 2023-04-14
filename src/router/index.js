@@ -9,7 +9,8 @@ import { createRouter, createWebHistory } from "vue-router";
 // import PasswordRecoveryPage from "/src/views/PasswordRecovery.vue";
 // import CreateNewPetCardPage from "/src/views/CreateNewPetCard.vue";
 
-const IndexPage = () => import("/src/views/IndexView.vue");
+// const IndexPage = () => import("/src/views/IndexView.vue");
+import IndexPage from "/src/views/IndexView.vue";
 const AboutUsPage = () => import("/src/views/AboutUsVeiw.vue");
 const PetPage = () => import("/src/views/PetView.vue");
 const ProfilePage = () => import("/src/views/ProfileView.vue");
