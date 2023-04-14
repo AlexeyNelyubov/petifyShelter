@@ -21,10 +21,12 @@ const userName = computed(() => {
   return userStore.authentificated ? userStore.user.userName : "Привет, друг!";
 });
 
+// new URL('/src/assets/images/logo.svg', import.meta.url)
+// : "/src/assets/images/Header/Hello.svg";
 const userAvatar = computed(() => {
   return userStore.authentificated
     ? userStore.user.avatar
-    : "/src/assets/images/Header/Hello.svg";
+    : new URL("/src/assets/images/Header/Hello.svg", import.meta.url);
 });
 
 watch(

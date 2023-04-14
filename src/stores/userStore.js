@@ -7,9 +7,9 @@ export const useUserStore = defineStore("user", () => {
     userName: "Гость",
     userId: "guest",
     city: "",
-    avatar: "/src/assets/images/Header/guestava.png",
+    avatar:  new URL("/src/assets/images/Header/guestava.png", import.meta.url),
   });
-
+  // avatar: "/src/assets/images/Header/guestava.png",
   if (localStorage.getItem("user")) {
     authentificated.value = true;
     user.value = JSON.parse(localStorage.getItem("user"));
@@ -20,18 +20,19 @@ export const useUserStore = defineStore("user", () => {
     user.value.userName = json["firstName"] + " " + json["lastName"];
     user.value.userId = json["firstName"];
     user.value.city = json["city"];
-    user.value.avatar = "/src/assets/images/Header/imgava.svg";
+    user.value.avatar = new URL("/src/assets/images/Header/imgava.svg", import.meta.url);
+    // user.value.avatar = "/src/assets/images/Header/imgava.svg";
     localStorage.setItem("user", JSON.stringify(user.value));
   };
-
+  
   const logOut = () => {
     localStorage.removeItem("user");
     authentificated.value = false;
     user.value.userName = "Гость";
     user.value.userId = "guest";
     user.value.city = "";
-    user.value.avatar = "/src/assets/images/Header/guestava.png";
+    user.value.avatar = new URL("/src/assets/images/Header/guestava.png", import.meta.url);
+    // user.value.avatar = "/src/assets/images/Header/guestava.png";
   };
-
   return { authentificated, user, logIn, logOut };
 });
