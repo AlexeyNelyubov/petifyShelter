@@ -26,7 +26,7 @@ const userName = computed(() => {
 const userAvatar = computed(() => {
   return userStore.authentificated
     ? userStore.user.avatar
-    : new URL("/src/assets/images/Header/Hello.svg", import.meta.url);
+    : new URL("/src/assets/images/Header/Hello.svg", import.meta.url).href;
 });
 
 watch(

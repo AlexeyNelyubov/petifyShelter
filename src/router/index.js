@@ -1,15 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-// import IndexPage from "/src/views/IndexView.vue";
-// import AboutUsPage from "/src/views/AboutUsVeiw.vue";
-// import PetPage from "/src/views/PetView.vue";
-// import ProfilePage from "/src/views/ProfileView.vue";
-// import SignUpPage from "/src/views/SignUpView.vue";
-// import SignInPage from "/src/views/SignInView.vue";
-// import PasswordRecoveryPage from "/src/views/PasswordRecovery.vue";
-// import CreateNewPetCardPage from "/src/views/CreateNewPetCard.vue";
-
-// const IndexPage = () => import("/src/views/IndexView.vue");
 import IndexPage from "/src/views/IndexView.vue";
 const AboutUsPage = () => import("/src/views/AboutUsVeiw.vue");
 const PetPage = () => import("/src/views/PetView.vue");
