@@ -39,14 +39,20 @@ switch (props.pet.type) {
 }
 
 if (props.pet.gender === "Мальчик") {
-  PetsGender.value = "/src/assets/images/Feed/male.svg";
+  PetsGender.value = new URL(
+    "/src/assets/images/Feed/male.svg",
+    import.meta.url
+  ).href;
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизован";
   } else {
     PetsSterelization.value = "не стерелизован";
   }
 } else {
-  PetsGender.value = "/src/assets/images/Feed/female.svg";
+  PetsGender.value = new URL(
+    "/src/assets/images/Feed/female.svg",
+    import.meta.url
+  ).href;
   if (props.pet.sterilized) {
     PetsSterelization.value = "стерелизована";
   } else {
