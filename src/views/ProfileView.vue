@@ -2,8 +2,6 @@
 import MenuItem from "/src/components/Profile/MenuItem.vue";
 import { useUserStore } from "/src/stores/userStore.js";
 const userStore = useUserStore();
-window.location.href =
-  "http://localhost:5173/petifyShelter/pet/6436c6986a0e2c2906c0d7e4";
 </script>
 <template>
   <main>

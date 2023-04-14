@@ -2,8 +2,6 @@
 import { RouterView } from "vue-router";
 import TheHeader from "/src/components/Header/TheHeader.vue";
 import TheFooter from "/src/components/TheFooter.vue";
-
-console.log(window.location.href);
 </script>
 
 <template>
