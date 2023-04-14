@@ -19,13 +19,22 @@ const isAuthorized = ref(true);
 
 switch (props.pet.type) {
   case "Кот":
-    PetsTypeImg.value = "/src/assets//images/Feed/cat.svg";
+    PetsTypeImg.value = new URL(
+      "/src/assets/images/Feed/cat.svg",
+      import.meta.url
+    ).href;
     break;
   case "Собака":
-    PetsTypeImg.value = "/src/assets//images/Feed/dog.svg";
+    PetsTypeImg.value = new URL(
+      "/src/assets/images/Feed/dog.svg",
+      import.meta.url
+    ).href;
     break;
   case "Птица":
-    PetsTypeImg.value = "/src/assets//images/Feed/dog.svg";
+    PetsTypeImg.value = new URL(
+      "/src/assets/images/Feed/bird.svg",
+      import.meta.url
+    ).href;
     break;
 }
 

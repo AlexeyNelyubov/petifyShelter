@@ -9,7 +9,6 @@ export const useUserStore = defineStore("user", () => {
     city: "",
     avatar:  new URL("/src/assets/images/Header/guestava.png", import.meta.url),
   });
-  // avatar: "/src/assets/images/Header/guestava.png",
   if (localStorage.getItem("user")) {
     authentificated.value = true;
     user.value = JSON.parse(localStorage.getItem("user"));
@@ -21,7 +20,6 @@ export const useUserStore = defineStore("user", () => {
     user.value.userId = json["firstName"];
     user.value.city = json["city"];
     user.value.avatar = new URL("/src/assets/images/Header/imgava.svg", import.meta.url);
-    // user.value.avatar = "/src/assets/images/Header/imgava.svg";
     localStorage.setItem("user", JSON.stringify(user.value));
   };
   
@@ -32,7 +30,6 @@ export const useUserStore = defineStore("user", () => {
     user.value.userId = "guest";
     user.value.city = "";
     user.value.avatar = new URL("/src/assets/images/Header/guestava.png", import.meta.url);
-    // user.value.avatar = "/src/assets/images/Header/guestava.png";
   };
   return { authentificated, user, logIn, logOut };
 });
