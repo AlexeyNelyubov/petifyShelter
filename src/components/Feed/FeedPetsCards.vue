@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { RouterLink } from "vue-router";
 import { getAge } from "/src/Helpers/getAge.js";
 import { getColores } from "/src/Helpers/getColores.js";
@@ -17,48 +17,52 @@ const PetsGender = ref("");
 const showAllFeatures = ref(false);
 const isAuthorized = ref(true);
 
-switch (props.pet.type) {
-  case "Кот":
-    PetsTypeImg.value = new URL(
-      "/src/assets/images/Feed/cat.svg",
-      import.meta.url
-    ).href;
-    break;
-  case "Собака":
-    PetsTypeImg.value = new URL(
-      "/src/assets/images/Feed/dog.svg",
-      import.meta.url
-    ).href;
-    break;
-  case "Птица":
-    PetsTypeImg.value = new URL(
-      "/src/assets/images/Feed/bird.svg",
-      import.meta.url
-    ).href;
-    break;
-}
+watchEffect(() => {
+  switch (props.pet.type) {
+    case "Кот":
+      PetsTypeImg.value = new URL(
+        "/src/assets/images/Feed/cat.svg",
+        import.meta.url
+      ).href;
+      break;
+    case "Собака":
+      PetsTypeImg.value = new URL(
+        "/src/assets/images/Feed/dog.svg",
+        import.meta.url
+      ).href;
+      break;
+    case "Птица":
+      PetsTypeImg.value = new URL(
+        "/src/assets/images/Feed/bird.svg",
+        import.meta.url
+      ).href;
+      break;
+  }
+});
 
-if (props.pet.gender === "Мальчик") {
-  PetsGender.value = new URL(
-    "/src/assets/images/Feed/male.svg",
-    import.meta.url
-  ).href;
-  if (props.pet.sterilized) {
-    PetsSterelization.value = "стерелизован";
+watchEffect(() => {
+  if (props.pet.gender === "Мальчик") {
+    PetsGender.value = new URL(
+      "/src/assets/images/Feed/male.svg",
+      import.meta.url
+    ).href;
+    if (props.pet.sterilized) {
+      PetsSterelization.value = "стерелизован";
+    } else {
+      PetsSterelization.value = "не стерелизован";
+    }
   } else {
-    PetsSterelization.value = "не стерелизован";
+    PetsGender.value = new URL(
+      "/src/assets/images/Feed/female.svg",
+      import.meta.url
+    ).href;
+    if (props.pet.sterilized) {
+      PetsSterelization.value = "стерелизована";
+    } else {
+      PetsSterelization.value = "не стерелизована";
+    }
   }
-} else {
-  PetsGender.value = new URL(
-    "/src/assets/images/Feed/female.svg",
-    import.meta.url
-  ).href;
-  if (props.pet.sterilized) {
-    PetsSterelization.value = "стерелизована";
-  } else {
-    PetsSterelization.value = "не стерелизована";
-  }
-}
+});
 const putPetInMarkers = () => {
   if (!userStore.authentificated) {
     isAuthorized.value = false;

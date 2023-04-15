@@ -145,7 +145,6 @@ if (PetsStore.petsList.length) {
         `${import.meta.env.VITE_SERVER_URL}/api/v1/pets`
       );
       let json = await response.json();
-
       if (response.ok) {
         for (let pet of json) {
           PetsList.value.push(pet);
