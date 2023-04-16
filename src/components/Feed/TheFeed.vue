@@ -13,7 +13,9 @@ const PetsStore = usePetsStore();
 const storeGeolocation = useLocationStore();
 const PaginationStore = usePaginationStore();
 
-const showError = ref("");
+const showError = ref(
+  "Для загрузки данных с сервера при первом запуске может понадобиться некоторое время."
+);
 const PetsList = ref([]);
 const FiltersFromLocalStorage = ref({
   type: [],
@@ -136,6 +138,7 @@ if (PetsStore.petsList.length) {
   for (let pet of PetsStore.petsList) {
     PetsList.value.push(pet);
     PetsListForShow.value.push(pet);
+    showError.value = "";
   }
   checkFilterGeolocation();
 } else {
@@ -150,6 +153,7 @@ if (PetsStore.petsList.length) {
           PetsList.value.push(pet);
           PetsListForShow.value.push(pet);
           PetsStore.petsList.push(pet);
+          showError.value = "";
         }
         getFiltersFromLocalStorage();
       } else {
@@ -284,7 +288,6 @@ function checkFilterGeolocation() {
 
 <template>
   <div>
-    <MessageForShow v-if="showError" :message="showError" />
     <FeedPaginationArrow
       v-if="!showError"
       :counterPagination="counterPagination"
@@ -302,6 +305,7 @@ function checkFilterGeolocation() {
       :PaginationFromLocalStorage="PaginationFromLocalStorage"
       :PetsListForShow="PetsListForShow"
     />
+    <MessageForShow v-if="showError" :message="showError" :loader="true" />
     <MessageForShow v-if="HeveNotPets" :message="HeveNotPets" />
     <div class="feed-pets-cards" v-if="!counterPagination && !showError">
       <div v-for="pet in PetsListForShow" :key="pet.id">
