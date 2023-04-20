@@ -160,6 +160,11 @@ if (PetsStore.petsList.length) {
 </template>
 
 <style>
+.pet-page {
+  display: flex;
+  justify-content: center;
+}
+
 .pet-page-avatar-discription {
   margin: 72px 0 72px 72px;
   max-width: 1500px;
