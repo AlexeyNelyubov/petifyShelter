@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import PetType from "/src/components/CreateNewPetCard/PetType.vue";
 import PetGender from "/src/components/CreateNewPetCard/PetGender.vue";
 import PetName from "/src/components/CreateNewPetCard/PetName.vue";
+import PetBreed from "/src/components/CreateNewPetCard/PetBreed.vue";
 import PetAvatar from "/src/components/CreateNewPetCard/PetAvatar.vue";
 
 const props = defineProps({
@@ -14,11 +15,9 @@ const props = defineProps({
 
 const emit = defineEmits(["change-item"]);
 
-const validateError = ref("");
 const nextItem = ref("type");
 
 const changeItem = (item, value) => {
-  console.log(item, value);
   emit("change-item", item, value);
 };
 
@@ -58,15 +57,21 @@ watch(
         v-if="nextItem === 'name'"
         @change-pet-name="
           (item, value) => {
+            changeItem(item, value), (nextItem = 'breeds');
+          }
+        "
+      />
+    </Transition>
+    <Transition name="new-pet-card-fill-item">
+      <PetBreed
+        v-if="nextItem === 'breeds'"
+        @change-pet-breeds="
+          (item, value) => {
             changeItem(item, value), (nextItem = 'avatar');
           }
         "
-        @validate-error="(error) => (validateError = error)"
       />
     </Transition>
-    <div class="new-pet-card-fill__enformation-sign" v-if="validateError">
-      * {{ validateError }}
-    </div>
     <Transition name="new-pet-card-fill-item">
       <PetAvatar
         v-if="nextItem === 'avatar'"
@@ -76,47 +81,24 @@ watch(
           }
         "
       />
-      <!-- <div class="new-pet-card-fill__avatar">
-      <img src="@/assets/images/Feed/upload.svg" alt="img-upload" width="50" />
-      <label class="new-pet-card-fill__avatar-label"
-        >Выберите файл<input
-          type="file"
-          accept="image/*"
-          class="new-pet-card-fill__avatar-input"
-          @change="getAvatar"
-      /></label>
-      <span>или перетащите его сюда</span>
-    </div> -->
     </Transition>
   </div>
 </template>
 
 <style>
 .new-pet-card-fill {
-  position: relative;
-  margin: 76px;
-  height: 150px;
+  padding: 152px 76px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   font-family: "Sofia Sans", sans-serif;
 }
 
 .new-pet-card-fill__title {
-  position: absolute;
-  top: -50px;
   margin-bottom: 24px;
   font-size: 30px;
   font-weight: bold;
-  /* z-index: 2; */
-}
-
-.new-pet-card-fill__enformation-sign {
-  position: absolute;
-  top: 150px;
-  width: 768px;
 }
 
 .new-pet-card-title-enter-active {
@@ -125,10 +107,10 @@ watch(
 
 @keyframes title {
   from {
-    font-size: 50px;
+    transform: scale(2);
   }
   to {
-    font-size: 30px;
+    transform: scale(1);
   }
 }
 
@@ -140,38 +122,3 @@ watch(
   opacity: 0;
 }
 </style>
-
-<!-- .new-pet-card-fill-item-enter-active {
-  animation: item 3s;
-}
-
-.new-pet-card-fill-item-leave-active {
-  animation: item 1.5s reverse;
-}
-
-@keyframes item {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-} -->
-
-<!-- .new-pet-card-fill-pet-type-leave-from {
-  transition: opacity 5s ease;
-}
-
-.new-pet-card-fill-pet-type-leave-to {
-  opacity: 0;
-} */
-
-/* .new-pet-card-fill-pet-type-enter-active,
-.new-pet-card-fill-pet-type-leave-active {
-  transition: opacity 3s ease;
-}
-
-.new-pet-card-fill-pet-type-enter-from,
-.new-pet-card-fill-pet-type-leave-to {
-  opacity: 0;
-}  -->

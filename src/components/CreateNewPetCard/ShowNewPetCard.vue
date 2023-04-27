@@ -1,14 +1,22 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   newPet: {
     type: Object,
     required: true,
   },
+  changeSize: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 defineEmits(["get-current-item"]);
+
+const width = computed(() => {
+  return props.changeSize ? "1000px" : "500px";
+});
 </script>
 
 <template>
@@ -28,23 +36,34 @@ defineEmits(["get-current-item"]);
       Пол : {{ props.newPet.gender }}
     </div>
     <div
-      lang="ru"
       v-if="props.newPet.name"
       @click="$emit('get-current-item', 'name')"
       class="new-pets-card-show__item"
     >
       Имя: {{ props.newPet.name }}
     </div>
-    <!-- <div v-if="age">Возраст: {{ age }}</div>
-    <div v-if="breeds">Порода: {{ breeds }}</div>
-    <div v-if="weight">Вес: {{ weight }}</div>
+    <!-- <div v-if="age">Возраст: {{ age }}</div> -->
+    <div
+      v-if="props.newPet.breeds"
+      @click="$emit('get-current-item', 'breeds')"
+      class="new-pets-card-show__item"
+    >
+      Порода: {{ props.newPet.breeds.join(", ") }}
+    </div>
+    <!--<div v-if="weight">Вес: {{ weight }}</div>
     <div v-if="height">Рост: {{ height }}</div>
     <div v-if="sterilized">Стерилизация: {{ sterilized }}</div>
     <div v-if="vaccinated">Вакцинация: {{ vaccinated }}</div>
     <div v-if="features">Особенности: {{ features }}</div>
     <div v-if="bio">Описание: {{ bio }}</div>
-    <div v-if="location">Место нахождения: {{ location }}</div>
-    <div v-if="ava">Аватар карточки:</div> -->
+    <div v-if="location">Место нахождения: {{ location }}</div>-->
+    <div
+      v-if="props.newPet.avatar"
+      @click="$emit('get-current-item', 'avatar')"
+      class="new-pets-card-show__item"
+    >
+      Аватар карточки: ✔
+    </div>
   </div>
   <!-- <div class="new-pets-card-show">
     <div
@@ -75,9 +94,8 @@ defineEmits(["get-current-item"]);
 
 <style>
 .new-pets-card-show {
-  align-self: flex-start;
-  max-width: 500px;
-  margin: 76px 24px 76px 0;
+  max-width: v-bind(width);
+  margin: 76px 24px 12px 0;
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -91,7 +109,6 @@ defineEmits(["get-current-item"]);
 .new-pets-card-show__item {
   color: #000;
   word-break: break-all;
-  /* hyphens: auto; */
 }
 
 .new-pets-card-show__item:hover {

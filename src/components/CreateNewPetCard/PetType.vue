@@ -4,7 +4,6 @@ const emit = defineEmits(["change-pet-type"]);
 
 const type = ref("");
 const changePetType = () => {
-  console.log(type.value);
   emit("change-pet-type", "type", type.value);
 };
 </script>

@@ -4,14 +4,13 @@ const emit = defineEmits(["change-pet-gender"]);
 
 const gender = ref("");
 const changePetGender = () => {
-  console.log(gender.value);
   emit("change-pet-gender", "gender", gender.value);
 };
 </script>
 
 <template>
   <main class="pet-gender">
-    <p class="pet-gender__title">Выберите пол животного</p>
+    <p class="pet-gender__title">Выберите пол питомца</p>
     <div class="pet-gender__items">
       <label style="margin-right: 24px"
         >Мальчик

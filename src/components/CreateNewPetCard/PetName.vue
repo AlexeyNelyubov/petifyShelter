@@ -2,29 +2,27 @@
 import { ref } from "vue";
 import { useDocumentKeyUp } from "/src/composable/useDocumentKeyUp.js";
 
-const emit = defineEmits(["change-pet-name", "validate-error"]);
+const emit = defineEmits(["change-pet-name"]);
 
 const name = ref("");
 const colorForBorder = ref("#000");
 
 const checkNewPetsName = () => {
-  console.log(name.value.length, name.value);
-  if (name.value.length > 0 && /^[а-яА-ЯёЁ]{2,}$/.test(name.value)) {
+  if (
+    (name.value.length > 0 && /^[а-яА-ЯёЁ]{2,}$/.test(name.value)) ||
+    /^[а-яА-ЯёЁ]{2,}[\-\ ][а-яА-ЯёЁ]{2,}$/.test(name.value)
+  ) {
     emit("change-pet-name", "name", name.value);
     return;
   }
   colorForBorder.value = "#ff0000";
-  emit(
-    "validate-error",
-    "В имени животного могут присутствовать только заглавные и прописные буквы русского алфавита, а также пробел и дефис."
-  );
 };
 useDocumentKeyUp(checkNewPetsName, "Enter");
 </script>
 
 <template>
   <main class="pet-name">
-    <p class="pet-name__title">Введите имя животного</p>
+    <p class="pet-name__title">Введите имя питомца</p>
     <input
       type="text"
       v-model="name"
@@ -32,6 +30,10 @@ useDocumentKeyUp(checkNewPetsName, "Enter");
       class="pet-name__input"
       @input="colorForBorder = '#000'"
     />
+    <p class="pet-name__enformation-sign">
+      * В имени животного могут присутствовать только заглавные и прописные
+      буквы русского алфавита, а также пробел и дефис.
+    </p>
   </main>
 </template>
 
@@ -53,5 +55,10 @@ useDocumentKeyUp(checkNewPetsName, "Enter");
   font-size: 18px;
   border: 1px solid v-bind(colorForBorder);
   outline: none;
+}
+
+.pet-name__enformation-sign {
+  margin-top: 12px;
+  width: 768px;
 }
 </style>

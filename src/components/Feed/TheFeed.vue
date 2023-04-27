@@ -145,7 +145,7 @@ if (PetsStore.petsList.length) {
   (async () => {
     try {
       let response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/v1/pets`
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/pet/allpets`
       );
       let json = await response.json();
       if (response.ok) {
