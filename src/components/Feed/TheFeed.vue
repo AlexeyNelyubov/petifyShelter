@@ -246,7 +246,7 @@ function compareFiltersandGeolocation() {
 }
 
 function checkHeveNotPets() {
-  if (!PetsListForShow.value.length) {
+  if (!PetsListForShow.value.length && PetsStore.petsList.length) {
     HeveNotPets.value =
       "По вашему запросу животных не найдено. Попробуйте изменить фильтры.";
   } else {

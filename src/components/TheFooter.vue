@@ -16,7 +16,6 @@ import { RouterLink } from "vue-router";
       </div>
       <div class="footer__logo-discription-discription">
         <p>Помогаем вам одомашнивать животных.</p>
-        <p>Агрегатор приютов / p2p pet sharing.</p>
       </div>
     </div>
     <div class="footer__socialmedia">
@@ -50,12 +49,13 @@ import { RouterLink } from "vue-router";
 
 <style>
 .footer {
-  height: 234px;
+  height: 164px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .footer__logo-discription {
-  margin-top: 64px;
+  /* margin-top: 64px; */
   margin-left: 80px;
   display: flex;
   flex-direction: column;
@@ -75,7 +75,7 @@ import { RouterLink } from "vue-router";
 }
 .footer__logo-discription-discription {
   margin-left: 32px;
-  margin-top: 16px;
+  /* margin-top: 8px; */
   font-family: "Epilogue";
   font-style: normal;
   font-weight: 400;

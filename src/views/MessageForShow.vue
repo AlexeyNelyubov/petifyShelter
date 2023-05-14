@@ -57,7 +57,7 @@ const props = defineProps({
 
 .loader-message {
   position: absolute;
-  bottom: 344px;
+  bottom: 264px;
   font-size: 16px;
 }
 </style>
