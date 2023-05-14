@@ -91,8 +91,7 @@ const logOut = () => {
       <img
         alt="avatar"
         :src="userStore.user.avatar"
-        width="48"
-        height="48"
+        width="84"
         class="drop-down-field__user-avatar"
       />
       <p class="drop-down-field__user-name">
@@ -175,7 +174,7 @@ const logOut = () => {
   border-radius: 16px;
 }
 .drop-down-field__user-avatar {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 .drop-down-field__user-name {
   margin: 0 8px;

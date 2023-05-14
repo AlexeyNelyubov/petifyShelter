@@ -7,7 +7,7 @@ export const useUserStore = defineStore("user", () => {
     userName: "Гость",
     userId: "guest",
     city: "",
-    avatar: new URL("/src/assets/images/Header/guestava.png", import.meta.url),
+    avatar: new URL("/src/assets/images/Header/guestava.svg", import.meta.url),
   });
   if (localStorage.getItem("user")) {
     authentificated.value = true;
@@ -33,7 +33,7 @@ export const useUserStore = defineStore("user", () => {
     user.value.userId = "guest";
     user.value.city = "";
     user.value.avatar = new URL(
-      "/src/assets/images/Header/guestava.png",
+      "/src/assets/images/Header/guestava.svg",
       import.meta.url
     );
   };
